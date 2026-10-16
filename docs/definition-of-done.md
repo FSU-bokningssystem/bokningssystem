@@ -10,20 +10,13 @@
 
 En story är klar när:
 
-> **Exempel (Sysslos version 1):**
-> 1. Alla acceptanskriterier är uppfyllda och testade för hand.
-> 2. Koden ligger i `main` via en pull request.
-> 3. Pull requesten är granskad och godkänd av minst en annan i teamet.
-> 4. Applikationen startar och körs utan fel efter mergen.
-> 5. Det finns inga `console.log`, utkommenterad kod eller TODO kvar i ändringen.
-> 6. Kortet på boarden är flyttat till "Klart".
-> 7. README eller `docs/` är uppdaterad om ändringen påverkar hur man startar eller använder projektet.
-
-1.
-2.
-3.
-4.
-5.
+1. Alla acceptanskriterier är uppfyllda och testade för hand.
+2. Alla formulär ska ha validering på sitt innehåll och ge felmeddelanden om man fyller i fel (t ex anger en mailadress utan @).
+3. Koden ligger i `main` via en pull request.
+4. Pull requesten är granskad och godkänd av minst en annan i teamet.
+5. Applikationen startar och körs utan fel efter mergen.
+6. Det finns inga `console.log`, utkommenterad kod eller TODO kvar i ändringen.
+7. README eller `docs/` är uppdaterad om ändringen påverkar hur man startar eller använder projektet.
 
 ## Versioner
 
