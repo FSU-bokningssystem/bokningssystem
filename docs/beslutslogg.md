@@ -40,42 +40,20 @@ Kopiera den här för varje nytt beslut:
 
 ---
 
-> **Exempel (Sysslo):**
->
-> ## #2 Ingen inloggning i MVP:n
->
-> **Datum:** 2026-11-04
-> **Status:** Gäller
->
-> **Bakgrund:** Inloggning stod i första utkastet av MVP:n. När vi estimerade blev den en L, och vi har inte byggt inloggning förut.
->
-> **Alternativ:**
-> - Bygga egen inloggning med lösenord
-> - Använda en färdig tjänst (t.ex. Auth0)
-> - Ingen inloggning i MVP:n. Man väljer vem man är från en lista i hushållet.
->
-> **Beslut:** Ingen inloggning i MVP:n.
->
-> **Varför:** Inloggning är inte kärnan i appen och skulle ta en hel sprint. Vi vill hellre visa fungerande sysslor tidigt. Användartestet visade också att ingen ville skapa konto.
->
-> **Konsekvenser:** Vem som helst med länken kan se hushållet. Vi tar upp inloggning igen efter MVP:n (Should i backloggen).
->
-> ## #1 Stack: React, Node/Express och PostgreSQL
->
-> **Datum:** 2026-10-28
-> **Status:** Gäller
->
-> **Bakgrund:** Vi behövde välja teknik innan vi satte upp projektet.
->
-> **Alternativ:**
-> - React + Node/Express + PostgreSQL
-> - Angular + Spring Boot + PostgreSQL
->
-> **Beslut:** React, Node/Express och PostgreSQL.
->
-> **Varför:** Tre av fyra i gruppen har jobbat med React och Node. Samma språk i frontend och backend gör det lättare att hjälpa varandra.
->
-> **Konsekvenser:** Jonas, som mest kan Java, behöver lära sig Express. Vi parprogrammerar första sprinten.
+## #1 Stack: React, Java/SpringBoot, och MySQL
+**Datum:** 2026-10-16
+**Status:** Gäller
+
+**Bakgrund:** Vi behövde välja teknik innan vi satte upp projektet.
+**Alternativ:**
+Vi hade inte mycket att fundera på när det gäller frontendbiten utan kom fram till att den skulle vara React med Typescript.
+Som backend hade vi valen mellan Node/Express och Java/SpringBoot och valde Java/Springboot då man då får mycket "gratis".
+Som databas valde vi till att börja med MySQL då vi är vana vid den sedan tidigare. Vi har dock sagt att vi ska undersöka möjligheten till att ha databasen online och kanske då reviderar valet.
+**Beslut:** React, Java/SpringBoot, MySQL
+
+**Varför:** Vi har jobbat med dessa verktyg tidigare och är tillräckligt bekväma med dessa, och vill inte lägga arbete på att lära oss nya tekniska verktyg samtidigt som vi lär oss arbetssätt.
+
+**Konsekvenser:** Inga för tillfället.
 
 ---
 
