@@ -18,6 +18,7 @@
 | Axel | axelkodandersson |
 | Johan | johansvenssonS |
 | Jonathan | JonathanBrandt560 |
+| Anton | doresteanton7 |
 
 ## Teknik
 
