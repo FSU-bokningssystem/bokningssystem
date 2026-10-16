@@ -8,7 +8,7 @@
 
 <!-- En eller två meningar: vad gör applikationen och för vem? -->
 
-> **Exempel (Sysslo):** En webbapp där studenter som delar lägenhet fördelar och bockar av hushållssysslor.
+> **Exempel (Lokalbokaren):** En webbapp där anställda i en organisation kan boka lokaler som finns tillgängliga i de hus som finns till organisationens förfogande.
 
 ## Teamet
 
@@ -27,7 +27,7 @@
 |---|---|
 | Frontend | React |
 | Backend | Spring Boot |
-| Databas | MySQL|
+| Databas | MySQL |
 
 ## Kom igång
 
@@ -61,4 +61,4 @@ cd <projektmapp>
 
 <!-- Länk till ert projekt i GitHub Projects. -->
 
-[Länk till boarden]()
+[Länk till boarden](https://github.com/orgs/FSU-bokningssystem/projects/2/views/1)
