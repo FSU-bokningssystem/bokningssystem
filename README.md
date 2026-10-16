@@ -14,10 +14,10 @@
 
 | Namn | GitHub |
 |---|---|
-| | |
-| | |
-| | |
-| | |
+| Staffan | StaffanBaloo |
+| Axel | axelkodandersson |
+| Johan | johansvenssonS |
+| Jonathan | JonathanBrandt560 |
 
 ## Teknik
 
@@ -25,9 +25,9 @@
 
 | Del | Teknik |
 |---|---|
-| Frontend | |
-| Backend | |
-| Databas | |
+| Frontend | React |
+| Backend | Spring Boot |
+| Databas | MySQL|
 
 ## Kom igång
 
