@@ -18,29 +18,75 @@
 
 ```mermaid
 erDiagram
-    HOUSEHOLD ||--o{ MEMBER : har
-    HOUSEHOLD ||--o{ CHORE : har
-    MEMBER ||--o{ CHORE : "är tilldelad"
+    users {
+        bigint id PK
+        varchar(100) first_name
+        varchar(100) last_name
+        varchar(100) email UK
+        varchar(45) phone
+    }
+    credentials {
+        bigint user_id PK,FK
+        varchar(72) password
+        varchar(45) role
+    }
+    organizations {
+        bigint id PK
+        varchar(100) name
+    }
+    memberships {
+        bigint id PK
+        bigint user_id PK,FK
+        bigint organization_id PK,FK
+        enum(MEMBER,ADMIN,OWNER) member_role
+    }
+    houses {
+        bigint id PK
+        varchar(45) name
+        varchar(45) street
+        varchar(10) street_number
+        varchar(10) zipcode
+        varchar(45) city
+        bigint organization_id FK
+    }
+    rooms {
+        bigint id PK
+        varchar(10) room_number
+        int floor
+        varchar(45) name
+        text description
+        bigint house_id FK
+        tinyint available
+    }
+    bookings {
+        bigint id PK
+        varchar(45) title
+        text description
+        datetime start_time
+        bigint room_id FK
+        int duration
+        bigint owner FK
+    }
+    participants {
+        bigint user_id PK,FK
+        bigint booking_id PK,FK
+    }
+    houseowners {
+        bigint user_id PK,FK
+        bigint house_id PK,FK
+    }
+    users ||--o{ credentials : "user_id"
+    users ||--o{ memberships : "user_id"
+    organizations ||--o{ memberships : "organization_id"
+    organizations ||--o{ houses : "organization_id"
+    houses ||--o{ rooms : "house_id"
+    rooms ||--o{ bookings : "room_id"
+    users ||--o{ bookings : "owner"
+    users ||--o{ participants : "user_id"
+    bookings ||--o{ participants : "booking_id"
+    users ||--o{ houseowners : "user_id"
+    houses ||--o{ houseowners : "house_id"
 
-    HOUSEHOLD {
-        int id PK
-        string name
-        datetime created_at
-    }
-    MEMBER {
-        int id PK
-        int household_id FK
-        string name
-        string email
-    }
-    CHORE {
-        int id PK
-        int household_id FK
-        int assigned_to FK
-        string title
-        date due_date
-        boolean done
-    }
 ```
 
 ## Tabeller
