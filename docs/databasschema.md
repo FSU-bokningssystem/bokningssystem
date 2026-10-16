@@ -93,14 +93,14 @@ erDiagram
 
 <!-- Kort förklaring av varje tabell: vad den innehåller och varför den finns. -->
 
-> **Exempel:**
->
-> | Tabell | Innehåll |
-> |---|---|
-> | `household` | Ett hushåll, t.ex. "Korridor 4B". |
-> | `member` | En person i ett hushåll. |
-> | `chore` | En syssla. Kan vara tilldelad en medlem eller ingen. |
-
 | Tabell | Innehåll |
 |---|---|
-| | |
+| `users` | En enskild användare. |
+| `credentials` | Lösen för användare plus roll i systemet (ej i organisation). |
+| `memberships` | En användares förhållande till en organisation. |
+| `organizations` | En organisation som kan ha medlemmar och hus. |
+| `house` | En samling lokaler på en viss adress. |
+| `room` | En specifik lokal |
+| `bookings` | En bokning av en lokal |
+| `participants` | Deltagare i ett möte. |
+| `houseowners` | Användare som har rätt att lägga till och redigera lokaler i hus. |
