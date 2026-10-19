@@ -50,7 +50,7 @@ cd <projektmapp>
 
 | Dokument | Innehåll |
 |---|---|
-| [Gruppkontrakt](docs/gruppkontrakt.md) | Hur vi samarbetar |
+| [Gruppkontrakt](docs/gruppkontrakt-projekt.md) | Hur vi samarbetar |
 | [Definition of Done](docs/definition-of-done.md) | När en story räknas som klar |
 | [MVP](docs/mvp.md) | Vad som ingår i första versionen |
 | [Databasschema](docs/databasschema.md) | Tabeller och relationer |
