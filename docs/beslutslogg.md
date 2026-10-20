@@ -53,6 +53,7 @@ Kopiera den här för varje nytt beslut:
 **Varför:** För att det blir krångel med dokumentationen och boarden i två olika repos, vi slipper hålla reda på vilket som ska hamna var.
 
 **Konsekvenser:** Vi får vara noggranna med filstrukturen i projektet så inte de olika ramverken kolliderar med varandra.
+
 ---
 
 ## #1 Stack: React, Java/SpringBoot, och MySQL
