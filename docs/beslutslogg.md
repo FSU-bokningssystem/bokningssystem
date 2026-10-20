@@ -38,6 +38,29 @@ Kopiera den här för varje nytt beslut:
 **Konsekvenser:** Vad betyder beslutet för projektet framåt?
 
 ```
+
+## #4 Kod- och kvalitetsbeslut
+
+**Datum:** 2026-10-20
+**Status:** Gäller 
+
+**Bakgrund:** Vi behövde besluta hur vi skulle göra med pull requests och branches.
+
+**Beslut:** Vi beslutade följande:
+- En Pull request som kommer in innan kl 14 ska påbörja granskning samma dag.
+- Tid efter kl 14 är prioriterad för granskningar.
+- Man får inte merga sin egen kod till main utan allt ska gå via pull requests.
+- En pull request ska vara för en issue. Om det går att dela upp issuen i delar som fortfarande ger fungerande system så bör man göra det.
+- En branch för en ny feature skapad från en issue ska heta feature/issuename (där issuename ska inkludera issue number). En branch för en ändring ska heta update/issuename.
+- Commit-meddelanden ska beskriva vad man har gjort i den committen och ska i huvudsak vara på svenska. Man bör undvika att göra commits som är så stora att det blir svårt att få med allt i ett meddelande.
+- Den som godkänner en pull request mergar den också och tar bort branchen.
+
+**Varför:** Vi gjorde dessa val för vi tyckte det gav ett bra och strukturerat arbetssätt
+
+**Konsekvenser:** Vi får ordning på vår git.
+
+---
+
 ## #3 Main protection
 
 **Datum:** 2026-10-20
@@ -51,9 +74,8 @@ Kopiera den här för varje nytt beslut:
 
 **Konsekvenser:** Tanken är att main blir skyddad.
 
-```
+---
 
-```
 ## #2 Repositories
 
 **Datum:** 2026-10-20
