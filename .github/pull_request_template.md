@@ -24,8 +24,11 @@ Closes #<!-- issuenummer, t.ex. Closes #4. Då stängs issuen och kortet flyttas
   Uppdatera den här mallen när ni ändrar er DoD.
 -->
 
-- [ ] Alla acceptanskriterier är uppfyllda och testade för hand
-- [ ] Applikationen startar och körs utan fel
+- [ ] Alla acceptanskriterier är uppfyllda och testade för hand.
+- [ ] Alla formulär ska ha validering på sitt innehåll och ge felmeddelanden om man fyller i fel (t ex anger en mailadress utan @).
+- [ ] Koden ligger i `main` via en pull request.
+- [ ] Pull requesten är granskad och godkänd av minst en annan i teamet.
+- [ ] Applikationen startar och körs utan fel efter mergen.
 - [ ] Inga `console.log`, utkommenterad kod eller TODO kvar
 - [ ] README eller `docs/` är uppdaterad om det behövs
 
