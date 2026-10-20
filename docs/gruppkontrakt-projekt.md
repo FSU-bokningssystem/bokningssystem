@@ -34,14 +34,13 @@
 
 ## Kod och kvalitet
 
-### Pausad så länge
-
-- Hur snabbt ska pull requests granskas?  
-- Så snabbt det går tänker jag \- eller under utsatt tid för review ?  
-- Får man merga sin egen kod?  
-- Beror väl lite vad det är för något, men bör väl ses över med någon annan innan man gör det generellt
-
-Det här kan ni fylla på efter pass 3, när vi gått igenom Git i team.
+- En Pull request som kommer in innan kl 14 ska påbörja granskning samma dag.
+- Tid efter kl 14 är prioriterad för granskningar.
+- Man får inte merga sin egen kod till main utan allt ska gå via pull requests.
+- En pull request ska vara för en issue. Om det går att dela upp issuen i delar som fortfarande ger fungerande system så bör man göra det.
+- En branch för en ny feature skapad från en issue ska heta feature/issuename (där issuename ska inkludera issue number). En branch för en ändring ska heta update/issuename.
+- Commit-meddelanden ska beskriva vad man har gjort i den committen och ska i huvudsak vara på svenska. Man bör undvika att göra commits som är så stora att det blir svårt att få med allt i ett meddelande.
+- Den som godkänner en pull request mergar den också och tar bort branchen.
 
 ## Konflikter och eskalering
 
