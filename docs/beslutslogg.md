@@ -37,7 +37,22 @@ Kopiera den här för varje nytt beslut:
 
 **Konsekvenser:** Vad betyder beslutet för projektet framåt?
 ```
+## #2 Repositories
 
+**Datum:** 2026-10-20
+**Status:** Gäller
+
+**Bakgrund:** Vi behövde avgöra om vi skulle ha backend och frontend i samma repository eller två olika.
+
+**Alternativ:**
+- FE och BE i samma repository.
+- Två olika repositories för FE och BE.
+
+**Beslut:** Vi valde att lägga allt i samma repository. 
+
+**Varför:** För att det blir krångel med dokumentationen och boarden i två olika repos, vi slipper hålla reda på vilket som ska hamna var.
+
+**Konsekvenser:** Vi får vara noggranna med filstrukturen i projektet så inte de olika ramverken kolliderar med varandra.
 ---
 
 ## #1 Stack: React, Java/SpringBoot, och MySQL
