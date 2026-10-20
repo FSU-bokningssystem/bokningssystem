@@ -55,7 +55,7 @@ Bestäm en trappa för vad som händer om någon inte följer kontraktet, till e
 
 - Johan Svensson 13/10 2026  
 - Staffan Johansson 13/10 2026  
-- Axel Andersson 13/10 2026  
+- Axel Andersson 20/10 2026  
 - Jonathan Brandt 13/10 2026
 - Anton Doreste 16/10 2026
 
