@@ -36,6 +36,23 @@ Kopiera den här för varje nytt beslut:
 **Varför:** Varför valde vi det, och vad valde vi bort?
 
 **Konsekvenser:** Vad betyder beslutet för projektet framåt?
+
+```
+## #3 Main protection
+
+**Datum:** 2026-10-20
+**Status:** Gäller
+
+**Bakgrund:** Vi behövde besluta om skydd för main.
+
+**Beslut:** Vi valde standarden: inga merges till main utan pull request, pull requesten måste godkännas av minst en annan person, och ägare har inte rätt att köra över den regeln.
+
+**Varför:** För att hindra ogenomtänkta ändringar av main och för att få gemensamt "ägande" av koden.
+
+**Konsekvenser:** Tanken är att main blir skyddad.
+
+```
+
 ```
 ## #2 Repositories
 
