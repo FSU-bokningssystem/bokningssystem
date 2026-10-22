@@ -31,3 +31,10 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+### test test ###
+
+### Spring Boot / Properties ###
+**/src/main/resources/application.properties
+**/src/main/resources/application-prod.properties
