@@ -37,13 +37,12 @@
   Testa instruktionen själva på en annan dator. Om den inte fungerar där fungerar den inte för läraren heller.
 -->
 
-```bash
-git clone <repo-url>
-cd <projektmapp>
-# installera beroenden
-# starta databasen
-# starta backend
-# starta frontend
+Klona repositoriet i en IDE, t ex IntelliJ eller med git clone https://github.com/FSU-bokningssystem/bokningssystem
+Vid behov, ladda in beroenden via Maven.
+Se till att databasen som ligger i Aiven är igång.
+Kör projektet via IntelliJ med environment-variabler som anges separat (detta för att inte sprida inlogg vind för våg).
+Än så länge har vi ingen frontend mer än Swagger installerat (http://localhost:8080/swagger-ui.html).
+
 ```
 
 ## Dokumentation
