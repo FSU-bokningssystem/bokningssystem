@@ -41,8 +41,8 @@
 - Vid behov, ladda in beroenden via Maven.
 - Se till att databasen som ligger i Aiven är igång.
 - Kör projektet via IntelliJ med environment-variabler som anges separat (detta för att inte sprida inlogg vind för våg).
-- Än så länge har vi ingen frontend mer än Swagger installerat (http://localhost:8080/swagger-ui.html).
 - För att aktivera react, gå in i /frontend och kör npm install för att få alla dependencies, och sedan npm run dev för att starta react. Än så länge är inte detta kopplat till projektet som sådant men finns för att jobba vidare på.
+  Gå sedan in på URL:en som anges .
 
 ---
 
