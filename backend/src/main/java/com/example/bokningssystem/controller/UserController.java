@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-@CrossOrigin(origins = "http://localhost:5173", maxAge = 3600)
+@CrossOrigin(allowCredentials = "true",
+        originPatterns = {"http://localhost:*"})
 @RestController
 
 public class UserController {
