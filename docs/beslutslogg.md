@@ -28,6 +28,7 @@ Kopiera den här för varje nytt beslut:
 **Bakgrund:** Vad behövde vi bestämma, och varför?
 
 **Alternativ:**
+
 - Alternativ A
 - Alternativ B
 
@@ -36,17 +37,53 @@ Kopiera den här för varje nytt beslut:
 **Varför:** Varför valde vi det, och vad valde vi bort?
 
 **Konsekvenser:** Vad betyder beslutet för projektet framåt?
+```
+
+## #6 Pull Request merges
+
+**Datum:** 2026-10-26
+**Status:** Gäller
+
+**Bakgrund:** Vi behövde komma överens om en standard för att mergea in en pull request.
+
+**Alternativ:**
+
+- Create a merge commit: Mergear in varje commit som funnits i branchen plus en ny commit för merge:en.
+- Squash and merge: Gör en enda commit av alla merges och lägger in den i main.
+- Rebase and merge: Mergear in varje commit som funnits i branchen utan någon ny commit.
+
+**Beslut:** Vi valde Squash and merge.
+
+**Varför:** Vi valde detta för att minska mängden smådokumentation i varje enskild branch.
+
+**Konsekvenser:** Mindre "kladd" i historiken.
+
+```
+
+## #5 Standups
+
+**Datum:** 2026-10-26
+**Status:** Gäller
+
+**Bakgrund:** Vi behövde komma överens om tid för standups.
+
+**Beslut:** Vi valde att köra standups varje vardag kl 10.
+
+**Varför:** Vi valde kl 10 för att man ska hinna kolla genom sina bitar själv innan man tar in dem på en standup.
+
+**Konsekvenser:** Möten varje morgon.
 
 ```
 
 ## #4 Kod- och kvalitetsbeslut
 
 **Datum:** 2026-10-20
-**Status:** Gäller 
+**Status:** Gäller
 
 **Bakgrund:** Vi behövde besluta hur vi skulle göra med pull requests och branches.
 
 **Beslut:** Vi beslutade följande:
+
 - En Pull request som kommer in innan kl 14 ska påbörja granskning samma dag.
 - Tid efter kl 14 är prioriterad för granskningar.
 - Man får inte merga sin egen kod till main utan allt ska gå via pull requests.
@@ -84,10 +121,11 @@ Kopiera den här för varje nytt beslut:
 **Bakgrund:** Vi behövde avgöra om vi skulle ha backend och frontend i samma repository eller två olika.
 
 **Alternativ:**
+
 - FE och BE i samma repository.
 - Två olika repositories för FE och BE.
 
-**Beslut:** Vi valde att lägga allt i samma repository. 
+**Beslut:** Vi valde att lägga allt i samma repository.
 
 **Varför:** För att det blir krångel med dokumentationen och boarden i två olika repos, vi slipper hålla reda på vilket som ska hamna var.
 
@@ -96,6 +134,7 @@ Kopiera den här för varje nytt beslut:
 ---
 
 ## #1 Stack: React, Java/SpringBoot, och MySQL
+
 **Datum:** 2026-10-16
 **Status:** Gäller
 
