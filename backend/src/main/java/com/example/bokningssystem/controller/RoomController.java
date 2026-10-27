@@ -4,6 +4,7 @@ import com.example.bokningssystem.dtos.RoomCreateDTO;
 import com.example.bokningssystem.dtos.RoomResponseDTO;
 import com.example.bokningssystem.entities.Room;
 import com.example.bokningssystem.service.RoomService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class RoomController {
     }
 
     @PostMapping
-    public ResponseEntity<RoomResponseDTO> create(@RequestBody RoomCreateDTO createDTO) {
+    public ResponseEntity<RoomResponseDTO> create(@Valid @RequestBody RoomCreateDTO createDTO) {
         RoomResponseDTO room = roomService.create(createDTO);
         return ResponseEntity.ok(room);
     }
