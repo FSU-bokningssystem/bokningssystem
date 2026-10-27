@@ -24,6 +24,7 @@ erDiagram
         varchar(100) last_name
         varchar(100) email UK
         varchar(45) phone
+        varchar(64) time_zone
     }
     credentials {
         bigint user_id PK,FK
@@ -47,6 +48,7 @@ erDiagram
         varchar(10) street_number
         varchar(10) zipcode
         varchar(45) city
+        varchar(64) time_zone
         bigint organization_id FK
     }
     rooms {
@@ -62,7 +64,7 @@ erDiagram
         bigint id PK
         varchar(45) title
         text description
-        datetime start_time
+        timestamp start_time
         bigint room_id FK
         int duration
         bigint owner FK
@@ -93,14 +95,14 @@ erDiagram
 
 <!-- Kort förklaring av varje tabell: vad den innehåller och varför den finns. -->
 
-| Tabell | Innehåll |
-|---|---|
-| `users` | En enskild användare. |
-| `credentials` | Lösen för användare plus roll i systemet (ej i organisation). |
-| `memberships` | En användares förhållande till en organisation. |
-| `organizations` | En organisation som kan ha medlemmar och hus. |
-| `house` | En samling lokaler på en viss adress. |
-| `room` | En specifik lokal |
-| `bookings` | En bokning av en lokal |
-| `participants` | Deltagare i ett möte. |
-| `houseowners` | Användare som har rätt att lägga till och redigera lokaler i hus. |
+| Tabell          | Innehåll                                                          |
+| --------------- | ----------------------------------------------------------------- |
+| `users`         | En enskild användare.                                             |
+| `credentials`   | Lösen för användare plus roll i systemet (ej i organisation).     |
+| `memberships`   | En användares förhållande till en organisation.                   |
+| `organizations` | En organisation som kan ha medlemmar och hus.                     |
+| `house`         | En samling lokaler på en viss adress.                             |
+| `room`          | En specifik lokal                                                 |
+| `bookings`      | En bokning av en lokal                                            |
+| `participants`  | Deltagare i ett möte.                                             |
+| `houseowners`   | Användare som har rätt att lägga till och redigera lokaler i hus. |
