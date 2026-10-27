@@ -37,9 +37,9 @@ public class Room {
     private House house;
 
     @NotNull
-    @ColumnDefault("1")
-    @Column(name = "available", nullable = false)
-    private Byte available;
+    @ColumnDefault("true")
+    @Column(name = "is_available", nullable = false, columnDefinition = "TINYINT", length=1)
+    private boolean isAvailable;
 
     public Room() {
     }
@@ -50,6 +50,7 @@ public class Room {
         this.name = name;
         this.description = description;
         this.house = house;
+        this.isAvailable=true;
     }
 
     public Long getId() {
@@ -100,12 +101,12 @@ public class Room {
         this.house = house;
     }
 
-    public Byte getAvailable() {
-        return available;
+    public boolean getAvailable() {
+        return isAvailable;
     }
 
-    public void setAvailable(Byte available) {
-        this.available = available;
+    public void setAvailable(boolean isAvailable) {
+        this.isAvailable = isAvailable ;
     }
 
     @Override
