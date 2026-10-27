@@ -22,7 +22,6 @@ public class RoomController {
 
     @PostMapping
     public ResponseEntity<RoomResponseDTO> create(@Valid @RequestBody RoomCreateDTO createDTO) {
-        System.out.println("Controller reached with DTO: " + createDTO);
         RoomResponseDTO room = roomService.create(createDTO);
         return ResponseEntity.ok(room);
     }
