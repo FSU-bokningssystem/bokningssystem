@@ -1,25 +1,30 @@
-import { useQuery } from "@tanstack/react-query";
 import "./App.css";
-import { fetchFromApi } from "./api/fetchData";
-import UserList from "./User/UserList";
+import UserPage from "./pages/UserPage";
+import HomePage from "./pages/HomePage";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { ErrorBoundary } from "react-error-boundary";
 
 const App = () => {
-	const {
-		data: userlist,
-		isLoading,
-		error,
-	} = useQuery({
-		queryKey: ["users"],
-		queryFn: () => fetchFromApi("users"),
-	});
-	if (isLoading) return <p>Laddar användare...</p>;
-	if (error) return <p>Ett fel uppstod: {error.message}</p>;
+  const ErrorFallback = ({ error, resetErrorBoundary }: any) => {
+    return (
+      <div role="alert">
+        <h2>Något gick fel</h2>
+        <pre>{error.message}</pre>
+        <button onClick={resetErrorBoundary}>Försök igen</button>
+      </div>
+    );
+  };
 
-	return (
-		<>
-			<UserList users={userlist || []} />
-		</>
-	);
+  return (
+    <BrowserRouter>
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <Routes>
+          <Route path="/" element={<HomePage />}></Route>
+          <Route path="/users" element={<UserPage />}></Route>
+        </Routes>
+      </ErrorBoundary>
+    </BrowserRouter>
+  );
 };
 
 export default App;

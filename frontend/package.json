@@ -12,7 +12,9 @@
   "dependencies": {
     "@tanstack/react-query": "^5.104.5",
     "react": "^19.3.1",
-    "react-dom": "^19.3.1"
+    "react-dom": "^19.3.1",
+    "react-error-boundary": "^6.1.6",
+    "react-router-dom": "^7.18.4"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
