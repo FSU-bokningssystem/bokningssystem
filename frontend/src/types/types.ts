@@ -21,6 +21,28 @@ export interface houseData {
 	timeZone: string;
 }
 
+export interface houseWithRoomsData {
+	id: number;
+	name: string;
+	street: string;
+	streetNumber: string;
+	zipCode: string;
+	city: string;
+	organizationName: string;
+	timeZone: string;
+	rooms: roomData[];
+}
+
 export interface houseList {
-	houses: Array<houseData>;
+	houses: houseData[];
+}
+
+export interface roomData {
+	id: number;
+	roomNumber: string;
+	floor: number;
+	name: string;
+	description: string;
+	houseName: string;
+	isAvailable: boolean;
 }

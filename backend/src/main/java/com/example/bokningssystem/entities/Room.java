@@ -101,11 +101,11 @@ public class Room {
         this.house = house;
     }
 
-    public boolean getAvailable() {
+    public boolean getIsAvailable() {
         return isAvailable;
     }
 
-    public void setAvailable(boolean isAvailable) {
+    public void setIsAvailable(boolean isAvailable) {
         this.isAvailable = isAvailable ;
     }
 

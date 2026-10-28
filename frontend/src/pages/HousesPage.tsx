@@ -11,7 +11,7 @@ const HousesPage = () => {
 		queryKey: ["houses"],
 		queryFn: () => fetchFromApi("house"),
 	});
-	if (isLoading) return <p>Laddar användare...</p>;
+	if (isLoading) return <p>Laddar hus...</p>;
 	if (error) return <p>Ett fel uppstod: {error.message}</p>;
 
 	return (

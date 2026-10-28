@@ -17,11 +17,24 @@ public class RoomMapper {
     }
 
     public Room fromCreateDTO (RoomCreateDTO createDTO) {
-        House house = houseRepository.findById(createDTO.houseId()).orElseThrow(() -> new HouseNotFoundException("Hittar inte hus med id: "+createDTO.houseId()));
-        return new Room(createDTO.roomNumber(), createDTO.floor(), createDTO.name(), createDTO.description(), house);
+        House house = houseRepository.findById(createDTO.houseId())
+                .orElseThrow(() -> new HouseNotFoundException("Hittar inte hus med id: "+createDTO.houseId()));
+        return new Room(
+                createDTO.roomNumber(),
+                createDTO.floor(),
+                createDTO.name(),
+                createDTO.description(),
+                house);
     }
 
     public RoomResponseDTO toResponseDTO (Room room) {
-        return new RoomResponseDTO(room.getRoomNumber(), room.getFloor(), room.getName(), room.getDescription(), room.getHouse().getName(), room.getAvailable());
+        return new RoomResponseDTO(
+                room.getId(),
+                room.getRoomNumber(),
+                room.getFloor(),
+                room.getName(),
+                room.getDescription(),
+                room.getHouse().getName(),
+                room.getIsAvailable());
     }
 }

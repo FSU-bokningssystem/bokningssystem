@@ -2,6 +2,9 @@ import "./App.css";
 import UserPage from "./pages/UserPage";
 import HomePage from "./pages/HomePage";
 import HousesPage from "./pages/HousesPage";
+import OneHousePage from "./pages/OneHousePage";
+import HouseDetails from "./components/House/HouseDetails";
+import RoomDetails from "./components/Room/RoomDetails";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
 import { Navbar } from "./components/Navbar";
@@ -33,6 +36,10 @@ const App = () => {
 								<Route path="/" element={<HomePage />}></Route>
 								<Route path="/users" element={<UserPage />}></Route>
 								<Route path="/houses" element={<HousesPage />}></Route>
+								<Route path="/houses/:houseid" element={<OneHousePage />}>
+									<Route index element={<HouseDetails />} />
+									<Route path=":roomid" element={<RoomDetails />} />
+								</Route>
 							</Routes>
 						</div>
 					</div>
