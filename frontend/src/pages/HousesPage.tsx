@@ -2,7 +2,7 @@ import { fetchFromApi } from "../api/fetchData";
 import { useQuery } from "@tanstack/react-query";
 import HouseList from "../components/House/HouseList";
 
-const HousePage = () => {
+const HousesPage = () => {
 	const {
 		data: houselist,
 		isLoading,
@@ -21,4 +21,4 @@ const HousePage = () => {
 	);
 };
 
-export default HousePage;
+export default HousesPage;

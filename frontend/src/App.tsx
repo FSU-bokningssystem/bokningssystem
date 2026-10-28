@@ -1,7 +1,7 @@
 import "./App.css";
 import UserPage from "./pages/UserPage";
 import HomePage from "./pages/HomePage";
-import HousePage from "./pages/HousePage";
+import HousesPage from "./pages/HousesPage";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
 import { Navbar } from "./components/Navbar";
@@ -32,7 +32,7 @@ const App = () => {
 							<Routes>
 								<Route path="/" element={<HomePage />}></Route>
 								<Route path="/users" element={<UserPage />}></Route>
-								<Route path="/houses" element={<HousePage />}></Route>
+								<Route path="/houses" element={<HousesPage />}></Route>
 							</Routes>
 						</div>
 					</div>
