@@ -13,8 +13,9 @@ const RoomForm = () => {
   };
 
   const handleSubmit = async (values) => {
+    console.log(values);
     await postToApi("room", values);
-    closeForm();
+    ///closeForm();
   };
 
   return (

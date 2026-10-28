@@ -8,7 +8,7 @@ const RoomModal = (props) => {
 
     const values = Object.fromEntries(formData);
     console.log(values);
-    props.submitData();
+    props.submitData(values);
   };
 
   return (
@@ -39,7 +39,7 @@ const RoomModal = (props) => {
               </label>
               <input
                 type="number"
-                name="rumsnummer"
+                name="roomNumber"
                 id="rumsnummer"
                 className="block w-full rounded-lg border border-gray-300 bg-gray-50 px-3 py-2.5 text-sm text-gray-900 shadow-xs placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500"
                 placeholder="Rumsnummer"
@@ -70,7 +70,7 @@ const RoomModal = (props) => {
               </label>
               <input
                 type="text"
-                name="rumsnamn"
+                name="name"
                 id="rumsnamn"
                 className="block w-full rounded-lg border border-gray-300 bg-gray-50 px-3 py-2.5 text-sm text-gray-900 shadow-xs placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500"
                 placeholder="Lilla mötesrummet"
@@ -90,6 +90,22 @@ const RoomModal = (props) => {
                 rows={4}
                 className="block w-full rounded-lg border border-gray-300 bg-gray-50 px-3 py-2.5 text-sm text-gray-900 shadow-xs placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500"
                 placeholder="Kort beskrivning av lokalen"
+                required
+              />
+            </div>
+            <div className="col-span-2 sm:col-span-1">
+              <label
+                htmlFor="houseId"
+                className="mb-2.5 block text-sm font-medium text-gray-900"
+              >
+                HusId behövs tydligen
+              </label>
+              <input
+                type="number"
+                name="houseId"
+                id="rumsnamn"
+                className="block w-full rounded-lg border border-gray-300 bg-gray-50 px-3 py-2.5 text-sm text-gray-900 shadow-xs placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500"
+                placeholder="1"
                 required
               />
             </div>
