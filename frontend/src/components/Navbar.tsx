@@ -7,12 +7,13 @@ export const navLinks = [
   { id: "users", title: "Users" },
   { id: "product", title: "Product" },
   { id: "clients", title: "Clients" },
+  { id: "rooms", title: "Rooms" },
 ];
 
 export const Navbar = () => {
-    const [toggle, setToggle] = useState(false);
+  const [toggle, setToggle] = useState(false);
 
-    return (
+  return (
     <nav className="w-full flex py-6 justify-between items-center relative z-50">
       {/* Logo */}
       <h1 className="text-3xl text-white font-bold">Logo</h1>
@@ -27,7 +28,9 @@ export const Navbar = () => {
                 to={path}
                 className={({ isActive }) =>
                   `font-poppins cursor-pointer text-base transition-colors ${
-                    isActive ? "text-white font-semibold" : "text-dimWhite hover:text-white"
+                    isActive
+                      ? "text-white font-semibold"
+                      : "text-dimWhite hover:text-white"
                   }`
                 }
               >
@@ -58,7 +61,8 @@ export const Navbar = () => {
         >
           <ul className="list-none flex flex-col justify-end items-start flex-1 gap-4 w-full">
             {navLinks.map((nav) => {
-              const path = nav.id === "" || nav.id === "home" ? "/" : `/${nav.id}`;
+              const path =
+                nav.id === "" || nav.id === "home" ? "/" : `/${nav.id}`;
               return (
                 <li key={nav.id || "home"} className="w-full">
                   <NavLink
@@ -66,7 +70,9 @@ export const Navbar = () => {
                     onClick={() => setToggle(false)}
                     className={({ isActive }) =>
                       `font-poppins text-base block w-full ${
-                        isActive ? "text-white font-semibold" : "text-dimWhite hover:text-white"
+                        isActive
+                          ? "text-white font-semibold"
+                          : "text-dimWhite hover:text-white"
                       }`
                     }
                   >
