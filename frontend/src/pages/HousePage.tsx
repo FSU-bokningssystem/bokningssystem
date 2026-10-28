@@ -1,0 +1,24 @@
+import { fetchFromApi } from "../api/fetchData";
+import { useQuery } from "@tanstack/react-query";
+import HouseList from "../components/House/HouseList";
+
+const HousePage = () => {
+	const {
+		data: houselist,
+		isLoading,
+		error,
+	} = useQuery({
+		queryKey: ["houses"],
+		queryFn: () => fetchFromApi("house"),
+	});
+	if (isLoading) return <p>Laddar användare...</p>;
+	if (error) return <p>Ett fel uppstod: {error.message}</p>;
+
+	return (
+		<>
+			<HouseList houses={houselist || []} />
+		</>
+	);
+};
+
+export default HousePage;

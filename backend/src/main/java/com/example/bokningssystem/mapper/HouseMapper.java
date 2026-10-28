@@ -9,6 +9,6 @@ import org.springframework.stereotype.Component;
 public class HouseMapper {
 
     public HouseShortResponseDTO toHouseShortResponseDTO (House house) {
-        return new HouseShortResponseDTO(house.getName(), house.getStreet(), house.getStreetNumber(), house.getZipcode(), house.getCity(), house.getOrganization().getName(), house.getTimeZone());
+        return new HouseShortResponseDTO(house.getId(), house.getName(), house.getStreet(), house.getStreetNumber(), house.getZipcode(), house.getCity(), house.getOrganization().getName(), house.getTimeZone());
     }
 }
