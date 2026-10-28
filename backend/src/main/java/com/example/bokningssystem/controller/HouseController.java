@@ -1,13 +1,13 @@
 package com.example.bokningssystem.controller;
 
 import com.example.bokningssystem.dtos.HouseShortResponseDTO;
+import com.example.bokningssystem.dtos.HouseWithRoomsResponseDTO;
 import com.example.bokningssystem.service.HouseService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,5 +27,9 @@ class HouseController {
     @GetMapping
     public ResponseEntity<List<HouseShortResponseDTO>> findAll(){
         return ResponseEntity.ok(houseService.findAll());
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<HouseWithRoomsResponseDTO> findHouse(@Valid @Positive @PathVariable long id){
+        return ResponseEntity.ok(houseService.findHouse(id));
     }
 }

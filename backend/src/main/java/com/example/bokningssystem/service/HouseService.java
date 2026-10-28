@@ -1,7 +1,9 @@
 package com.example.bokningssystem.service;
 
 import com.example.bokningssystem.dtos.HouseShortResponseDTO;
+import com.example.bokningssystem.dtos.HouseWithRoomsResponseDTO;
 import com.example.bokningssystem.entities.House;
+import com.example.bokningssystem.exceptions.HouseNotFoundException;
 import com.example.bokningssystem.mapper.HouseMapper;
 import com.example.bokningssystem.repository.HouseRepository;
 import org.springframework.stereotype.Service;
@@ -19,11 +21,15 @@ public class HouseService {
     }
 
     public List<HouseShortResponseDTO> findAll() {
-        List<House> houseList = houseRepository.findAll();
-        List<HouseShortResponseDTO> houseDTOList = houseList
+        return houseRepository.findAll()
                 .stream()
                 .map(houseMapper::toHouseShortResponseDTO)
                 .toList();
-        return houseDTOList;
+    }
+
+    public HouseWithRoomsResponseDTO findHouse(long id) {
+        House house = houseRepository.findById(id)
+                .orElseThrow(() -> new HouseNotFoundException("Hus med id: "+id+" hittades inte."));
+        return houseMapper.toHouseWithRoomsResponseDTO(house);
     }
 }
