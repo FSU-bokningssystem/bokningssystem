@@ -3,6 +3,7 @@ import UserPage from "./pages/UserPage";
 import HomePage from "./pages/HomePage";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
+import { Navbar } from "./components/Navbar";
 
 const App = () => {
   const ErrorFallback = ({ error, resetErrorBoundary }: any) => {
@@ -18,13 +19,25 @@ const App = () => {
   return (
     <BrowserRouter>
       <ErrorBoundary FallbackComponent={ErrorFallback}>
-        <Routes>
-          <Route path="/" element={<HomePage />}></Route>
-          <Route path="/users" element={<UserPage />}></Route>
-        </Routes>
+        <div className="bg-primary w-full overflow-hidden min-h-screen text-white">
+          <div className="sm:px-16 px-6 flex justify-center items-center">
+            <div className="xl:max-w-[1280px] w-full">
+              <Navbar />
+            </div>
+          </div>
+        
+          <div className="sm:px-16 px-6 flex justify-center items-center">
+            <div className="xl:max-w-[1280px] w-full">
+              <Routes>
+                <Route path="/" element={<HomePage />}></Route>
+                <Route path="/users" element={<UserPage />}></Route>
+              </Routes>
+            </div>
+          </div>
+        </div>
       </ErrorBoundary>
     </BrowserRouter>
   );
-};
+}
 
 export default App;
