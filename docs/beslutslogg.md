@@ -39,6 +39,26 @@ Kopiera den här för varje nytt beslut:
 **Konsekvenser:** Vad betyder beslutet för projektet framåt?
 ```
 
+## #7 Tidszoner i systemet
+
+**Datum:** 2026-10-27
+**Status:** Gäller
+
+**Bakgrund:** Vi behövde avgöra om systemet skulle hantera tidszoner eller inte.
+
+**Alternativ:**
+
+- Inga tidszoner, enklare att göra men svårare att lägga till tidszoner i efterhand.
+- Tidszoner, lite mer jobb i början men behöver inte fixas i efterhand.
+
+**Beslut:** Vi valde att använda tidszoner.
+
+**Varför:** Vi valde det för att det är lättare att göra det "rätt" från början och att det skulle vara risk för att missa någonstans om man ska lägga in det efteråt.
+
+**Konsekvenser:** Vi behöver ändra fältet för bokningstid i databasen till TIMESTAMP i stället för DATETIME, och lägga in tidszoner i tabellerna users och houses.
+
+```
+
 ## #6 Pull Request merges
 
 **Datum:** 2026-10-26
@@ -152,3 +172,4 @@ Som databas valde vi till att börja med MySQL då vi är vana vid den sedan tid
 ---
 
 <!-- Era beslut nedan, nyaste överst. -->
+```
