@@ -4,9 +4,9 @@ import { NavLink } from "react-router-dom";
 
 export const navLinks = [
   { id: "", title: "Home" },
-  { id: "users", title: "Users" },
-  { id: "product", title: "Product" },
-  { id: "clients", title: "Clients" },
+  { id: "users", title: "Användare" },
+  { id: "organizations", title: "Organisationer" },
+  { id: "houses", title: "Hus" },
   { id: "rooms", title: "Rooms" },
 ];
 
