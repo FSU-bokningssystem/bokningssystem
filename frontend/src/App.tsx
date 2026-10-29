@@ -38,7 +38,7 @@ const App = () => {
 								<Route path="/houses" element={<HousesPage />}></Route>
 								<Route path="/houses/:houseid" element={<OneHousePage />}>
 									<Route index element={<HouseDetails />} />
-									<Route path=":roomid" element={<RoomDetails />} />
+									<Route path=":roomNbr" element={<RoomDetails />} />
 								</Route>
 							</Routes>
 						</div>
