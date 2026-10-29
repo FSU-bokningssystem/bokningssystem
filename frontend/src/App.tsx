@@ -9,6 +9,7 @@ import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
 import { Navbar } from "./components/Navbar";
 import RoomPage from "./pages/RoomPage";
+import { AuthProvider } from "./context/AuthContext";
 
 const App = () => {
   const ErrorFallback = ({ error, resetErrorBoundary }: any) => {
@@ -24,28 +25,30 @@ const App = () => {
   return (
     <BrowserRouter>
       <ErrorBoundary FallbackComponent={ErrorFallback}>
-        <div className="bg-primary w-full overflow-hidden min-h-screen text-white">
-          <div className="sm:px-16 px-6 flex justify-center items-center">
-            <div className="xl:max-w-[1280px] w-full">
-              <Navbar />
+        <AuthProvider>
+          <div className="bg-primary w-full overflow-hidden min-h-screen text-white">
+            <div className="sm:px-16 px-6 flex justify-center items-center">
+              <div className="xl:max-w-[1280px] w-full">
+                <Navbar />
+              </div>
             </div>
-          </div>
 
-          <div className="sm:px-16 px-6 flex justify-center items-center">
-            <div className="xl:max-w-[1280px] w-full">
-              <Routes>
-                <Route path="/" element={<HomePage />}></Route>
-                <Route path="/users" element={<UserPage />}></Route>
-                <Route path="/houses" element={<HousesPage />}></Route>
-                <Route path="/rooms" element={<RoomPage />}></Route>
-                <Route path="/houses/:houseid" element={<OneHousePage />}>
-                  <Route index element={<HouseDetails />} />
-                  <Route path=":roomid" element={<RoomDetails />} />
-                </Route>
-              </Routes>
+            <div className="sm:px-16 px-6 flex justify-center items-center">
+              <div className="xl:max-w-[1280px] w-full">
+                <Routes>
+                  <Route path="/" element={<HomePage />}></Route>
+                  <Route path="/users" element={<UserPage />}></Route>
+                  <Route path="/houses" element={<HousesPage />}></Route>
+                  <Route path="/rooms" element={<RoomPage />}></Route>
+                  <Route path="/houses/:houseid" element={<OneHousePage />}>
+                    <Route index element={<HouseDetails />} />
+                    <Route path=":roomid" element={<RoomDetails />} />
+                  </Route>
+                </Routes>
+              </div>
             </div>
           </div>
-        </div>
+        </AuthProvider>
       </ErrorBoundary>
     </BrowserRouter>
   );

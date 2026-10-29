@@ -4,6 +4,7 @@ export interface userData {
   id: number;
   lastName: string;
   phone: string;
+  timeZone: string;
 }
 
 export interface userList {
