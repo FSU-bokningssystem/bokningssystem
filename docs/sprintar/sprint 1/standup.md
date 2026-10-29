@@ -32,14 +32,15 @@
 
 Vi diskuterade även möjlighet att göra vissa fält i databasen kollektivt unika (name+organization för hus, name+house för rum) men valde att avvakta tills vi har fler på plats.
 
-## Torsdag ÅÅÅÅ-MM-DD
+## Torsdag 2026-10-29
 
-| Namn | Närvaro | Igår | Idag | Hinder |
-| ---- | ------- | ---- | ---- | ------ |
-|      |         |      |      |        |
-|      |         |      |      |        |
-|      |         |      |      |        |
-|      |         |      |      |        |
+| Namn     | Närvaro | Igår            | Idag            | Hinder                   |
+| -------- | ------- | --------------- | --------------- | ------------------------ |
+| Staffan  | Ja      | Visa Lokaler    | Visa Lokaler    |
+| Jonathan | Ja      | Välja användare | Välja användare |
+| Johan    | Ja      | Lokalformulär   | Lokalformulär   | Har avvaktat lokallista. |
+| Anton    | Ja      | Skapa användare | Skapa användare |
+| Axel     | Nej     | Bortrest        | Bortrest        |
 
 ## Fredag ÅÅÅÅ-MM-DD
 
