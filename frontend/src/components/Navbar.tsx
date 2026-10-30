@@ -41,17 +41,16 @@ export const Navbar = () => {
         })}
       </ul>
 
-      {/* Mobile Navigation */}
-      <div className="sm:hidden flex flex-1 justify-end items-center">
-        {/* Meny-knapp med Lucide-ikon */}
-        <button
-          type="button"
-          onClick={() => setToggle((prev) => !prev)}
-          className="text-white p-2 focus:outline-none cursor-pointer"
-          aria-label="Toggle Menu"
-        >
-          {toggle ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
-        </button>
+			{/* Mobile Navigation */}
+			<div className="sm:hidden flex flex-1 justify-end items-center">
+				{/* Meny-knapp med Lucide-ikon */}
+				<button
+					type="button"
+					onClick={() => setToggle((prev) => !prev)}
+					className="text-white p-2 focus:outline-none cursor-pointer"
+					aria-label="Toggle Menu">
+					{toggle ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
+				</button>
 
         {/* Dropdown / Sidebar för mobil */}
         <div

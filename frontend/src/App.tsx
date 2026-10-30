@@ -12,15 +12,15 @@ import RoomPage from "./pages/RoomPage";
 import { AuthProvider } from "./context/AuthContext";
 
 const App = () => {
-  const ErrorFallback = ({ error, resetErrorBoundary }: any) => {
-    return (
-      <div role="alert">
-        <h2>Något gick fel</h2>
-        <pre>{error.message}</pre>
-        <button onClick={resetErrorBoundary}>Försök igen</button>
-      </div>
-    );
-  };
+	const ErrorFallback = ({ error, resetErrorBoundary }: any) => {
+		return (
+			<div role="alert">
+				<h2>Något gick fel</h2>
+				<pre>{error.message}</pre>
+				<button onClick={resetErrorBoundary}>Försök igen</button>
+			</div>
+		);
+	};
 
   return (
     <BrowserRouter>
