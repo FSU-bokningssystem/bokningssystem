@@ -27,7 +27,7 @@ const OneHousePage = () => {
 		);
 
 	return (
-		<div className="flex flex-row align-start justify-content gap-4">
+		<div className="flex flex-col sm:flex-row align-start justify-content gap-4">
 			<aside>
 				<h2 className="font-sans text-white text-xl p-2 border-yellow-50 bg-indigo-900 rounded-2xl">
 					<Link to={`/houses/${houseIdNbr}`}>Hussida</Link>
