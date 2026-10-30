@@ -42,11 +42,12 @@ Vi diskuterade även möjlighet att göra vissa fält i databasen kollektivt uni
 | Anton    | Ja      | Skapa användare | Skapa användare |
 | Axel     | Nej     | Bortrest        | Bortrest        |
 
-## Fredag ÅÅÅÅ-MM-DD
+## Fredag 2026-10-30
 
-| Namn | Närvaro | Igår | Idag | Hinder |
-| ---- | ------- | ---- | ---- | ------ |
-|      |         |      |      |        |
-|      |         |      |      |        |
-|      |         |      |      |        |
-|      |         |      |      |        |
+| Namn     | Närvaro | Igår            | Idag                     | Hinder |
+| -------- | ------- | --------------- | ------------------------ | ------ |
+| Staffan  | Ja      | Visa Lokaler    | Responsivitet            |
+| Jonathan | Ja      | Välja användare | Förbättra användardesign |
+| Johan    | Ja      | Lokalformulär   | Visa bokningar i lokal   |
+| Anton    | Ja      | Skapa användare | Skapa användare          |
+| Axel     | Ja      | Bortrest        | Uppdatera sig i systemet |
