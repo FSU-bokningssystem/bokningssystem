@@ -8,6 +8,7 @@ import com.example.bokningssystem.exceptions.RoomOccupiedException;
 import com.example.bokningssystem.mapper.BookingMapper;
 import com.example.bokningssystem.repository.BookingRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -40,5 +41,13 @@ public class BookingService {
             }
         }
         return bookingMapper.toBookingResponseDTO(bookingRepository.save(newBooking));
+    }
+
+    @Transactional(readOnly = true)
+    public List<BookingResponseDTO> findAll() {
+        return bookingRepository.findAll()
+                .stream()
+                .map(bookingMapper::toBookingResponseDTO)
+                .toList();
     }
 }

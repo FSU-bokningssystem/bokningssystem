@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin(allowCredentials = "true",
         originPatterns = {"http://localhost:*"})
 @RestController
@@ -23,5 +25,10 @@ public class BookingController {
     @PostMapping
     public ResponseEntity<BookingResponseDTO> create (@Valid @RequestBody BookingRequestDTO requestDTO) {
         return ResponseEntity.ok(bookingService.create(requestDTO));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<BookingResponseDTO>> findAll() {
+        return ResponseEntity.ok(bookingService.findAll());
     }
 }
