@@ -27,7 +27,7 @@ const App = () => {
 			<ErrorBoundary FallbackComponent={ErrorFallback}>
 				<AuthProvider>
 					<div className="mx-auto w-full bg-primary overflow-hidden min-h-screen text-white sm:px-16 px-6 justify-center items-center">
-						<div className="mx-auto w-full max-w-screen-md overflow-hidden sm:px-16 px-6 justify-center items-center">
+						<div className="mx-auto w-full min-h-screen max-w-screen-md overflow-hidden sm:px-16 px-6 justify-center items-center">
 							<Navbar />
 
 							<Routes>
