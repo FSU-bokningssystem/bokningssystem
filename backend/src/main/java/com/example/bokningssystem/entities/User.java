@@ -33,11 +33,13 @@ public class User {
     @Column(name = "phone", length = 45)
     private String phone;
 
+    @Size(max = 64)
+    @Column(name = "time_zone", nullable = false, length = 64)
+    private String timeZone;
 
     public Long getId() {
         return id;
     }
-
 
     public String getFirstName() {
         return firstName;
@@ -71,14 +73,22 @@ public class User {
         this.phone = phone;
     }
 
-    public User() {
+    public String getTimeZone() {
+        return timeZone;
     }
 
-    public User(String firstName, String lastName, String email, String phone) {
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
+    }
+
+    public User() {}
+
+    public User(String firstName, String lastName, String email, String phone, String timeZone) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phone = phone;
+        this.timeZone = timeZone;
     }
 
 
