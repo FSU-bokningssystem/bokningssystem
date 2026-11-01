@@ -35,4 +35,6 @@ const fetchFromApi = async (endpoint: string) => {
 	}
 };
 
+
+
 export { fetchFromApi };
