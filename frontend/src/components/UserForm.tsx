@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import type { CreateUserProfileDTO } from '../types/types';
-import { createUserProfile } from '../api/userApi';
+import { postToApi } from '../api/postData';
+import { useAuth } from '../context/AuthContext';
 import styles from './UserForm.module.css';
 
 export const UserForm: React.FC = () => {
+  const { loginAs } = useAuth();
   const [formData, setFormData] = useState<CreateUserProfileDTO>({
     email: '',
     password: '',
     confirmPassword: '',
     firstName: '',
     lastName: '',
-    phone: '',
+    phoneNumber: '',
+    timeZone: '',
   });
 
   const [loading, setLoading] = useState(false);
@@ -34,15 +37,27 @@ export const UserForm: React.FC = () => {
     setLoading(true);
 
     try {
-      await createUserProfile(formData);
-      setStatusMessage({ text: 'Användarprofilen har skapats!', type: 'success' });
+      const created = await postToApi("user/register", formData);
+
+      // Logga in som den nyskapade användaren (backend returnerar time_zone, frontend använder timeZone)
+      loginAs({
+        id: created.id,
+        firstName: created.firstName,
+        lastName: created.lastName,
+        email: created.email,
+        phone: created.phone,
+        timeZone: created.time_zone ?? created.timeZone,
+      });
+
+      setStatusMessage({ text: 'Användarprofilen har skapats och du är nu inloggad!', type: 'success' });
       setFormData({
         email: '',
         password: '',
         confirmPassword: '',
         firstName: '',
         lastName: '',
-        phone: '',
+        phoneNumber: '',
+        timeZone: '',
       });
     } catch (err: any) {
       setStatusMessage({ text: err.message || 'Ett oväntat fel uppstod.', type: 'error' });
@@ -122,13 +137,25 @@ export const UserForm: React.FC = () => {
         </div>
 
         <div className={styles.group}>
-          <label htmlFor="phone" className={styles.label}>Telefonnummer:</label>
+          <label htmlFor="phoneNumber" className={styles.label}>Telefonnummer:</label>
           <input
             type="tel"
-            id="phone"
-            name="phone"
+            id="phoneNumber"
+            name="phoneNumber"
             className={styles.input}
-            value={formData.phone}
+            value={formData.phoneNumber}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className={styles.group}>
+          <label htmlFor="timeZone" className={styles.label}>Tidszon:</label>
+          <input
+            type="text"
+            id="timeZone"
+            name="timeZone"
+            className={styles.input}
+            value={formData.timeZone}
             onChange={handleChange}
           />
         </div>

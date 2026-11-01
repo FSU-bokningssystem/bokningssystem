@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserMapper {
+    private static final String DEFAULT_TIME_ZONE = "Europe/Stockholm";
 
     public User toEntity(CreateUserProfileDTO dto) {
         User user = new User();
@@ -14,6 +15,21 @@ public class UserMapper {
         user.setLastName(dto.getLastName());
         user.setEmail(dto.getEmail());
         user.setPhone(dto.getPhoneNumber());
+
+        String tz = dto.getTimeZone();
+        user.setTimeZone(tz == null || tz.isBlank() ? DEFAULT_TIME_ZONE : tz);
         return user;
+    }
+
+
+    public UserResponseDTO toResponseDTO (User user) {
+        return new UserResponseDTO(
+                user.getId(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getPhone(),
+                user.getTimeZone()
+        );
     }
 }

@@ -113,5 +113,7 @@ export interface CreateUserProfileDTO {
   confirmPassword?: string;
   firstName: string;
   lastName: string;
-  phone?: string;
+  phoneNumber?: string;
+  timeZone?: string;
 }
+

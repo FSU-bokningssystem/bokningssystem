@@ -16,7 +16,7 @@ public class CreateUserProfileDTO {
        @Email(message = "Ange en giltig e-postadress")
        private String email;
 
-       @NotBlank(message = "Telefonnummer krävs")
+       // Telefon är valfritt
        private String phoneNumber;
 
        @NotBlank(message = "Lösenord krävs")
@@ -25,6 +25,8 @@ public class CreateUserProfileDTO {
 
        @NotBlank(message = "Lösenordsbekräftelse krävs")
        private String confirmPassword;
+
+       private String timeZone;
 
        public CreateUserProfileDTO() {
        }
@@ -76,4 +78,8 @@ public class CreateUserProfileDTO {
        public void setConfirmPassword(String confirmPassword) {
               this.confirmPassword = confirmPassword;
        }
+
+       public String getTimeZone() {return timeZone;}
+
+       public void setTimeZone(String timeZone) {this.timeZone = timeZone;}
 }

@@ -5,7 +5,6 @@ import com.example.bokningssystem.mapper.UserMapper;
 import com.example.bokningssystem.dtos.CreateUserProfileDTO;
 import com.example.bokningssystem.entities.Credential;
 import com.example.bokningssystem.entities.User;
-import com.example.bokningssystem.mapper.UserMapper;
 import com.example.bokningssystem.repository.CredentialRepository;
 import com.example.bokningssystem.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -19,25 +18,18 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final CredentialRepository credentialRepository;
-    private final UserMapper userMapper;
 
-
-    public UserService(UserRepository userRepository, UserMapper userMapper) {
     public UserService(UserRepository userRepository, CredentialRepository credentialRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
-        this.userMapper = userMapper;
         this.credentialRepository = credentialRepository;
         this.userMapper = userMapper;
     }
-
 
     public List<UserResponseDTO> getAll(){
         return userRepository.findAll()
                 .stream()
                 .map(userMapper::toResponseDTO)
                 .toList();
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
     }
 
     public User getUserById(Long id) {
@@ -46,7 +38,7 @@ public class UserService {
     }
 
     @Transactional
-    public User createUserProfile(CreateUserProfileDTO dto) {
+    public UserResponseDTO createUserProfile(CreateUserProfileDTO dto) {
         if (dto.getPassword() == null || !dto.getPassword().equals(dto.getConfirmPassword())) {
             throw new IllegalArgumentException("Lösenorden matchar inte");
         }
@@ -61,6 +53,6 @@ public class UserService {
         Credential credential = new Credential(savedUser, dto.getPassword(), "USER");
         credentialRepository.save(credential);
 
-        return savedUser;
+        return userMapper.toResponseDTO(savedUser);
     }
 }
