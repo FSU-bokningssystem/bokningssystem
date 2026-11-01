@@ -1,11 +1,25 @@
+import { useAuth } from "../../context/AuthContext";
 import UserListItem from "./UserListItem";
-const UserList = ({ users }: { users: any[] }) => {
+import type { userData } from "../../types/types";
+
+const UserList = ({ users }: { users: userData[] }) => {
+	const { loginAs, currentUser } = useAuth();
+
 	return (
-		<div>
+		<ul>
 			{users.map((user) => (
-				<UserListItem key={user.id} user={user} />
+				<li key={user.id} className="flex items-center justify-between border-b-2 py-2">
+					<UserListItem user={user} />
+					<button 
+						onClick={() => loginAs(user)}
+						disabled={currentUser?.id === user.id}
+					>
+						{currentUser?.id === user.id ? 'Inloggad' : 'Logga in som'}
+					</button>
+				</li>
 			))}
-		</div>
+		</ul>
 	);
 };
+
 export default UserList;

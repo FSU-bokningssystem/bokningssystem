@@ -1,5 +1,7 @@
 package com.example.bokningssystem.service;
 
+import com.example.bokningssystem.dtos.UserResponseDTO;
+import com.example.bokningssystem.mapper.UserMapper;
 import com.example.bokningssystem.dtos.CreateUserProfileDTO;
 import com.example.bokningssystem.entities.Credential;
 import com.example.bokningssystem.entities.User;
@@ -15,15 +17,25 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
     private final CredentialRepository credentialRepository;
     private final UserMapper userMapper;
 
+
+    public UserService(UserRepository userRepository, UserMapper userMapper) {
     public UserService(UserRepository userRepository, CredentialRepository credentialRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
         this.credentialRepository = credentialRepository;
         this.userMapper = userMapper;
     }
 
+
+    public List<UserResponseDTO> getAll(){
+        return userRepository.findAll()
+                .stream()
+                .map(userMapper::toResponseDTO)
+                .toList();
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }

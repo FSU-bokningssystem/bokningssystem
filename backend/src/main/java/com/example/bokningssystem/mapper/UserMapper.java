@@ -1,6 +1,7 @@
 package com.example.bokningssystem.mapper;
 
 import com.example.bokningssystem.dtos.CreateUserProfileDTO;
+import com.example.bokningssystem.dtos.UserResponseDTO;
 import com.example.bokningssystem.entities.User;
 import org.springframework.stereotype.Component;
 

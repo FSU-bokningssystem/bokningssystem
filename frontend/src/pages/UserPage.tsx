@@ -1,6 +1,7 @@
 import UserList from "../components/User/UserList";
 import { fetchFromApi } from "../api/fetchData";
 import { useQuery } from "@tanstack/react-query";
+import LoadingSpinner from "../UI/LoadingSpinner";
 
 const UserPage = () => {
 	const {
@@ -11,7 +12,7 @@ const UserPage = () => {
 		queryKey: ["users"],
 		queryFn: () => fetchFromApi("users"),
 	});
-	if (isLoading) return <p>Laddar användare...</p>;
+	if (isLoading) return <LoadingSpinner />;
 	if (error) return <p>Ett fel uppstod: {error.message}</p>;
 	return (
 		<>

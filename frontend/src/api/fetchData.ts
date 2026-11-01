@@ -6,32 +6,34 @@ const fetchFromApi = async (endpoint: string) => {
 	try {
 		const res = await fetch(`${API_BASE_URL}${endpoint}`);
 		if (!res.ok) {
-			switch (res.status) {
+			const errorData = await res.json();
+			switch (errorData.status) {
 				case 404:
-					throw new Error("Hittar inte användarlistan");
+					throw new Error(`Hittar inte data: ${errorData.message}`);
 				case 401:
-					throw new Error("Ej auktoriserad åtkomst");
+					throw new Error(`Ej auktoriserad åtkomst: ${errorData.message}`);
 				case 403:
-					throw new Error("Förbjuden åtkomst");
+					throw new Error(`Förbjuden åtkomst: ${errorData.message}`);
 				case 418:
-					throw new Error("Servern är en teakopp");
+					throw new Error(`Servern är en teakopp: ${errorData}`);
 				case 429:
-					throw new Error("För många förfrågningar");
+					throw new Error(`För många förfrågningar: ${errorData.message}`);
 				case 500:
-					throw new Error("Internt serverfel");
+					throw new Error(`Internt serverfel: ${errorData.message}`);
 				case 502:
-					throw new Error("Dålig gateway");
+					throw new Error(`Dålig gateway: ${errorData.message}`);
 				case 503:
-					throw new Error("Tjänsten är otillgänglig");
+					throw new Error(`Tjänsten är otillgänglig: +${errorData.message}`);
 				default:
-					throw new Error(`Oväntat fel: ${res.status}`);
+					throw new Error(
+						`Oväntat fel: ${errorData.status}: ${errorData.message}`,
+					);
 			}
 		}
 		const data = await res.json();
-		console.log(data);
 		return data;
 	} catch (error) {
-		console.error(error);
+		throw error;
 	}
 };
 
