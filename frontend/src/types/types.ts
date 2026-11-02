@@ -106,3 +106,14 @@ export interface RoomModalProps {
 export interface RoomListProps {
   id: number;
 }
+
+export interface CreateUserProfileDTO {
+  email: string;
+  password: string;
+  confirmPassword?: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber?: string;
+  timeZone?: string;
+}
+
