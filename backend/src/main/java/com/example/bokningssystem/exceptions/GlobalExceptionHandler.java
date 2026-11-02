@@ -34,4 +34,12 @@ public class GlobalExceptionHandler {
         ErrorResponse error = new ErrorResponse(400, message, fieldErrors);
         return ResponseEntity.status(400).body(error);
     }
+
+    // Affärsregelfel, t.ex. lösenord matchar inte / e-post upptagen
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalArgument(IllegalArgumentException ex) {
+        ErrorResponse error = new ErrorResponse(400, ex.getMessage());
+        return ResponseEntity.status(400).body(error);
+    }
+
 }

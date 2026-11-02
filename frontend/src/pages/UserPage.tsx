@@ -10,7 +10,7 @@ const UserPage = () => {
 		error,
 	} = useQuery({
 		queryKey: ["users"],
-		queryFn: () => fetchFromApi("users"),
+		queryFn: () => fetchFromApi("user"),
 	});
 	if (isLoading) return <LoadingSpinner />;
 	if (error) return <p>Ett fel uppstod: {error.message}</p>;
