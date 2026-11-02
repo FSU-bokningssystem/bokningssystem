@@ -14,76 +14,63 @@
   Demot ska köras på riktigt, inte med skärmdumpar. Testa det innan.
 -->
 
-**Datum:**
-**Deltagare:**
+**Datum:** 2026-11-02
+**Deltagare:** Alla
 
 ## Del 1: Förberedelse
 
 ### Sprintmål
 
+Vi ska ha en grundstruktur på projektet som låter oss se och lägga till användare samt har placeholders för lokaler och organisationer.
+
+| Issue | Story                    | Storlek | Ansvarig |
+| ----- | ------------------------ | ------- | -------- |
+| #10   | Se lokaler som användare | L       | Alla     |
+| #2    | Skapa lokal              | M       | Alla     |
+| #11   | Boka lokal               | L       | Alla     |
+
 <!-- Kopiera från planning.md. -->
 
-
-
-**Uppnåddes sprintmålet?** Ja / Delvis / Nej
+**Uppnåddes sprintmålet?** Delvis
 
 ### Blev klart
 
-> **Exempel:**
->
-> | Issue | Story | Visas av |
-> |---|---|---|
-> | #3 | Skapa ett hushåll | Sara |
-> | #4 | Lägga till en syssla | Lina |
-> | #7 | Visa lista med sysslor | Jonas |
-
-| Issue | Story | Visas av |
-|---|---|---|
-| | | |
-| | | |
+| Issue | Story                    | Storlek | Ansvarig |
+| ----- | ------------------------ | ------- | -------- |
+| #10   | Se lokaler som användare | L       | Alla     |
+| #2    | Skapa lokal              | M       | Alla     |
 
 ### Blev inte klart
 
-<!-- Vad och varför? Det är inget misslyckande, men det ska förklaras. -->
+| Issue | Story      | Storlek | Ansvarig |
+| ----- | ---------- | ------- | -------- |
+| #11   | Boka lokal | L       | Alla     |
 
-> **Exempel:** #9 Projektskelett blev klart, men databasen körs bara lokalt hos Amir. Vi underskattade hur lång tid Docker-uppsättningen tog.
+Under utförandet valde vi att prioritera andra saker än att boka lokal, som att se till att lokaler kunde läggas till.
 
-| Issue | Story | Varför inte klar | Vad händer med den? |
-|---|---|---|---|
-| | | | |
+Att tänka på framöver kan vara att vi inte planerar saker som är beroende av varandra utan att varje issue som ska göras kan göras på egen hand.
 
 ### Demoplan
 
-<!-- I vilken ordning visar ni? Vem gör vad? Berätta det som en användares väg genom appen, inte story för story. -->
+Eftersom vi hade mötet med Nils innan reviewen blev det ingen demoplan gjord.
 
-> **Exempel:**
-> 1. Sara skapar hushållet "Korridor 4B".
-> 2. Lina lägger till tre sysslor.
-> 3. Jonas visar att sysslorna finns kvar efter omladdning.
-
-1.
-2.
-3.
+Vi kommer fram till att vi ska se om vi kan ha möte med Nils på eftermiddagen nästa vecka så vi kan ha vår interna review innan och lägga fram en demoplan.
 
 ### Frågor till läraren
 
-<!-- Något ni vill ha feedback på eller är osäkra på? -->
-
--
+Samma sak där.
 
 ## Del 2: Efter reviewn
 
 ### Feedback
 
-> **Exempel:** Läraren frågade hur man vet vem som ska göra nästa disk. I deras kollektiv turas man om varje vecka i stället för att tilldela.
-
--
--
+- Påpekande att det går att lägga upp issues som inte är direkt kopplade till en user story utan kan vara mer allmänna förbättringar, t ex "förbättra layouten".
+- Vore bra att ha en gemensam vision för frontenden.
+- Se till att veckans planering inte har ömsesidiga beroenden.
 
 ### Ändringar i backloggen
 
-<!-- Nya stories, ändrad prioritet, stories som tagits bort. Länka issues. -->
-
-> **Exempel:** Ny story #15 "Turordning per vecka" som Must. "Tilldela en syssla" (#5) sänks till Should.
-
--
+- Har lagt till en issue för att flytta "lägg till lokal"-knappen dit den hör hemma.
+- Gör en issue för att lägga till en "backa" knapp på hussida.
+- Ny issue för att ladda in organisation vid inlogg.
+- Ny issue för att basera huslistan på inloggad organisation.
