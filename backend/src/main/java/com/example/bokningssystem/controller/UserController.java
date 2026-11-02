@@ -4,7 +4,6 @@ import com.example.bokningssystem.dtos.CreateUserProfileDTO;
 import com.example.bokningssystem.entities.User;
 
 import com.example.bokningssystem.dtos.UserResponseDTO;
-import com.example.bokningssystem.mapper.UserMapper;
 import com.example.bokningssystem.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -23,10 +22,9 @@ import java.util.List;
 @RequestMapping("/user")
 @Validated
 public class UserController {
-
     private final UserService userService;
 
-    public UserController(UserService userService, UserMapper userMapper) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
@@ -45,5 +43,4 @@ public class UserController {
         UserResponseDTO createdUser = userService.createUserProfile(dto);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
-
 }
