@@ -19,7 +19,6 @@
 
 Kopiera den här för varje nytt beslut:
 
-```markdown
 ## #N Rubrik
 
 **Datum:**
@@ -37,7 +36,24 @@ Kopiera den här för varje nytt beslut:
 **Varför:** Varför valde vi det, och vad valde vi bort?
 
 **Konsekvenser:** Vad betyder beslutet för projektet framåt?
-```
+
+## #8 Unika rumsnummer i databasen
+
+**Datum:** 2026-11-02
+**Status:** Gäller
+
+**Bakgrund:** Vi hade upptäckt ett problem med duplicerade rumsnummer i databasen.
+
+**Alternativ:**
+
+- Låta rumsnummer i samma hus vara duplicerbara.
+- Lägga rumsnummer som unikt i förhållande till house_id.
+
+**Beslut:** Vi valde att göra rumsnummer unikt för varje hus. Vi passade även på att lägga not_null på rumsnummer och våningsnummer.
+
+**Varför:** För att det blir tydligare.
+
+**Konsekvenser:** Mer koherenta hus.
 
 ## #7 Tidszoner i systemet
 
@@ -57,8 +73,6 @@ Kopiera den här för varje nytt beslut:
 
 **Konsekvenser:** Vi behöver ändra fältet för bokningstid i databasen till TIMESTAMP i stället för DATETIME, och lägga in tidszoner i tabellerna users och houses.
 
-```
-
 ## #6 Pull Request merges
 
 **Datum:** 2026-10-26
@@ -77,8 +91,6 @@ Kopiera den här för varje nytt beslut:
 **Varför:** Vi valde detta för att minska mängden smådokumentation i varje enskild branch.
 
 **Konsekvenser:** Mindre "kladd" i historiken.
-
-```
 
 ## #5 Standups
 
