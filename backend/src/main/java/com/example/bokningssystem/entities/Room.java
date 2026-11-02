@@ -5,7 +5,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "rooms")
@@ -40,6 +42,9 @@ public class Room {
     @ColumnDefault("true")
     @Column(name = "is_available", nullable = false, columnDefinition = "TINYINT", length=1)
     private boolean isAvailable;
+
+    @OneToMany(mappedBy = "room")
+    private Set<Booking> bookings = new LinkedHashSet<>();
 
     public Room() {
     }
@@ -107,6 +112,14 @@ public class Room {
 
     public void setIsAvailable(boolean isAvailable) {
         this.isAvailable = isAvailable ;
+    }
+
+    public Set<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(Set<Booking> bookings) {
+        this.bookings = bookings;
     }
 
     @Override

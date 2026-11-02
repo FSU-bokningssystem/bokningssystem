@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -122,6 +123,16 @@ public class Booking {
 
     public void setUsers(Set<User> users) {
         this.users = users;
+    }
+
+    @Transient
+    public Instant getEndTime() {
+        return startTime.plus(duration, ChronoUnit.MINUTES);
+    }
+
+    @Transient
+    public Boolean overlapsWith (Instant testStart, Instant testEnd){
+        return (testStart.isBefore(getEndTime()) && testEnd.isBefore(startTime));
     }
 
     @Override
