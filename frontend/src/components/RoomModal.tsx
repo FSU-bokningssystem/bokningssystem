@@ -7,7 +7,6 @@ const RoomModal = ({ onClose, submitData }: RoomModalProps) => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
-
     const floor = formData.get("floor") as string;
     const values: roomCreateData = {
       roomNumber: formData.get("roomNumber") as string,
@@ -16,110 +15,101 @@ const RoomModal = ({ onClose, submitData }: RoomModalProps) => {
       description: formData.get("description") as string,
       houseId: Number(formData.get("houseId")),
     };
-    console.log(values);
     submitData(values);
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="relative w-full max-w-md rounded-lg border border-gray-200 bg-white p-4 shadow-sm md:p-6">
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-gray-200 pb-4 md:pb-5">
-          <h3 className="text-lg font-medium text-gray-900">Lägg till lokal</h3>
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4"
+      onClick={onClose}
+    >
+      <div
+        className="relative w-full max-w-md rounded-2xl bg-white p-6 shadow-xl border border-gray-200"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between border-b border-gray-100 pb-4">
+          <h3 className="text-lg font-bold text-gray-900">Lägg till lokal</h3>
           <button
             onClick={onClose}
             type="button"
-            className="ms-auto inline-flex h-9 w-9 items-center justify-center rounded-lg text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-900"
+            className="rounded-full p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-700 transition"
           >
             <X className="h-5 w-5" />
             <span className="sr-only">Stäng</span>
           </button>
         </div>
 
-        {/* Body */}
-        <form onSubmit={handleSubmit}>
-          <div className="grid grid-cols-2 gap-4 py-4 md:py-6">
-            <div className="col-span-2">
-              <label
-                htmlFor="rumsnummer"
-                className="mb-2.5 block text-sm font-medium text-gray-900"
-              >
-                Rumsnummer
-              </label>
-              <input
-                type="number"
-                name="roomNumber"
-                id="rumsnummer"
-                className="block w-full rounded-lg border border-gray-300 bg-gray-50 px-3 py-2.5 text-sm text-gray-900 shadow-xs placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500"
-                placeholder="Rumsnummer"
-                required
-              />
-            </div>
-            <div className="col-span-2 sm:col-span-1">
-              <label
-                htmlFor="floor"
-                className="mb-2.5 block text-sm font-medium text-gray-900"
-              >
+        <form onSubmit={handleSubmit} className="mt-4 space-y-4">
+          <div>
+            <label htmlFor="rumsnummer" className="block text-xs font-bold text-gray-700 uppercase mb-1">
+              Rumsnummer
+            </label>
+            <input
+              type="text"
+              name="roomNumber"
+              id="rumsnummer"
+              className="w-full rounded-lg border border-gray-300 bg-gray-50 px-3.5 py-2 text-sm text-gray-900 focus:border-[#0058a3] focus:ring-[#0058a3]"
+              placeholder="Ex. 101"
+              required
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="floor" className="block text-xs font-bold text-gray-700 uppercase mb-1">
                 Våning
               </label>
               <input
                 type="number"
                 name="floor"
                 id="floor"
-                className="block w-full rounded-lg border border-gray-300 bg-gray-50 px-3 py-2.5 text-sm text-gray-900 shadow-xs placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500"
+                className="w-full rounded-lg border border-gray-300 bg-gray-50 px-3.5 py-2 text-sm text-gray-900 focus:border-[#0058a3] focus:ring-[#0058a3]"
                 placeholder="(valfritt)"
               />
             </div>
-            <div className="col-span-2 sm:col-span-1">
-              <label
-                htmlFor="rumsnamn"
-                className="mb-2.5 block text-sm font-medium text-gray-900"
-              >
+            <div>
+              <label htmlFor="rumsnamn" className="block text-xs font-bold text-gray-700 uppercase mb-1">
                 Rumsnamn
               </label>
               <input
                 type="text"
                 name="name"
                 id="rumsnamn"
-                className="block w-full rounded-lg border border-gray-300 bg-gray-50 px-3 py-2.5 text-sm text-gray-900 shadow-xs placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500"
-                placeholder="Lilla mötesrummet"
-                required
-              />
-            </div>
-            <div className="col-span-2">
-              <label
-                htmlFor="description"
-                className="mb-2.5 block text-sm font-medium text-gray-900"
-              >
-                Beskrivning
-              </label>
-              <textarea
-                name="description"
-                id="description"
-                rows={4}
-                className="block w-full rounded-lg border border-gray-300 bg-gray-50 px-3 py-2.5 text-sm text-gray-900 shadow-xs placeholder:text-gray-400 focus:border-green-500 focus:ring-green-500"
-                placeholder="Kort beskrivning av lokalen"
+                className="w-full rounded-lg border border-gray-300 bg-gray-50 px-3.5 py-2 text-sm text-gray-900 focus:border-[#0058a3] focus:ring-[#0058a3]"
+                placeholder="Ex. Konferensrum"
                 required
               />
             </div>
           </div>
 
-          {/* Footer */}
-          <div className="flex items-center space-x-4 border-t border-gray-200 pt-4 md:pt-6">
-            <button
-              type="submit"
-              className="inline-flex items-center rounded-lg bg-green-500 px-4 py-2.5 text-sm font-medium text-white shadow-xs hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-300"
-            >
-              <Plus className="-ms-0.5 me-1.5 h-4 w-4" />
-              Lägg till
-            </button>
+          <div>
+            <label htmlFor="description" className="block text-xs font-bold text-gray-700 uppercase mb-1">
+              Beskrivning
+            </label>
+            <textarea
+              name="description"
+              id="description"
+              rows={3}
+              className="w-full rounded-lg border border-gray-300 bg-gray-50 px-3.5 py-2 text-sm text-gray-900 focus:border-[#0058a3] focus:ring-[#0058a3]"
+              placeholder="Kort beskrivning..."
+              required
+            />
+          </div>
+
+          <div className="flex items-center justify-end space-x-3 border-t border-gray-100 pt-4">
             <button
               onClick={onClose}
               type="button"
-              className="rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-xs hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-200"
+              className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-full transition"
             >
-              {" "}
               Avbryt
+            </button>
+            <button
+              type="submit"
+              className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-bold text-white bg-[#0058a3] hover:bg-[#004f93] rounded-full transition shadow-xs"
+            >
+              <Plus className="h-4 w-4" />
+              Lägg till
             </button>
           </div>
         </form>

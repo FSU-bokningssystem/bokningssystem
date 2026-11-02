@@ -2,17 +2,17 @@ import type { RoomRowProps } from "../types/types";
 
 const RoomRow = (props: RoomRowProps) => {
   return (
-    <tr className="hover:bg-gray-500">
-      <td className="border border-gray-300 px-4 py-2 align-top">
-        <p>{props.room.name}</p>
+    <tr className="hover:bg-gray-50 transition-colors">
+      <td className="px-6 py-4 font-semibold text-gray-900">
+        {props.room.name}
       </td>
-      <td className="border border-gray-300 px-4 py-2 align-top">
+      <td className="px-6 py-4 text-gray-600">
         {props.room.roomNumber}
       </td>
-      <td className="border border-gray-300 px-4 py-2 align-top">
-        {props.room.floor}
+      <td className="px-6 py-4 text-gray-600">
+        {props.room.floor ?? "-"}
       </td>
-      <td className="border border-gray-300 px-4 py-2 align-top">
+      <td className="px-6 py-4 text-gray-500">
         {props.room.description}
       </td>
     </tr>

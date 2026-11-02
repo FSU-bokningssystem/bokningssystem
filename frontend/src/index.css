@@ -1,10 +1,11 @@
 @import "tailwindcss";
 
 @theme {
-	--color-primary: #00040f;
-	--color-secondary: #00f6ff;
-	--color-dim-white: rgba(255, 255, 255, 0.7);
-	--color-dim-blue: rgba(9, 151, 124, 0.1);
-
-	--font-poppins: Poppins, sans-serif;
+  --color-ikea-blue: #0058a3;
+  --color-ikea-blue-hover: #004f93;
+  --color-ikea-yellow: #ffdb00;
+  --color-ikea-yellow-hover: #f1ce00;
+  --color-ikea-dark: #111111;
+  --color-ikea-gray-bg: #f5f5f5;
+  --color-ikea-gray-border: #e0e0e0;
 }
