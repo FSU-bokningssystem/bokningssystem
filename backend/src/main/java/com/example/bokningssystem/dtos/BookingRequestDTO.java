@@ -7,8 +7,8 @@ import jakarta.validation.constraints.Positive;
 import java.time.LocalDateTime;
 
 public record BookingRequestDTO(
-        @NotNull(message="Bokningen måste höra till ett hus.")
-        long houseId,
+        @NotNull @Positive (message="Bokningen måste höra till ett hus.")
+        Long houseId,
 
         @NotNull @NotBlank (message="Bokningen måste höra till ett rum.")
         String roomNumber,
@@ -26,6 +26,6 @@ public record BookingRequestDTO(
         LocalDateTime endTime,
 
         @NotNull @Positive (message="Bokningen måste ha en ägare.")
-        long ownerId
+        Long ownerId
 ) {
 }
