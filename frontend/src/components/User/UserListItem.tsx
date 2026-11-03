@@ -1,4 +1,4 @@
-import type { userData } from "../types/types";
+import type { userData } from '../../types/types';
 
 const UserListItem = ({ user }: { user: userData }) => {
 	return (

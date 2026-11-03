@@ -5,6 +5,7 @@ import HousesPage from "./pages/HousesPage";
 import OneHousePage from "./pages/OneHousePage";
 import HouseDetails from "./components/House/HouseDetails";
 import RoomDetails from "./components/Room/RoomDetails";
+import CreateUserPage from "./pages/CreateUserPage";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
 import { Navbar } from "./components/Navbar";
@@ -39,6 +40,7 @@ const App = () => {
 									<Route index element={<HouseDetails />} />
 									<Route path=":roomNbr" element={<RoomDetails />} />
 								</Route>
+								<Route path="/create-user" element={<CreateUserPage />}></Route>
 							</Routes>
 						</div>
 					</div>
