@@ -1,6 +1,8 @@
 package com.example.bokningssystem.mapper;
 
+import com.example.bokningssystem.dtos.BookingResponseDTO;
 import com.example.bokningssystem.dtos.BookingRequestDTO;
+import com.example.bokningssystem.dtos.UserResponseDTO;
 import com.example.bokningssystem.entities.Booking;
 import com.example.bokningssystem.entities.Room;
 import com.example.bokningssystem.entities.User;
@@ -10,16 +12,20 @@ import com.example.bokningssystem.repository.UserRepository;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Component
 public class BookingMapper {
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
-    public BookingMapper(RoomRepository roomRepository, UserRepository userRepository) {
+    public BookingMapper(RoomRepository roomRepository, UserRepository userRepository, UserMapper userMapper) {
         this.roomRepository = roomRepository;
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
 
     public Booking fromBookingRequestDTO (BookingRequestDTO DTO) {
@@ -41,5 +47,24 @@ public class BookingMapper {
                 room,
                 duration,
                 owner);
+    }
+    public BookingResponseDTO toBookingResponseDTO (Booking booking) {
+        LocalDateTime startTime = LocalDateTime.ofInstant(booking.getStartTime(),booking.getRoom().getHouse().getActualTimeZone());
+        LocalDateTime endTime = LocalDateTime.ofInstant(booking.getEndTime(),booking.getRoom().getHouse().getActualTimeZone());
+        UserResponseDTO owner = userMapper.toResponseDTO(booking.getOwner());
+        List<UserResponseDTO> participants = booking.getUsers()
+                .stream()
+                .map(userMapper::toResponseDTO)
+                .toList();
+        return new BookingResponseDTO(
+                booking.getId(),
+                booking.getTitle(),
+                booking.getDescription(),
+                startTime,
+                endTime,
+                booking.getRoom().getHouse().getId(),
+                booking.getRoom().getRoomNumber(),
+                owner,
+                participants);
     }
 }

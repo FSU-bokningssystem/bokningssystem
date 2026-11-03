@@ -1,6 +1,7 @@
 package com.example.bokningssystem.service;
 
 import com.example.bokningssystem.dtos.BookingRequestDTO;
+import com.example.bokningssystem.dtos.BookingResponseDTO;
 import com.example.bokningssystem.entities.Booking;
 import com.example.bokningssystem.exceptions.RoomNotAvailableException;
 import com.example.bokningssystem.exceptions.RoomOccupiedException;
@@ -21,7 +22,7 @@ public class BookingService {
         this.bookingRepository = bookingRepository;
     }
 
-    public Booking create(BookingRequestDTO requestDTO){
+    public BookingResponseDTO create(BookingRequestDTO requestDTO){
         Booking newBooking = bookingMapper.fromBookingRequestDTO(requestDTO);
         if(!newBooking.getRoom().getIsAvailable()) throw new RoomNotAvailableException(
                 "Rum " + requestDTO.roomNumber() + " går inte att boka.");
@@ -33,6 +34,6 @@ public class BookingService {
             if(futureBooking.overlapsWith(newBooking.getStartTime(), newBooking.getEndTime())) throw new RoomOccupiedException(
                     "Rum " + requestDTO.roomNumber() + " är bokat " + futureBooking.getStartTime() + " till " + futureBooking.getEndTime() +".");
         }
-        return bookingRepository.save(newBooking);
+        return bookingMapper.toBookingResponseDTO(bookingRepository.save(newBooking));
     }
 }
