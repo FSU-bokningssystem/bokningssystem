@@ -1,10 +1,11 @@
 @import "tailwindcss";
 
 @theme {
-	--color-primary: #00040f;
-	--color-secondary: #00f6ff;
-	--color-dim-white: rgba(255, 255, 255, 0.7);
-	--color-dim-blue: rgba(9, 151, 124, 0.1);
-
-	--font-poppins: Poppins, sans-serif;
+  --color-blue: #0058a3;
+  --color-blue-hover: #004f93;
+  --color-yellow: #ffdb00;
+  --color-yellow-hover: #f1ce00;
+  --color-dark: #111111;
+  --color-gray-bg: #f5f5f5;
+  --color-gray-border: #e0e0e0;
 }

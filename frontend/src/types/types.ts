@@ -117,3 +117,8 @@ export interface CreateUserProfileDTO {
   timeZone?: string;
 }
 
+export interface UserModalProps {
+  user: userData;
+  onClose: () => void;
+}
+

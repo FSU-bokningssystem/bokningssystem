@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import type { CreateUserProfileDTO } from '../types/types';
 import { postToApi } from '../api/postData';
 import { useAuth } from '../context/AuthContext';
+import { X, UserPlus } from 'lucide-react';
 
 export const UserForm: React.FC = () => {
   const { loginAs } = useAuth();
@@ -28,7 +29,6 @@ export const UserForm: React.FC = () => {
     e.preventDefault();
     setStatusMessage(null);
 
-    // Frontend-validering för lösenord
     if (formData.password !== formData.confirmPassword) {
       setStatusMessage({ text: 'Lösenorden matchar inte.', type: 'error' });
       return;
@@ -39,7 +39,6 @@ export const UserForm: React.FC = () => {
     try {
       const created = await postToApi("user/register", formData);
 
-      // Logga in som den nyskapade användaren (backend returnerar time_zone, frontend använder timeZone)
       loginAs({
         id: created.id,
         firstName: created.firstName,
@@ -67,42 +66,39 @@ export const UserForm: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-lg bg-white rounded-xl shadow-xl border border-gray-100 p-6 relative text-gray-800">
-      {/* Kryss-knapp längst upp till höger som länkar tillbaka till /users */}
+    <div className="w-full max-w-lg mx-auto bg-white rounded-2xl shadow-xl border border-gray-200 p-6 sm:p-8 relative">
       <Link 
         to="/users"
-        className="absolute top-5 right-5 text-gray-400 hover:text-gray-600 text-xl font-bold no-underline transition-colors"
+        className="absolute top-6 right-6 text-gray-400 hover:text-gray-700 p-1.5 rounded-full hover:bg-gray-100 transition"
         aria-label="Stäng"
       >
-        ✕
+        <X className="w-5 h-5" />
       </Link>
 
-      <h2 className="text-xl font-medium text-gray-800 mb-4 pb-2 border-b border-gray-100">
+      <h2 className="text-2xl font-bold text-gray-900 mb-6 pb-3 border-b border-gray-100">
         Skapa Profil
       </h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* E-post (Full bredd) */}
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="email" className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">
             E-post
           </label>
           <input
             type="email"
             id="email"
             name="email"
-            placeholder="E-postadress"
-            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition-all"
+            placeholder="anna.svensson@example.com"
+            className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#0058a3] focus:border-[#0058a3] transition"
             value={formData.email}
             onChange={handleChange}
             required
           />
         </div>
 
-        {/* Förnamn & Efternamn bredvid varandra */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="firstName" className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">
               Förnamn
             </label>
             <input
@@ -110,7 +106,7 @@ export const UserForm: React.FC = () => {
               id="firstName"
               name="firstName"
               placeholder="Förnamn"
-              className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition-all"
+              className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#0058a3] focus:border-[#0058a3] transition"
               value={formData.firstName}
               onChange={handleChange}
               required
@@ -118,7 +114,7 @@ export const UserForm: React.FC = () => {
           </div>
 
           <div>
-            <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="lastName" className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">
               Efternamn
             </label>
             <input
@@ -126,7 +122,7 @@ export const UserForm: React.FC = () => {
               id="lastName"
               name="lastName"
               placeholder="Efternamn"
-              className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition-all"
+              className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#0058a3] focus:border-[#0058a3] transition"
               value={formData.lastName}
               onChange={handleChange}
               required
@@ -134,10 +130,9 @@ export const UserForm: React.FC = () => {
           </div>
         </div>
 
-        {/* Lösenord & Upprepa lösenord bredvid varandra */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="password" className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">
               Lösenord
             </label>
             <input
@@ -145,7 +140,7 @@ export const UserForm: React.FC = () => {
               id="password"
               name="password"
               placeholder="Lösenord"
-              className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition-all"
+              className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#0058a3] focus:border-[#0058a3] transition"
               value={formData.password}
               onChange={handleChange}
               required
@@ -153,7 +148,7 @@ export const UserForm: React.FC = () => {
           </div>
 
           <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="confirmPassword" className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">
               Upprepa lösenord
             </label>
             <input
@@ -161,7 +156,7 @@ export const UserForm: React.FC = () => {
               id="confirmPassword"
               name="confirmPassword"
               placeholder="Upprepa lösenord"
-              className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition-all"
+              className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#0058a3] focus:border-[#0058a3] transition"
               value={formData.confirmPassword}
               onChange={handleChange}
               required
@@ -169,10 +164,9 @@ export const UserForm: React.FC = () => {
           </div>
         </div>
 
-        {/* Telefonnummer & Tidszon bredvid varandra */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="phoneNumber" className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">
               Telefonnummer
             </label>
             <input
@@ -180,34 +174,33 @@ export const UserForm: React.FC = () => {
               id="phoneNumber"
               name="phoneNumber"
               placeholder="(valfritt)"
-              className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition-all"
+              className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#0058a3] focus:border-[#0058a3] transition"
               value={formData.phoneNumber}
               onChange={handleChange}
             />
           </div>
 
           <div>
-            <label htmlFor="timeZone" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="timeZone" className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">
               Tidszon
             </label>
             <input
               type="text"
               id="timeZone"
               name="timeZone"
-              placeholder="(valfritt)"
-              className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition-all"
+              placeholder="Europe/Stockholm"
+              className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#0058a3] focus:border-[#0058a3] transition"
               value={formData.timeZone}
               onChange={handleChange}
             />
           </div>
         </div>
 
-        {/* Statusmeddelande */}
         {statusMessage && (
           <div
-            className={`p-3 rounded-lg text-sm font-medium border ${
+            className={`p-3.5 rounded-lg text-sm font-medium border ${
               statusMessage.type === 'success'
-                ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
+                ? 'bg-green-50 border-green-200 text-green-800'
                 : 'bg-red-50 border-red-200 text-red-800'
             }`}
           >
@@ -215,23 +208,22 @@ export const UserForm: React.FC = () => {
           </div>
         )}
 
-        {/* Knappar */}
-        <div className="flex items-center gap-3 pt-4">
-          <button
-            type="submit"
-            disabled={loading}
-            className="flex items-center justify-center gap-1.5 px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded-lg text-sm transition-colors disabled:opacity-50"
-          >
-            <span>+</span> {loading ? 'Skapar...' : 'Skapa Användare'}
-          </button>
-          
-          {/* Avbryt-knapp som länkar tillbaka till /users */}
+        <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
           <Link
             to="/users"
-            className="px-4 py-2 bg-white border border-gray-200 text-gray-600 font-medium rounded-lg text-sm hover:bg-gray-50 transition-colors inline-block text-center no-underline"
+            className="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-full text-sm transition"
           >
             Avbryt
           </Link>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="inline-flex items-center gap-2 px-6 py-2.5 bg-[#0058a3] hover:bg-[#004f93] text-white font-bold rounded-full text-sm transition shadow-xs disabled:opacity-50"
+          >
+            <UserPlus className="w-4 h-4" />
+            {loading ? 'Skapar...' : 'Skapa Användare'}
+          </button>
         </div>
       </form>
     </div>

@@ -5,16 +5,15 @@ import { fetchFromApi } from "../api/fetchData";
 import { useQuery } from "@tanstack/react-query";
 import Roomlist from "./RoomList";
 import type { houseWithRoomsData, roomCreateData } from "../types/types";
+import { Plus, Home } from "lucide-react";
+
 const RoomForm = () => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedHouse, setSelectedHouse] = useState("1");
 
-  const openForm = () => {
-    setOpenModal(true);
-  };
-  const closeForm = () => {
-    setOpenModal(false);
-  };
+  const openForm = () => setOpenModal(true);
+  const closeForm = () => setOpenModal(false);
+
   const {
     data: houselist,
     isLoading,
@@ -23,55 +22,53 @@ const RoomForm = () => {
     queryKey: ["houses"],
     queryFn: () => fetchFromApi("house"),
   });
-  if (isLoading) return <p>Laddar hus...</p>;
-  if (error) return <p>Ett fel uppstod: {error.message}</p>;
 
-  console.log(selectedHouse);
-  ///Använd valt hus för att lägga till en ny lokal
+  if (isLoading) return <p className="text-gray-500">Laddar hus...</p>;
+  if (error) return <p className="text-red-600">Ett fel uppstod: {error.message}</p>;
+
   const handleSubmit = async (values: roomCreateData) => {
-    console.log(values);
     await postToApi("room", { ...values, houseId: Number(selectedHouse) });
     closeForm();
   };
 
   return (
-    <>
-      <div className="flex justify-between items-end w-full">
-        <form className="w-full max-w-sm">
-          <label className="block mb-2.5 text-sm font-medium text-heading">
+    <div className="space-y-6">
+      <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-xs flex flex-col sm:flex-row items-end justify-between gap-4">
+        <form className="w-full sm:max-w-xs space-y-1">
+          <label className="block text-xs font-bold uppercase tracking-wider text-gray-500">
             Välj Hus
           </label>
-          <select
-            value={selectedHouse}
-            onChange={(e) => setSelectedHouse(e.target.value)}
-            className="w-full px-3 py-2.5 bg-primary border border-gray-600 text-white text-sm rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary shadow-xs"
-          >
-            <option value="" disabled className="bg-primary text-white">
-              -- Välj ett hus --
-            </option>
-            {houselist.map((house: houseWithRoomsData) => (
-              <option
-                key={house.id}
-                value={house.id}
-                className="bg-primary text-white"
-              >
-                {house.name}
+          <div className="relative">
+            <select
+              value={selectedHouse}
+              onChange={(e) => setSelectedHouse(e.target.value)}
+              className="w-full px-4 py-2.5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#0058a3] focus:border-[#0058a3] transition"
+            >
+              <option value="" disabled>
+                -- Välj ett hus --
               </option>
-            ))}
-          </select>
+              {houselist?.map((house: houseWithRoomsData) => (
+                <option key={house.id} value={house.id}>
+                  {house.name}
+                </option>
+              ))}
+            </select>
+          </div>
         </form>
         <button
-          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#0058a3] hover:bg-[#004f93] text-white font-bold py-2.5 px-5 rounded-full transition shadow-xs text-sm"
           onClick={openForm}
         >
-          Lägg till Lokal
+          <Plus className="w-4 h-4" /> Lägg till Lokal
         </button>
+
         {openModal && (
           <RoomModal onClose={closeForm} submitData={handleSubmit} />
         )}
       </div>
-      <Roomlist id={Number(selectedHouse)}></Roomlist>
-    </>
+
+      <Roomlist id={Number(selectedHouse)} />
+    </div>
   );
 };
 export default RoomForm;

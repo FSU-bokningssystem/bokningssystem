@@ -3,86 +3,84 @@ import { Menu, X } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 export const navLinks = [
-  { id: "", title: "Home" },
+  { id: "", title: "Hem" },
   { id: "users", title: "Användare" },
-  { id: "organizations", title: "Organisationer" },
   { id: "houses", title: "Hus" },
-  { id: "rooms", title: "Rooms" },
+  { id: "rooms", title: "Rum & Lokaler" },
 ];
 
 export const Navbar = () => {
   const [toggle, setToggle] = useState(false);
 
   return (
-    <nav className="w-full flex py-6 justify-between items-center relative z-50">
-      {/* Logo */}
-      <h1 className="text-3xl text-white font-bold">Logo</h1>
+    <header className="w-full bg-white border-b border-gray-200 sticky top-0 z-40 shadow-xs">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex justify-between items-center">
+        {/* Logo */}
+        <NavLink to="/" className="flex items-center gap-2">
+          <div className="bg-[#0058a3] text-[#ffdb00] font-black px-3 py-1 rounded text-xl tracking-wider">
+            LOGOTYPE
+          </div>
+        </NavLink>
 
-      {/* Desktop Navigation */}
-      <ul className="list-none sm:flex hidden justify-end items-center flex-1 gap-10">
-        {navLinks.map((nav) => {
-          const path = nav.id === "" || nav.id === "home" ? "/" : `/${nav.id}`;
-          return (
-            <li key={nav.id || "home"}>
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center gap-1">
+          {navLinks.map((nav) => {
+            const path = nav.id === "" ? "/" : `/${nav.id}`;
+            return (
               <NavLink
+                key={nav.id || "home"}
                 to={path}
                 className={({ isActive }) =>
-                  `font-poppins cursor-pointer text-base transition-colors ${
+                  `px-4 py-2 rounded-full font-medium text-sm transition-colors ${
                     isActive
-                      ? "text-white font-semibold"
-                      : "text-dimWhite hover:text-white"
+                      ? "bg-[#0058a3] text-white"
+                      : "text-gray-700 hover:bg-gray-100"
                   }`
                 }
               >
                 {nav.title}
               </NavLink>
-            </li>
-          );
-        })}
-      </ul>
+            );
+          })}
+        </nav>
 
-			{/* Mobile Navigation */}
-			<div className="sm:hidden flex flex-1 justify-end items-center">
-				{/* Meny-knapp med Lucide-ikon */}
-				<button
-					type="button"
-					onClick={() => setToggle((prev) => !prev)}
-					className="text-white p-2 focus:outline-none cursor-pointer"
-					aria-label="Toggle Menu">
-					{toggle ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
-				</button>
-
-        {/* Dropdown / Sidebar för mobil */}
-        <div
-          className={`${
-            !toggle ? "hidden" : "flex"
-          } p-6 bg-slate-900 border border-slate-800 absolute top-16 right-0 mx-4 my-2 min-w-[180px] rounded-xl shadow-xl z-50`}
-        >
-          <ul className="list-none flex flex-col justify-end items-start flex-1 gap-4 w-full">
-            {navLinks.map((nav) => {
-              const path =
-                nav.id === "" || nav.id === "home" ? "/" : `/${nav.id}`;
-              return (
-                <li key={nav.id || "home"} className="w-full">
-                  <NavLink
-                    to={path}
-                    onClick={() => setToggle(false)}
-                    className={({ isActive }) =>
-                      `font-poppins text-base block w-full ${
-                        isActive
-                          ? "text-white font-semibold"
-                          : "text-dimWhite hover:text-white"
-                      }`
-                    }
-                  >
-                    {nav.title}
-                  </NavLink>
-                </li>
-              );
-            })}
-          </ul>
+        {/* Mobile Navigation Button */}
+        <div className="md:hidden flex items-center">
+          <button
+            type="button"
+            onClick={() => setToggle((prev) => !prev)}
+            className="p-2 rounded-full text-gray-700 hover:bg-gray-100 focus:outline-none"
+            aria-label="Toggle Menu"
+          >
+            {toggle ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
         </div>
       </div>
-    </nav>
+
+      {/* Dropdown för mobil */}
+      {toggle && (
+        <div className="md:hidden bg-white border-b border-gray-200 px-4 pt-2 pb-4 space-y-1 shadow-lg">
+          {navLinks.map((nav) => {
+            const path = nav.id === "" ? "/" : `/${nav.id}`;
+            return (
+              <NavLink
+                key={nav.id || "home"}
+                to={path}
+                onClick={() => setToggle(false)}
+                className={({ isActive }) =>
+                  `block px-4 py-3 rounded-lg text-base font-medium transition-colors ${
+                    isActive
+                      ? "bg-[#0058a3] text-white"
+                      : "text-gray-700 hover:bg-gray-100"
+                  }`
+                }
+              >
+                {nav.title}
+              </NavLink>
+            );
+          })}
+        </div>
+      )}
+    </header>
   );
 };
