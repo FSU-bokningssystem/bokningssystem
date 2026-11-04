@@ -1,92 +1,137 @@
 import { fetchFromApi } from "../api/fetchData";
-import { useQuery } from "@tanstack/react-query";
-import { Outlet, useParams, Link, NavLink } from "react-router-dom";
+import { postToApi } from "../api/postData";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Outlet, useParams, Link, useNavigate } from "react-router-dom";
 import RoomListItem from "../components/Room/RoomListItem";
-import type { houseWithRoomsData } from "../types/types";
+import RoomModal from "../components/RoomModal";
+import type { houseWithRoomsData, roomCreateData } from "../types/types";
 import LoadingSpinner from "../UI/LoadingSpinner";
 import { useState } from "react";
-import { DoorClosed, ChevronLeft } from "lucide-react";
+import { DoorClosed, ChevronLeft, Building, ArrowLeft, Plus } from "lucide-react";
 
 const OneHousePage = () => {
-	const [toggle, setToggle] = useState(false);
-	const { houseid } = useParams<{ houseid: string }>();
-	const houseIdNbr = houseid ? parseInt(houseid) : null;
-	const {
-		data: theHouse,
-		isLoading,
-		error,
-	} = useQuery<houseWithRoomsData>({
-		queryKey: ["house"],
-		queryFn: () => fetchFromApi("house/" + houseIdNbr),
-	});
-	if (isLoading) return <LoadingSpinner />;
-	if (error) return <p>Ett fel uppstod: {error.message}</p>;
-	if (!theHouse || houseIdNbr === null)
-		return (
-			<p>
-				Inget hus valt, vänligen gå tillbaka till Hus och välj ett hus från
-				listan.
-			</p>
-		);
+  const [toggle, setToggle] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
-	return (
-		<div className="flex flex-col sm:flex-row align-start justify-content gap-4">
-			<aside className="hidden sm:block">
-				<h2 className="font-sans text-white text-xl p-2 border-yellow-50 bg-indigo-900 rounded-2xl">
-					<Link to={`/houses/${houseIdNbr}`}>Hussida</Link>
-				</h2>
-				<ul className="list-none p-2 m-2 gap-1 flex-column">
-					{theHouse.rooms.map((room) => (
-						<RoomListItem key={room.id} houseId={houseIdNbr} room={room} />
-					))}
-				</ul>
-			</aside>
-			{/* Mobile Navigation */}
-			<div className="sm:hidden flex flex-1 justify-start items-start">
-				{/* Meny-knapp med Lucide-ikon */}
-				<button
-					type="button"
-					onClick={() => setToggle((prev) => !prev)}
-					className="text-white p-2 focus:outline-none cursor-pointer"
-					aria-label="Toggle Menu">
-					{toggle ? (
-						<ChevronLeft className="w-7 h-7" />
-					) : (
-						<DoorClosed className="w-7 h-7" />
-					)}
-				</button>
+  const { houseid } = useParams<{ houseid: string }>();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const houseIdNbr = houseid ? parseInt(houseid) : null;
 
-				{/* Dropdown / Sidebar för mobil */}
-				<div
-					className={`${
-						!toggle ? "hidden" : "flex"
-					} p-6 bg-slate-900 border border-slate-800 top-16 left-0 mx-4 my-2 min-w-[180px] rounded-xl shadow-xl z-50`}>
-					<ul className="list-none flex flex-col justify-start items-start flex-1 gap-4 w-full">
-						{theHouse.rooms.map((room) => {
-							return (
-								<li key={room.roomNumber} className="w-full">
-									<NavLink
-										to={`/houses/${houseid}/${room.roomNumber}`}
-										onClick={() => setToggle(false)}
-										className={({ isActive }) =>
-											`font-poppins text-base block w-full ${
-												isActive
-													? "text-white font-semibold"
-													: "text-dimWhite hover:text-white"
-											}`
-										}>
-										{room.name}
-									</NavLink>
-								</li>
-							);
-						})}
-					</ul>
-				</div>
-			</div>
-			<main>
-				<Outlet context={theHouse} />
-			</main>
-		</div>
-	);
+  const {
+    data: theHouse,
+    isLoading,
+    error,
+  } = useQuery<houseWithRoomsData>({
+    queryKey: ["house", houseIdNbr],
+    queryFn: () => fetchFromApi("house/" + houseIdNbr),
+  });
+
+  // Mutation för att skicka nytt rum till API
+  const addRoomMutation = useMutation({
+    mutationFn: (values: roomCreateData) => postToApi("room", values),
+    onSuccess: () => {
+      // Invalidera cachen för detta hus så att den nya lokalen syns direkt i listan
+      queryClient.invalidateQueries({ queryKey: ["house", houseIdNbr] });
+      setOpenModal(false);
+    },
+  });
+
+  // Hanterar submit från RoomModal och skickar med valt hus-ID automatisk
+  const handleSubmitRoom = (values: roomCreateData) => {
+    if (!houseIdNbr) return;
+
+    addRoomMutation.mutate({
+      ...values,
+      houseId: houseIdNbr, // Här skickas automatiskt det valda husets ID med!
+    });
+  };
+
+  if (isLoading) return <LoadingSpinner />;
+  if (error) return <p className="text-red-600">Ett fel uppstod: {error.message}</p>;
+  if (!theHouse || houseIdNbr === null)
+    return (
+      <p className="text-gray-600">
+        Inget hus valt, vänligen gå tillbaka till Hus och välj ett hus från listan.
+      </p>
+    );
+
+  return (
+    <div className="space-y-6">
+      {/* Översta navigeringsfältet med tillbaka-knapp och Lägg till lokal */}
+      <div className="flex items-center justify-between gap-4">
+        <button
+          type="button"
+          onClick={() => navigate("/houses")}
+          className="flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition cursor-pointer"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span>Tillbaka till hus</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setOpenModal(true)}
+          className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#0058a3] hover:bg-[#004f93] text-white text-sm font-bold rounded-full transition shadow-xs cursor-pointer"
+        >
+          <Plus className="w-4 h-4" />
+          <span>Lägg till lokal</span>
+        </button>
+      </div>
+
+      {/* Mobilknapp för sidomeny */}
+      <div className="md:hidden">
+        <button
+          type="button"
+          onClick={() => setToggle((prev) => !prev)}
+          className="flex items-center gap-2 w-full px-4 py-3 bg-white border border-gray-200 rounded-xl font-medium text-sm text-gray-700 shadow-xs"
+        >
+          {toggle ? <ChevronLeft className="w-5 h-5" /> : <DoorClosed className="w-5 h-5 text-[#0058a3]" />}
+          <span>{toggle ? "Dölj rum" : "Visa alla rum"}</span>
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-start">
+        {/* Vänstermeny / Rumspanel */}
+        <aside
+          className={`${
+            toggle ? "block" : "hidden md:block"
+          } bg-white p-4 rounded-xl border border-gray-200 shadow-xs md:col-span-1 space-y-3`}
+        >
+          <Link
+            to={`/houses/${houseIdNbr}`}
+            className="flex items-center gap-2 p-2.5 font-bold text-gray-900 hover:text-[#0058a3] transition border-b border-gray-100"
+          >
+            <Building className="w-4 h-4 text-[#0058a3]" />
+            <span>Översikt</span>
+          </Link>
+
+          <div>
+            <span className="text-xs font-bold text-gray-400 uppercase tracking-wider px-2 block mb-2">
+              Rum ({theHouse.rooms.length})
+            </span>
+            <ul className="space-y-1.5">
+              {theHouse.rooms.map((room) => (
+                <RoomListItem key={room.id} houseId={houseIdNbr} room={room} />
+              ))}
+            </ul>
+          </div>
+        </aside>
+
+        {/* Huvudinnehåll */}
+        <main className="md:col-span-3">
+          <Outlet context={theHouse} />
+        </main>
+      </div>
+      
+      {openModal && (
+        <RoomModal
+          onClose={() => setOpenModal(false)}
+          submitData={handleSubmitRoom}
+        />
+      )}
+    </div>
+  );
 };
+
 export default OneHousePage;

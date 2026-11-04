@@ -1,9 +1,11 @@
 package com.example.bokningssystem.entities;
 
+import com.example.bokningssystem.exceptions.InvalidTimeZoneException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.time.ZoneId;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -127,7 +129,14 @@ public class House {
         return timeZone;
     }
 
+    public ZoneId getActualTimeZone() {return ZoneId.of(timeZone);}
+
     public void setTimeZone(String timeZone) {
+        try {
+            ZoneId testTimeZone = ZoneId.of(timeZone);
+        } catch (Exception e) {
+            throw new InvalidTimeZoneException(timeZone + " är inte en giltig tidszon.");
+        }
         this.timeZone = timeZone;
     }
 

@@ -1,4 +1,4 @@
-# Daily standup: sprint N
+# Daily standup: sprint 2
 
 <!--
   INSTRUKTION
@@ -9,60 +9,44 @@
   Närvaro: Ja / Nej / Sen / Distans.
 -->
 
-> **Exempel (Sysslo, sprint 1):**
->
-> ### Tisdag 2026-11-03
->
-> | Namn | Närvaro | Igår | Idag | Hinder |
-> |---|---|---|---|---|
-> | Amir | Ja | Sprint planning | Projektskelett #9 | – |
-> | Sara | Ja | Sprint planning | Skapa hushåll #3, backend | – |
-> | Jonas | Distans | Sprint planning | Lista sysslor #7 | – |
-> | Lina | Ja | Sprint planning | Formulär ny syssla #4 | Vet inte hur datum ska skickas. Jonas hjälper efter standup. |
+## Måndag 2026-11-02
 
----
+Inbakad i review/retro/planering.
 
-## Måndag ÅÅÅÅ-MM-DD
+## Tisdag 2026-11-03
 
-| Namn | Närvaro | Igår | Idag | Hinder |
-|---|---|---|---|---|
-| | | | | |
-| | | | | |
-| | | | | |
-| | | | | |
+| Namn     | Närvaro | Igår                   | Idag                                             | Hinder |
+| -------- | ------- | ---------------------- | ------------------------------------------------ | ------ |
+| Staffan  | Ja      | Skapa bokning          | Skapa bokning                                    |        |
+| Axel     | Ja      | Ändra lokal            | Ändra lokal                                      |        |
+| Johan    | Ja      | Visa bokningar i lokal | Visa bokningar i lokal                           |        |
+| Anton    | Ja      | Layout + användarvy    | Hus backa-knapp och flytta lägg till lokal-knapp |        |
+| Jonathan | Nej     |                        |                                                  |        |
 
-## Tisdag ÅÅÅÅ-MM-DD
+## Onsdag 2026-11-04
 
-| Namn | Närvaro | Igår | Idag | Hinder |
-|---|---|---|---|---|
-| | | | | |
-| | | | | |
-| | | | | |
-| | | | | |
-
-## Onsdag ÅÅÅÅ-MM-DD
-
-| Namn | Närvaro | Igår | Idag | Hinder |
-|---|---|---|---|---|
-| | | | | |
-| | | | | |
-| | | | | |
-| | | | | |
+| Namn     | Närvaro | Igår                                             | Idag                                 | Hinder |
+| -------- | ------- | ------------------------------------------------ | ------------------------------------ | ------ |
+| Staffan  | Ja      | Skapa bokning                                    | Skapa bokning (felsökning)           |        |
+| Axel     | Ja      | Ändra lokal                                      | Ändra lokal (anpassa till ny layout) |        |
+| Johan    | Ja      | Visa bokningar i lokal                           | Visa bokningar i lokal               |        |
+| Anton    | Ja      | Hus backa-knapp och flytta lägg till lokal-knapp | Felsökning på gårdagens jobb         |        |
+| Jonathan | Ja      | Jobbat                                           | Jobba på Authcontext                 |        |
 
 ## Torsdag ÅÅÅÅ-MM-DD
 
 | Namn | Närvaro | Igår | Idag | Hinder |
-|---|---|---|---|---|
-| | | | | |
-| | | | | |
-| | | | | |
-| | | | | |
+| ---- | ------- | ---- | ---- | ------ |
+|      |         |      |      |        |
+|      |         |      |      |        |
+|      |         |      |      |        |
+|      |         |      |      |        |
 
 ## Fredag ÅÅÅÅ-MM-DD
 
 | Namn | Närvaro | Igår | Idag | Hinder |
-|---|---|---|---|---|
-| | | | | |
-| | | | | |
-| | | | | |
-| | | | | |
+| ---- | ------- | ---- | ---- | ------ |
+|      |         |      |      |        |
+|      |         |      |      |        |
+|      |         |      |      |        |
+|      |         |      |      |        |

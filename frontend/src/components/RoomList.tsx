@@ -12,34 +12,29 @@ const Roomlist = (props: RoomListProps) => {
     queryKey: ["house", props.id],
     queryFn: () => fetchFromApi("house/" + props.id),
   });
-  if (isLoading) return <p>Laddar hus...</p>;
-  if (error) return <p>Ett fel uppstod: {error.message}</p>;
-  console.log(theHouse);
+
+  if (isLoading) return <p className="text-gray-500">Laddar lokaler...</p>;
+  if (error) return <p className="text-red-600">Ett fel uppstod: {error.message}</p>;
+
   return (
-    <div className="overflow-x-auto pt-10 w-full">
-      <table className="min-w-full border-collapse border border-gray-300 text-sm">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="border border-gray-300 px-4 py-2 text-left bg-black">
-              Rumsnamn
-            </th>
-            <th className="border border-gray-300 px-4 py-2 text-left bg-black">
-              Rumsnummer
-            </th>
-            <th className="border border-gray-300 px-4 py-2 text-left bg-black">
-              Våning
-            </th>
-            <th className="border border-gray-300 px-4 py-2 text-left bg-black">
-              Beskrivning
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {theHouse.rooms.map((room: roomData) => (
-            <RoomRow key={room.id} room={room}></RoomRow>
-          ))}
-        </tbody>
-      </table>
+    <div className="bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden">
+      <div className="overflow-x-auto">
+        <table className="w-full text-left text-sm text-gray-700">
+          <thead className="bg-gray-50 border-b border-gray-200 text-xs font-bold text-gray-500 uppercase tracking-wider">
+            <tr>
+              <th className="px-6 py-3.5">Rumsnamn</th>
+              <th className="px-6 py-3.5">Rumsnummer</th>
+              <th className="px-6 py-3.5">Våning</th>
+              <th className="px-6 py-3.5">Beskrivning</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-200">
+            {theHouse?.rooms?.map((room: roomData) => (
+              <RoomRow key={room.id} room={room} />
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
