@@ -2,6 +2,7 @@ package com.example.bokningssystem.mapper;
 
 import com.example.bokningssystem.dtos.RoomCreateDTO;
 import com.example.bokningssystem.dtos.RoomResponseDTO;
+import com.example.bokningssystem.dtos.RoomUpdateDTO;
 import com.example.bokningssystem.entities.House;
 import com.example.bokningssystem.entities.Room;
 import com.example.bokningssystem.exceptions.HouseNotFoundException;
@@ -36,5 +37,13 @@ public class RoomMapper {
                 room.getDescription(),
                 room.getHouse().getName(),
                 room.getIsAvailable());
+    }
+
+    public void updateFromDTO(Room room, RoomUpdateDTO updateDTO) {
+        room.setRoomNumber(updateDTO.roomNumber());
+        room.setFloor(updateDTO.floor());
+        room.setName(updateDTO.name());
+        room.setDescription(updateDTO.description());
+        room.setIsAvailable(updateDTO.isAvailable());
     }
 }
