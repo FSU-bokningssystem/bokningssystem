@@ -10,6 +10,7 @@ import com.example.bokningssystem.repository.BookingRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -31,8 +32,12 @@ public class BookingService {
                 .filter(booking->booking.getEndTime().isAfter(Instant.now()))
                 .toList();
         for(Booking futureBooking: futureBookings) {
-            if(futureBooking.overlapsWith(newBooking.getStartTime(), newBooking.getEndTime())) throw new RoomOccupiedException(
-                    "Rum " + requestDTO.roomNumber() + " är bokat " + futureBooking.getStartTime() + " till " + futureBooking.getEndTime() +".");
+            if(futureBooking.overlapsWith(newBooking.getStartTime(), newBooking.getEndTime())) {
+                LocalDateTime start = LocalDateTime.ofInstant(futureBooking.getStartTime(), futureBooking.getRoom().getHouse().getActualTimeZone());
+                LocalDateTime end =  LocalDateTime.ofInstant(futureBooking.getEndTime(), futureBooking.getRoom().getHouse().getActualTimeZone());
+                throw new RoomOccupiedException(
+                        "Rum " + requestDTO.roomNumber() + " är bokat " + start + " till " + end + ".");
+            }
         }
         return bookingMapper.toBookingResponseDTO(bookingRepository.save(newBooking));
     }

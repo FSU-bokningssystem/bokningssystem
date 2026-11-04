@@ -132,7 +132,7 @@ public class Booking {
 
     @Transient
     public Boolean overlapsWith (Instant testStart, Instant testEnd){
-        return (testStart.isBefore(getEndTime()) && testEnd.isBefore(startTime));
+        return (testStart.isBefore(getEndTime()) && getStartTime().isBefore(testEnd));
     }
 
     @Override

@@ -54,7 +54,7 @@ const BookingModal = ({ onClose, submitData }: BookingModalProps) => {
 			endTime: formData.get("endTime") as string,
 			ownerId: auth.currentUser.id,
 		};
-		console.log("Formulärdata:", values);
+
 		if (values.startTime >= values.endTime) {
 			alert("Sluttiden måste vara efter starttiden.");
 			return;

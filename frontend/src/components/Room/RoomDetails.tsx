@@ -12,8 +12,14 @@ const RoomDetails = () => {
 	const closeForm = () => setOpenModal(false);
 
 	const handleSubmit = async (values: BookingCreateData) => {
-		await postToApi("booking", values);
-		closeForm();
+		try {
+			await postToApi("booking", values);
+			// Här ska det läggas in kod som uppdaterar listan med bokningar i realtid, men det är inte implementerat än.
+			closeForm();
+			alert("Bokningen har skapats!");
+		} catch (error: any) {
+			alert(error.message || "Ett fel uppstod vid skapandet av bokningen.");
+		}
 	};
 
 	const theHouse: houseWithRoomsData = useOutletContext();
