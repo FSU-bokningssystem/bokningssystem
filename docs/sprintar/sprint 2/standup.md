@@ -23,14 +23,15 @@ Inbakad i review/retro/planering.
 | Anton    | Ja      | Layout + användarvy    | Hus backa-knapp och flytta lägg till lokal-knapp |        |
 | Jonathan | Nej     |                        |                                                  |        |
 
-## Onsdag ÅÅÅÅ-MM-DD
+## Onsdag 2026-11-04
 
-| Namn | Närvaro | Igår | Idag | Hinder |
-| ---- | ------- | ---- | ---- | ------ |
-|      |         |      |      |        |
-|      |         |      |      |        |
-|      |         |      |      |        |
-|      |         |      |      |        |
+| Namn     | Närvaro | Igår                                             | Idag                                 | Hinder |
+| -------- | ------- | ------------------------------------------------ | ------------------------------------ | ------ |
+| Staffan  | Ja      | Skapa bokning                                    | Skapa bokning (felsökning)           |        |
+| Axel     | Ja      | Ändra lokal                                      | Ändra lokal (anpassa till ny layout) |        |
+| Johan    | Ja      | Visa bokningar i lokal                           | Visa bokningar i lokal               |        |
+| Anton    | Ja      | Hus backa-knapp och flytta lägg till lokal-knapp | Felsökning på gårdagens jobb         |        |
+| Jonathan | Ja      | Jobbat                                           | Jobba på Authcontext                 |        |
 
 ## Torsdag ÅÅÅÅ-MM-DD
 
