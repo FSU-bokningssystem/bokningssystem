@@ -50,4 +50,12 @@ public class BookingService {
                 .map(bookingMapper::toBookingResponseDTO)
                 .toList();
     }
+
+    @Transactional(readOnly = true)
+    public List<BookingResponseDTO> findByRoomId(Long roomId) {
+        return bookingRepository.findByRoomId(roomId)
+                .stream()
+                .map(bookingMapper::toBookingResponseDTO)
+                .toList();
+    }
 }

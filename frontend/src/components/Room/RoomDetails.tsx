@@ -1,12 +1,15 @@
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useOutletContext, useParams, Navigate } from "react-router-dom";
 import type { houseWithRoomsData, BookingCreateData } from "../../types/types";
 import { CalendarArrowRight, XCircle, Info, Layers } from "lucide-react";
 import { postToApi } from "../../api/postData";
 import BookingModal from "./BookingModal";
+import RoomBookingDetails from "./RoomBookingDetails";
 
 const RoomDetails = () => {
 	const [openModal, setOpenModal] = useState(false);
+	const queryClient = useQueryClient();
 
 	const openForm = () => setOpenModal(true);
 	const closeForm = () => setOpenModal(false);
@@ -14,7 +17,7 @@ const RoomDetails = () => {
 	const handleSubmit = async (values: BookingCreateData) => {
 		try {
 			await postToApi("booking", values);
-			// Här ska det läggas in kod som uppdaterar listan med bokningar i realtid, men det är inte implementerat än.
+			await queryClient.invalidateQueries({ queryKey: ["bookinglist"] });
 			closeForm();
 			alert("Bokningen har skapats!");
 		} catch (error: any) {
@@ -33,6 +36,7 @@ const RoomDetails = () => {
 	if (!room) return <Navigate to={`/houses/${theHouse.id}`} replace />;
 
 	return (
+		<>
 		<div className="bg-white p-6 rounded-xl border border-gray-200 shadow-xs space-y-6">
 			<div className="flex justify-between items-start flex-wrap gap-4">
 				<div>
@@ -85,6 +89,8 @@ const RoomDetails = () => {
 				</div>
 			)}
 		</div>
+		<RoomBookingDetails roomId={room.id} />
+		</>
 	);
 };
 export default RoomDetails;

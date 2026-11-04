@@ -31,4 +31,9 @@ public class BookingController {
     public ResponseEntity<List<BookingResponseDTO>> findAll() {
         return ResponseEntity.ok(bookingService.findAll());
     }
+
+    @GetMapping("/room/{roomId}")
+    public ResponseEntity<List<BookingResponseDTO>> findByRoomId(@PathVariable long roomId) {
+        return ResponseEntity.ok(bookingService.findByRoomId(roomId));
+    }
 }
