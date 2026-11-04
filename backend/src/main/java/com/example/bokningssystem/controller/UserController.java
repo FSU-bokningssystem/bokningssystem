@@ -1,9 +1,11 @@
 package com.example.bokningssystem.controller;
 
+import com.example.bokningssystem.dtos.InitialResponseDTO;
 import com.example.bokningssystem.dtos.CreateUserProfileDTO;
 import com.example.bokningssystem.entities.User;
 
 import com.example.bokningssystem.dtos.UserResponseDTO;
+import com.example.bokningssystem.service.UserContextService;
 import com.example.bokningssystem.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -23,9 +25,11 @@ import java.util.List;
 @Validated
 public class UserController {
     private final UserService userService;
+    private final UserContextService userContextService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserContextService userContextService) {
         this.userService = userService;
+        this.userContextService = userContextService;
     }
 
     @GetMapping
@@ -42,5 +46,12 @@ public class UserController {
     public ResponseEntity<UserResponseDTO> registerUser(@Valid @RequestBody CreateUserProfileDTO dto) {
         UserResponseDTO createdUser = userService.createUserProfile(dto);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+    }
+
+    @GetMapping("me/context")
+    public ResponseEntity<InitialResponseDTO> getInitialData(@RequestParam Long userId,
+                                                             @RequestParam(required = false) Long selectedOrgId) {
+        InitialResponseDTO responseData = userContextService.getInitialDataForUser(userId, selectedOrgId);
+        return ResponseEntity.ok(responseData);
     }
 }

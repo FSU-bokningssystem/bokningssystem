@@ -1,9 +1,7 @@
 package com.example.bokningssystem.dtos;
 
-import java.time.Instant;
-
 public record UserResponseDTO(
-        long id,
+        Long id,
         String firstName,
         String lastName,
         String email,

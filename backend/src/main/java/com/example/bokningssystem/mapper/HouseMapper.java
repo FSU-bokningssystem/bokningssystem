@@ -1,8 +1,6 @@
 package com.example.bokningssystem.mapper;
 
-import com.example.bokningssystem.dtos.HouseShortResponseDTO;
-import com.example.bokningssystem.dtos.HouseWithRoomsResponseDTO;
-import com.example.bokningssystem.dtos.RoomResponseDTO;
+import com.example.bokningssystem.dtos.*;
 import com.example.bokningssystem.entities.House;
 import org.springframework.stereotype.Component;
 
@@ -36,5 +34,22 @@ public class HouseMapper {
                 house.getTimeZone(),
                 rooms);
 
+    }
+
+    public HouseDTO toHouseDTO(House house) {
+        List<RoomDTO> rooms = house.getRooms().stream()
+                .map(roomMapper::toDTO)
+                .toList();
+
+        return new HouseDTO(
+                house.getId(),
+                house.getName(),
+                house.getStreet(),
+                house.getStreetNumber(),
+                house.getZipcode(),
+                house.getCity(),
+                house.getTimeZone(),
+                rooms
+        );
     }
 }

@@ -1,6 +1,7 @@
 package com.example.bokningssystem.mapper;
 
 import com.example.bokningssystem.dtos.RoomCreateDTO;
+import com.example.bokningssystem.dtos.RoomDTO;
 import com.example.bokningssystem.dtos.RoomResponseDTO;
 import com.example.bokningssystem.entities.House;
 import com.example.bokningssystem.entities.Room;
@@ -36,5 +37,18 @@ public class RoomMapper {
                 room.getDescription(),
                 room.getHouse().getName(),
                 room.getIsAvailable());
+    }
+
+    public RoomDTO toDTO(Room room) {
+        if (room == null) return null;
+
+        return new RoomDTO(
+                room.getId(),
+                room.getRoomNumber(),
+                room.getFloor(),
+                room.getName(),
+                room.getDescription(),
+                room.getIsAvailable()
+        );
     }
 }
