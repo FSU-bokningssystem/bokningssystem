@@ -38,16 +38,6 @@ export interface houseList {
 	houses: houseData[];
 }
 
-export interface roomData {
-	id: number;
-	roomNumber: string;
-	floor: number;
-	name: string;
-	description: string;
-	houseName: string;
-	isAvailable: boolean;
-}
-
 export interface houseData {
   id: number;
   name: string;
