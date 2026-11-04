@@ -14,9 +14,13 @@ const RoomBookingDetails = ({ roomId }: RoomBookingDetailsProps) => {
     queryFn: () => fetchFromApi("booking/room/" + roomId),
   });
 
-  const sorted = [...(bookings ?? [])].sort(
-    (a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime(),
-  );
+  const now = Date.now();
+  const upcoming = (bookings ?? [])
+    .filter((b) => new Date(b.endTime).getTime() > now)
+    .sort(
+      (a, b) =>
+        new Date(a.startTime).getTime() - new Date(b.startTime).getTime(),
+    );
 
   return (
     <div className="bg-white p-6 mt-6 rounded-xl border border-gray-200 shadow-xs space-y-4">
@@ -51,16 +55,16 @@ const RoomBookingDetails = ({ roomId }: RoomBookingDetailsProps) => {
         </p>
       )}
 
-      {bookings && sorted.length === 0 && (
+      {bookings && upcoming.length === 0 && (
         <div className="flex flex-col items-center gap-2 py-10 text-gray-500">
           <CalendarX2 className="w-8 h-8 text-gray-300" />
           <p className="text-sm">Inga bokningar för det här rummet ännu.</p>
         </div>
       )}
 
-      {sorted.length > 0 && (
+      {upcoming.length > 0 && (
         <ul className="space-y-3">
-          {sorted.map((b) => (
+          {upcoming.map((b) => (
             <BookingCard key={b.id} booking={b} />
           ))}
         </ul>
