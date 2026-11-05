@@ -29,8 +29,8 @@ const OrganizationSelector: React.FC = () => {
         disabled={loading}
         className="px-3 py-1.5 bg-gray-50 border border-gray-300 rounded-lg text-xs font-medium text-gray-900 focus:ring-2 focus:ring-[#0058a3] focus:border-[#0058a3] transition cursor-pointer disabled:opacity-50"
       >
-        {userOrganizations.map((org) => (
-          <option key={org.id} value={org.id}>
+        {userOrganizations.map((org, index) => (
+          <option key={`${org.id}-${index}`} value={org.id}>
             {org.name}
           </option>
         ))}
