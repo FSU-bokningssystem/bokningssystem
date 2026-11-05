@@ -8,44 +8,44 @@ export interface userData {
 }
 
 export interface userList {
-  users: Array<userData>;
+	users: Array<userData>;
 }
 
 export interface houseData {
-  id: number;
-  name: string;
-  street: string;
-  streetnumber: string;
-  zipcode: string;
-  city: string;
-  organizationName: string;
-  timeZone: string;
+	id: number;
+	name: string;
+	street: string;
+	streetnumber: string;
+	zipcode: string;
+	city: string;
+	organizationName: string;
+	timeZone: string;
 }
 
 export interface houseWithRoomsData {
-  id: number;
-  name: string;
-  street: string;
-  streetNumber: string;
-  zipCode: string;
-  city: string;
-  organizationName: string;
-  timeZone: string;
-  rooms: roomData[];
+	id: number;
+	name: string;
+	street: string;
+	streetNumber: string;
+	zipCode: string;
+	city: string;
+	organizationName: string;
+	timeZone: string;
+	rooms: roomData[];
 }
 
 export interface houseList {
-  houses: houseData[];
+	houses: houseData[];
 }
 
 export interface roomData {
-  id: number;
-  roomNumber: string;
-  floor: number;
-  name: string;
-  description: string;
-  houseName: string;
-  isAvailable: boolean;
+	id: number;
+	roomNumber: string;
+	floor: number;
+	name: string;
+	description: string;
+	houseName: string;
+	isAvailable: boolean;
 }
 
 export interface houseData {
@@ -98,9 +98,19 @@ export interface roomCreateData {
 	houseId: number;
 }
 
+export interface roomFormValues {
+	roomNumber: string;
+	floor: number | null;
+	name: string;
+	description: string;
+	isAvailable?: boolean;
+}
+
 export interface RoomModalProps {
 	onClose: () => void;
-	submitData: (values: roomCreateData) => void;
+	submitData: (values: roomFormValues) => void;
+	room?: roomData;
+	error?: string | null;
 }
 
 export interface RoomListProps {
