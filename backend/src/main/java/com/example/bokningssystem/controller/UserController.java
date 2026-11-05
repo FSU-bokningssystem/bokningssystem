@@ -1,7 +1,7 @@
 package com.example.bokningssystem.controller;
 
 import com.example.bokningssystem.dtos.CreateUserProfileDTO;
-import com.example.bokningssystem.entities.User;
+import com.example.bokningssystem.dtos.UserWithBookingsResponseDTO;
 
 import com.example.bokningssystem.dtos.UserResponseDTO;
 import com.example.bokningssystem.service.UserService;
@@ -34,8 +34,13 @@ public class UserController {
        }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getUserById(id));
+    }
+
+    @GetMapping("/withbookings/{id}")
+    public ResponseEntity<UserWithBookingsResponseDTO> getUserWithBookingsById (@PathVariable Long id) {
+        return ResponseEntity.ok(userService.getUserWithBookings(id));
     }
 
     @PostMapping("/register")
