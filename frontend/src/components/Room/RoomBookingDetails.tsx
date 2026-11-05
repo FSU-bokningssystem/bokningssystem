@@ -31,9 +31,9 @@ const RoomBookingDetails = ({ roomId }: RoomBookingDetailsProps) => {
           </span>
           <h3 className="text-2xl font-bold text-gray-900">Bokningar</h3>
         </div>
-        {bookings && (
+        {upcoming && (
           <span className="text-sm text-gray-500">
-            {bookings.length} {bookings.length === 1 ? "bokning" : "bokningar"}
+            {upcoming.length} {upcoming.length === 1 ? "bokning" : "bokningar"}
           </span>
         )}
       </div>
@@ -55,7 +55,7 @@ const RoomBookingDetails = ({ roomId }: RoomBookingDetailsProps) => {
         </p>
       )}
 
-      {bookings && upcoming.length === 0 && (
+      {upcoming && upcoming.length === 0 && (
         <div className="flex flex-col items-center gap-2 py-10 text-gray-500">
           <CalendarX2 className="w-8 h-8 text-gray-300" />
           <p className="text-sm">Inga bokningar för det här rummet ännu.</p>
