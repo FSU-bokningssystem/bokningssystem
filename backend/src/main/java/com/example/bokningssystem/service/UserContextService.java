@@ -60,9 +60,18 @@ public class UserContextService {
 
         /* Bestäm vilken organisation som ska vara aktiv. Standardval är första organisationen
         i listan över användarens organisationer*/
-        Long targetOrgId = selectedOrgId;
-        if (targetOrgId == null && !userMemberShips.isEmpty()) {
+        Long requestedOrgId = selectedOrgId;
+
+        boolean isMember = requestedOrgId != null && userMemberShips.stream()
+                .anyMatch(m -> m.getOrganization().getId().equals(requestedOrgId));
+
+        Long targetOrgId;
+        if (isMember) {
+            targetOrgId = requestedOrgId;
+        } else if (!userMemberShips.isEmpty()) {
             targetOrgId = userMemberShips.get(0).getOrganization().getId();
+        } else {
+            targetOrgId = null;
         }
 
         // Hämta och mappa den aktiva organisationen med hus och rum

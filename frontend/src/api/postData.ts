@@ -2,7 +2,7 @@
 
 const API_BASE_URL = "http://localhost:8080/";
 
-const postToApi = async (endpoint: string, body: unknown) => {
+const postToApi = async <T>(endpoint: string, body: unknown): Promise<T> => {
   const res = await fetch(`${API_BASE_URL}${endpoint}`, {
     method: "POST",
     headers: {
@@ -48,7 +48,8 @@ const postToApi = async (endpoint: string, body: unknown) => {
   }
 
   // Kastar vidare om nätverksfel/CORS sker, så att anroparen (UserForm) kan visa felet
-  return await res.json();
+  const data: T = await res.json();
+  return data;
 };
 
 export { postToApi };

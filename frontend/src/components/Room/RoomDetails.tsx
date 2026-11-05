@@ -24,7 +24,7 @@ const RoomDetails = () => {
 
 	const theHouse: houseWithRoomsData = useOutletContext();
 	const rooms = theHouse.rooms;
-	const { houseid, roomNbr } = useParams<{
+	const { roomNbr } = useParams<{
 		houseid: string;
 		roomNbr: string;
 	}>();

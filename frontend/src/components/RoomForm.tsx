@@ -4,8 +4,8 @@ import { postToApi } from "../api/postData";
 import { fetchFromApi } from "../api/fetchData";
 import { useQuery } from "@tanstack/react-query";
 import Roomlist from "./RoomList";
-import type { houseWithRoomsData, roomCreateData } from "../types/types";
-import { Plus, Home } from "lucide-react";
+import type { houseData, roomCreateData } from "../types/types";
+import { Plus } from "lucide-react";
 
 const RoomForm = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -20,7 +20,7 @@ const RoomForm = () => {
     error,
   } = useQuery({
     queryKey: ["houses"],
-    queryFn: () => fetchFromApi("house"),
+    queryFn: () => fetchFromApi<houseData[]>("house"),
   });
 
   if (isLoading) return <p className="text-gray-500">Laddar hus...</p>;
@@ -47,7 +47,7 @@ const RoomForm = () => {
               <option value="" disabled>
                 -- Välj ett hus --
               </option>
-              {houselist?.map((house: houseWithRoomsData) => (
+              {houselist?.map((house: houseData) => (
                 <option key={house.id} value={house.id}>
                   {house.name}
                 </option>

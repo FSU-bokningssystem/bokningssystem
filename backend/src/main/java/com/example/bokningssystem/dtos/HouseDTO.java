@@ -7,7 +7,7 @@ public record HouseDTO(
         String name,
         String street,
         String streetNumber,
-        String zipcode,
+        String zipCode,
         String city,
         String timeZone,
         List<RoomDTO> rooms
