@@ -61,9 +61,19 @@ export interface roomCreateData {
 	houseId: number;
 }
 
+export interface roomFormValues {
+	roomNumber: string;
+	floor: number | null;
+	name: string;
+	description: string;
+	isAvailable?: boolean;
+}
+
 export interface RoomModalProps {
 	onClose: () => void;
-	submitData: (values: roomCreateData) => void;
+	submitData: (values: roomFormValues) => void;
+	room?: roomData;
+	error?: string | null;
 }
 
 export interface RoomListProps {

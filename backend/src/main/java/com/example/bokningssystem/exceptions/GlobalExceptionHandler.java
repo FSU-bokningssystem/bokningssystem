@@ -1,5 +1,6 @@
 package com.example.bokningssystem.exceptions;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -79,4 +80,17 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(400).body(error);
     }
 
+
+    @ExceptionHandler(RoomNotFoundException.class)
+    public ResponseEntity<ErrorResponse> roomNotFound(RoomNotFoundException ex) {
+        ErrorResponse error = new ErrorResponse(404, ex.getMessage());
+        return ResponseEntity.status(404).body(error);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> dataIntegrityViolation(DataIntegrityViolationException ex) {
+        ErrorResponse error = new ErrorResponse(409,
+                "Det finns redan en lokal med detta rumsnummer på den våningen.");
+        return ResponseEntity.status(409).body(error);
+    }
 }
