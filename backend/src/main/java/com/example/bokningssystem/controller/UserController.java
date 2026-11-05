@@ -33,15 +33,17 @@ public class UserController {
         return ResponseEntity.ok(userService.getAll());
        }
 
+    @GetMapping("/withbookings/{id}")
+    public ResponseEntity<UserWithBookingsResponseDTO> getUserWithBookingsById (@PathVariable Long id) {
+        return ResponseEntity.ok(userService.getUserWithBookings(id));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getUserById(id));
     }
 
-    @GetMapping("/withbookings/{id}")
-    public ResponseEntity<UserWithBookingsResponseDTO> getUserWithBookingsById (@PathVariable Long id) {
-        return ResponseEntity.ok(userService.getUserWithBookings(id));
-    }
+
 
     @PostMapping("/register")
     public ResponseEntity<UserResponseDTO> registerUser(@Valid @RequestBody CreateUserProfileDTO dto) {
