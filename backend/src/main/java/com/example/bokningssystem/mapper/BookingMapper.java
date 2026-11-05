@@ -1,8 +1,10 @@
 package com.example.bokningssystem.mapper;
 
+import com.example.bokningssystem.dtos.BookingForUserResponseDTO;
 import com.example.bokningssystem.dtos.BookingResponseDTO;
 import com.example.bokningssystem.dtos.BookingRequestDTO;
 import com.example.bokningssystem.dtos.UserResponseDTO;
+import com.example.bokningssystem.dtos.UserShortResponseDTO;
 import com.example.bokningssystem.entities.Booking;
 import com.example.bokningssystem.entities.Room;
 import com.example.bokningssystem.entities.User;
@@ -52,7 +54,7 @@ public class BookingMapper {
         LocalDateTime startTime = LocalDateTime.ofInstant(booking.getStartTime(),booking.getRoom().getHouse().getActualTimeZone());
         LocalDateTime endTime = LocalDateTime.ofInstant(booking.getEndTime(),booking.getRoom().getHouse().getActualTimeZone());
         UserResponseDTO owner = userMapper.toResponseDTO(booking.getOwner());
-        List<UserResponseDTO> participants = booking.getUsers()
+        List<UserResponseDTO> participants = booking.getParticipants()
                 .stream()
                 .map(userMapper::toResponseDTO)
                 .toList();
@@ -66,5 +68,27 @@ public class BookingMapper {
                 booking.getRoom().getRoomNumber(),
                 owner,
                 participants);
+    }
+
+    public BookingForUserResponseDTO toBookingForUserResponseDTO (Booking booking) {
+        LocalDateTime startTime = LocalDateTime.ofInstant(booking.getStartTime(),booking.getRoom().getHouse().getActualTimeZone());
+        LocalDateTime endTime = LocalDateTime.ofInstant(booking.getEndTime(),booking.getRoom().getHouse().getActualTimeZone());
+        UserShortResponseDTO owner = userMapper.userShortResponseDTO(booking.getOwner());
+        List<UserShortResponseDTO> participants = booking.getParticipants()
+                .stream()
+                .map(userMapper::userShortResponseDTO)
+                .toList();
+        return new BookingForUserResponseDTO(
+                booking.getId(),
+                booking.getTitle(),
+                booking.getDescription(),
+                startTime,
+                endTime,
+                booking.getRoom().getHouse().getId(),
+                booking.getRoom().getHouse().getName(),
+                booking.getRoom().getRoomNumber(),
+                owner,
+                participants
+        );
     }
 }
