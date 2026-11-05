@@ -100,6 +100,33 @@ export interface BookingModalProps {
 	submitData: (values: BookingCreateData) => void;
 }
 
+// Matchar UserResponseDTO i backend
+export interface bookingUser {
+	id: number;
+	firstName: string;
+	lastName: string;
+	email: string;
+	phoneNumber: string | null;
+	timeZone: string | null;
+}
+
+// Matchar BookingResponseDTO i backend
+export interface bookingData {
+	id: number;
+	title: string;
+	description: string | null;
+	startTime: string; // LocalDateTime i husets tidszon, t.ex. "2026-05-10T09:00:00"
+	endTime: string;
+	houseId: number;
+	roomNumber: string;
+	owner: bookingUser;
+	participants: bookingUser[];
+}
+
+export interface RoomBookingDetailsProps {
+	roomId: number;
+}
+
 export interface OrganizationSummaryData {
   id: number;
   name: string;
