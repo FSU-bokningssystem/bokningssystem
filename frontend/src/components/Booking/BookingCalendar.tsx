@@ -1,6 +1,6 @@
 import { CalendarX2 } from "lucide-react";
 import type { bookingData } from "../../types/types";
-import BookingCard from "../Room/RoomBookingCard";
+import MyBookingCard from "./MyBookingCard";
 
 const BookingCalendar = ({ bookings }: { bookings: bookingData[] }) => {
 	const upcoming = bookings.filter(
@@ -37,7 +37,7 @@ const BookingCalendar = ({ bookings }: { bookings: bookingData[] }) => {
 				{upcoming.length > 0 && (
 					<ul className="space-y-3">
 						{upcoming.map((b) => (
-							<BookingCard key={b.id} booking={b} />
+							<MyBookingCard key={b.id} booking={b} />
 						))}
 					</ul>
 				)}

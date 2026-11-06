@@ -66,7 +66,9 @@ public class BookingMapper {
                 startTime,
                 endTime,
                 booking.getRoom().getHouse().getId(),
+                booking.getRoom().getHouse().getName(),
                 booking.getRoom().getRoomNumber(),
+                booking.getRoom().getName(),
                 owner,
                 participants);
     }
