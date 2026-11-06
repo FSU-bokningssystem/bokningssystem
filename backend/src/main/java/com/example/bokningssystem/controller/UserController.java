@@ -3,7 +3,6 @@ package com.example.bokningssystem.controller;
 import com.example.bokningssystem.dtos.InitialResponseDTO;
 import com.example.bokningssystem.dtos.CreateUserProfileDTO;
 import com.example.bokningssystem.entities.User;
-
 import com.example.bokningssystem.dtos.UserResponseDTO;
 import com.example.bokningssystem.service.UserContextService;
 import com.example.bokningssystem.service.UserService;
@@ -35,7 +34,7 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
         return ResponseEntity.ok(userService.getAll());
-       }
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
@@ -46,6 +45,15 @@ public class UserController {
     public ResponseEntity<UserResponseDTO> registerUser(@Valid @RequestBody CreateUserProfileDTO dto) {
         UserResponseDTO createdUser = userService.createUserProfile(dto);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserResponseDTO> editUser(
+            @PathVariable Long id,
+            @Valid @RequestBody CreateUserProfileDTO dto
+    ) {
+        UserResponseDTO editedUser = userService.editUserProfile(id, dto);
+        return ResponseEntity.ok(editedUser);
     }
 
     @GetMapping("me/context")
