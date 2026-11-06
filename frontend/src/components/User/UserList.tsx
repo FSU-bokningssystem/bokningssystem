@@ -14,7 +14,7 @@ const UserList = ({ users }: { users: userData[] }) => {
   const queryClient = useQueryClient();
 
   const handleUserCreated = () => {
-    // Uppdatera användarlistan i cachen när en ny användare skapas
+    // Uppdatera användarlistan i cachen när en användare skapas eller redigeras
     queryClient.invalidateQueries({ queryKey: ["users"] });
   };
 
@@ -27,7 +27,7 @@ const UserList = ({ users }: { users: userData[] }) => {
         </span>
         <button
           onClick={() => setIsAddModalOpen(true)}
-          className="inline-flex items-center gap-2 bg-[#0058a3] hover:bg-[#004f93] text-white font-bold py-2.5 px-5 rounded-full transition shadow-xs text-sm"
+          className="inline-flex items-center gap-2 bg-[#0058a3] hover:bg-[#004f93] text-white font-bold py-2.5 px-5 rounded-full transition shadow-xs text-sm cursor-pointer"
         >
           <UserPlus className="w-4 h-4" />
           Skapa användare
@@ -54,7 +54,7 @@ const UserList = ({ users }: { users: userData[] }) => {
                   <button
                     type="button"
                     onClick={() => setSelectedUser(user)}
-                    className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-full transition"
+                    className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-full transition cursor-pointer"
                   >
                     <Info className="w-3.5 h-3.5" /> Detaljer
                   </button>
@@ -64,7 +64,7 @@ const UserList = ({ users }: { users: userData[] }) => {
                     className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold transition ${
                       isCurrent
                         ? "bg-green-100 text-green-700 border border-green-300 cursor-default"
-                        : "bg-[#0058a3] hover:bg-[#004f93] text-white"
+                        : "bg-[#0058a3] hover:bg-[#004f93] text-white cursor-pointer"
                     }`}
                   >
                     {isCurrent ? (
@@ -86,7 +86,11 @@ const UserList = ({ users }: { users: userData[] }) => {
 
       {/* Detaljmodal för vald användare */}
       {selectedUser && (
-        <UserModal user={selectedUser} onClose={() => setSelectedUser(null)} />
+        <UserModal
+          user={selectedUser}
+          onClose={() => setSelectedUser(null)}
+          onUserUpdated={handleUserCreated}
+        />
       )}
 
       {/* Modal för att skapa ny användare */}
