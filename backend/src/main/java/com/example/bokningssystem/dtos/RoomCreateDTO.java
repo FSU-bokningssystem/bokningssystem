@@ -1,6 +1,5 @@
 package com.example.bokningssystem.dtos;
 
-
 import jakarta.validation.constraints.NotBlank;
 
 public record RoomCreateDTO(
