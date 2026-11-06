@@ -47,11 +47,12 @@ Johan hade synpunkt om att vi bör vara mer försiktiga med att göra saker i l�
 
 Det börjar bli lite stökigt bland DTO:erna och de behöver lite mer struktur. Vi kom överens om att när vi hamnar i ett läge där vi inte har egna branches för tillfället, t ex vid nästa review, passa på att organisera upp dem. Vi ska även titta på att organisera upp våra typer, antingen i separata filer för olika domäner eller i alla fall att kommentera upp types-filen för att få relaterade typer på samma ställe.
 
-## Fredag ÅÅÅÅ-MM-DD
+## Fredag 2026-11-06
 
-| Namn | Närvaro | Igår | Idag | Hinder |
-| ---- | ------- | ---- | ---- | ------ |
-|      |         |      |      |        |
-|      |         |      |      |        |
-|      |         |      |      |        |
-|      |         |      |      |        |
+| Namn     | Närvaro | Igår                                 | Idag                                 | Hinder |
+| -------- | ------- | ------------------------------------ | ------------------------------------ | ------ |
+| Staffan  | Ja      | Visa egna bokningar                  | Borta                                |        |
+| Axel     | Ja      | Ta bort lokal                        | Ta bort lokal                        |        |
+| Johan    | Ja      | Ta bort användare ur organisation    | Ta bort användare ur organisation    |        |
+| Anton    | Ja      | Mer buggfix, Redigera användarprofil | Småfix                               |        |
+| Jonathan | Ja      | Authcontext                          | Husöversikt kopplad till authcontext |        |
