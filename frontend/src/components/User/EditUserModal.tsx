@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
 import type { userData } from '../../types/types';
-import { postToApi } from '../../api/postData';
+import { putToApi } from '../../api/putData';
 import { X, Save, Eye, EyeOff } from 'lucide-react';
 
 interface EditUserModalProps {
-  user: userData & { phoneNumber?: string; password?: string };
+  user: userData & { phoneNumber?: string };
   onClose: () => void;
   onUserUpdated?: () => void;
 }
 
 const EditUserModal: React.FC<EditUserModalProps> = ({ user, onClose, onUserUpdated }) => {
   const initialPhone = user.phone || user.phoneNumber || '';
-  const initialPassword = user.password || '';
 
   const [formData, setFormData] = useState({
     firstName: user.firstName || '',
@@ -19,8 +18,8 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ user, onClose, onUserUpda
     email: user.email || '',
     phoneNumber: initialPhone,
     timeZone: user.timeZone || '',
-    password: initialPassword,
-    confirmPassword: initialPassword,
+    password: '',
+    confirmPassword: '',
   });
 
   const [showPasswordText, setShowPasswordText] = useState(false);
@@ -36,13 +35,17 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ user, onClose, onUserUpda
     e.preventDefault();
     setStatusMessage(null);
 
-    // Validera att lösenord och bekräftelse matchar
-    if (formData.password !== formData.confirmPassword) {
-      setStatusMessage({ text: 'Lösenorden matchar inte.', type: 'error' });
-      return;
+    // Validera endast om användaren har skrivit något i lösenordsfälten
+    const isPasswordFilled = formData.password.trim() !== '' || formData.confirmPassword.trim() !== '';
+
+    if (isPasswordFilled) {
+      if (formData.password !== formData.confirmPassword) {
+        setStatusMessage({ text: 'Lösenorden matchar inte.', type: 'error' });
+        return;
+      }
     }
 
-    // Kontrollera om profil eller lösenord har ändrats
+    // Jämför om profilen eller lösenordet faktiskt har ändrats
     const isProfileChanged =
       formData.firstName !== (user.firstName || '') ||
       formData.lastName !== (user.lastName || '') ||
@@ -50,9 +53,9 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ user, onClose, onUserUpda
       formData.phoneNumber !== initialPhone ||
       formData.timeZone !== (user.timeZone || '');
 
-    const isPasswordChanged = formData.password !== initialPassword;
+    const isPasswordChanged = formData.password.trim() !== '';
 
-    // Om ingenting har ändrats, stäng modalen utan API-anrop
+    // Om ingenting har ändrats – avbryt och stäng utan anrop till databasen
     if (!isProfileChanged && !isPasswordChanged) {
       onClose();
       return;
@@ -61,8 +64,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ user, onClose, onUserUpda
     setLoading(true);
 
     try {
-      // Skicka mot backend-endpointen: POST /user/edit/{id}
-      await postToApi(`user/edit/${user.id}`, {
+      await putToApi(`user/${user.id}`, {
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
@@ -149,22 +151,21 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ user, onClose, onUserUpda
             </div>
           </div>
 
-          {/* Lösenordsfält som alltid syns */}
+          {/* Valfria lösenordsfält */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label htmlFor="password" className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">
-                Lösenord
+                Nytt Lösenord <span className="text-[10px] text-gray-400 font-normal lowercase"></span>
               </label>
               <div className="relative">
                 <input
                   type={showPasswordText ? 'text' : 'password'}
                   id="password"
                   name="password"
-                  placeholder="Lösenord"
+                  placeholder="Valfritt"
                   className="w-full px-3.5 py-2 pr-10 bg-gray-50 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#0058a3] focus:border-[#0058a3] transition"
                   value={formData.password}
                   onChange={handleChange}
-                  required
                 />
                 <button
                   type="button"
@@ -184,11 +185,10 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ user, onClose, onUserUpda
                 type={showPasswordText ? 'text' : 'password'}
                 id="confirmPassword"
                 name="confirmPassword"
-                placeholder="Upprepa lösenord"
+                placeholder="Valfritt"
                 className="w-full px-3.5 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#0058a3] focus:border-[#0058a3] transition"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                required
               />
             </div>
           </div>

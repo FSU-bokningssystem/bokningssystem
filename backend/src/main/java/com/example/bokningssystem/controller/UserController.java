@@ -40,8 +40,11 @@ public class UserController {
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
-    @PostMapping("/edit/{id}")
-    public ResponseEntity<UserResponseDTO> editUser(@PathVariable Long id, @Valid @RequestBody CreateUserProfileDTO dto) {
+    @PutMapping("/{id}")
+    public ResponseEntity<UserResponseDTO> editUser(
+            @PathVariable Long id,
+            @Valid @RequestBody CreateUserProfileDTO dto
+    ) {
         UserResponseDTO editedUser = userService.editUserProfile(id, dto);
         return ResponseEntity.ok(editedUser);
     }

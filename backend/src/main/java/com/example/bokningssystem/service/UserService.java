@@ -61,12 +61,12 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Användare hittades inte med id: " + id));
 
-        // Om e-posten ändrats så kollar den att e-posten inte upptas av någon annan
+        // Om e-posten ändrats, validera att den inte används av någon annan
         if (!user.getEmail().equalsIgnoreCase(dto.getEmail()) && userRepository.existsByEmail(dto.getEmail())) {
             throw new IllegalArgumentException("E-postadressen är redan registrerad");
         }
 
-        // Uppdatera lösenord om nytt lösenord har skickats med
+        // Uppdatera lösenordet ENDAST om användaren har fyllt i ett nytt lösenord
         if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
             if (!dto.getPassword().equals(dto.getConfirmPassword())) {
                 throw new IllegalArgumentException("Lösenorden matchar inte");
@@ -78,6 +78,7 @@ public class UserService {
             credentialRepository.save(credential);
         }
 
+        // Mappa användaruppgifter
         userMapper.updateEntityFromDto(user, dto);
 
         User updatedUser = userRepository.save(user);
