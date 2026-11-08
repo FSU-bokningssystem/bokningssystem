@@ -1,5 +1,6 @@
 package com.example.bokningssystem.mapper;
 
+import com.example.bokningssystem.dtos.BookingDTO;
 import com.example.bokningssystem.dtos.BookingResponseDTO;
 import com.example.bokningssystem.dtos.BookingRequestDTO;
 import com.example.bokningssystem.dtos.UserResponseDTO;
@@ -48,6 +49,7 @@ public class BookingMapper {
                 duration,
                 owner);
     }
+
     public BookingResponseDTO toBookingResponseDTO (Booking booking) {
         LocalDateTime startTime = LocalDateTime.ofInstant(booking.getStartTime(),booking.getRoom().getHouse().getActualTimeZone());
         LocalDateTime endTime = LocalDateTime.ofInstant(booking.getEndTime(),booking.getRoom().getHouse().getActualTimeZone());
@@ -67,4 +69,20 @@ public class BookingMapper {
                 owner,
                 participants);
     }
+
+    public BookingDTO toDTO(Booking booking) {
+        if (booking == null) return null;
+
+        return new BookingDTO(
+                booking.getId(),
+                booking.getTitle(),
+                booking.getDescription(),
+                booking.getStartTime(),
+                booking.getDuration(),
+                booking.getRoom().getId(),
+                booking.getRoom().getName(),
+                booking.getOwner().getId()
+        );
+    }
+
 }

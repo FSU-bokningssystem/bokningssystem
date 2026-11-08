@@ -8,19 +8,24 @@ import org.hibernate.annotations.ColumnDefault;
 import java.util.Objects;
 
 @Entity
-@Table(name = "memberships")
+@Table(
+        name = "memberships",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uk_user_organization",
+                        columnNames = {"user_id", "organization_id"}
+                )
+        })
 public class Membership {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private long id;
 
-    @MapsId
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @MapsId
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "organization_id", nullable = false)
     private Organization organization;

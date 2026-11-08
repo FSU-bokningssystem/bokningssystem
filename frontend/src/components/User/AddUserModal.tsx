@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import type { CreateUserProfileDTO } from '../../types/types';
+import React, { useState, type SubmitEvent } from 'react';
+import type { CreateUserProfileDTO, userData } from '../../types/types';
 import { postToApi } from '../../api/postData';
 import { useAuth } from '../../context/AuthContext';
 import { X, UserPlus } from 'lucide-react';
@@ -29,7 +29,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ onClose, onUserCreated }) =
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: SubmitEvent) => {
     e.preventDefault();
     setStatusMessage(null);
 
@@ -41,16 +41,9 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ onClose, onUserCreated }) =
     setLoading(true);
 
     try {
-      const created = await postToApi("user/register", formData);
+      const created = await postToApi<userData>("user/register", formData);
 
-      loginAs({
-        id: created.id,
-        firstName: created.firstName,
-        lastName: created.lastName,
-        email: created.email,
-        phone: created.phone,
-        timeZone: created.time_zone ?? created.timeZone,
-      });
+      await loginAs(created.id);
 
       if (onUserCreated) onUserCreated();
       onClose();
