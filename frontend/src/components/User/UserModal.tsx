@@ -2,6 +2,10 @@ import { useState } from "react";
 import { X, Mail, Phone, Globe, User, Edit } from "lucide-react";
 import type { userData } from "../../types/types";
 import EditUserModal from "./EditUserModal";
+import { useAuth } from "../../context/AuthContext";
+import { useQuery } from "@tanstack/react-query";
+import { fetchFromApi } from "../../api/fetchData";
+import type { Membership } from "../../types/types";
 
 export interface UserModalProps {
   user: userData & { phoneNumber?: string };
@@ -12,6 +16,24 @@ export interface UserModalProps {
 const UserModal = ({ user, onClose, onUserUpdated }: UserModalProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const displayPhone = user.phone || user.phoneNumber;
+  console.log(user);
+  const id = useAuth().currentUser?.id;
+
+  const {
+    data: userMemberships = [],
+    isLoading,
+    error,
+  } = useQuery<Membership[]>({
+    queryKey: ["membership", id],
+    queryFn: () => fetchFromApi("membership/user/" + id),
+    enabled: !!id,
+  });
+
+  const role = userMemberships[0]?.memberRole;
+  const isOwner = role === "OWNER";
+
+  console.log(userMemberships);
+  console.log(isOwner);
 
   return (
     <>
@@ -30,7 +52,9 @@ const UserModal = ({ user, onClose, onUserUpdated }: UserModalProps) => {
                 <div className="p-2 bg-blue-50 text-[#0058a3] rounded-full">
                   <User className="w-5 h-5" />
                 </div>
-                <h3 className="text-lg font-bold text-gray-900">Användardetaljer</h3>
+                <h3 className="text-lg font-bold text-gray-900">
+                  Användardetaljer
+                </h3>
               </div>
               <button
                 onClick={onClose}
@@ -48,7 +72,9 @@ const UserModal = ({ user, onClose, onUserUpdated }: UserModalProps) => {
                 <h4 className="text-xl font-bold text-gray-900">
                   {user.firstName} {user.lastName}
                 </h4>
-                <p className="text-xs font-semibold text-[#0058a3]">ID: #{user.id}</p>
+                <p className="text-xs font-semibold text-[#0058a3]">
+                  ID: #{user.id}
+                </p>
               </div>
 
               <div className="space-y-3 pt-2">
@@ -80,6 +106,15 @@ const UserModal = ({ user, onClose, onUserUpdated }: UserModalProps) => {
               >
                 <Edit className="w-4 h-4" /> Redigera
               </button>
+              {isOwner && (
+                <button
+                  type="button"
+                  onClick={console.log("hej")}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-bold text-white bg-[#a30000] hover:bg-[#004f93] rounded-full transition cursor-pointer"
+                >
+                  <Edit className="w-4 h-4" /> Ta bort ur organisation
+                </button>
+              )}
               <button
                 onClick={onClose}
                 type="button"
