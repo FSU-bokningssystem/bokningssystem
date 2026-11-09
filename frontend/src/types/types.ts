@@ -1,3 +1,5 @@
+// User types
+
 export interface userData {
 	email: string;
 	firstName: string;
@@ -11,6 +13,23 @@ export interface userList {
 	users: Array<userData>;
 }
 
+export interface CreateUserProfileDTO {
+	email: string;
+	password: string;
+	confirmPassword?: string;
+	firstName: string;
+	lastName: string;
+	phoneNumber?: string;
+	timeZone?: string;
+}
+
+export interface UserModalProps {
+	user: userData;
+	onClose: () => void;
+}
+
+// House types
+
 export interface houseData {
 	id: number;
 	name: string;
@@ -38,48 +57,18 @@ export interface houseList {
 	houses: houseData[];
 }
 
-export interface roomData {
-	id: number;
-	roomNumber: string;
-	floor: number;
-	name: string;
-	description: string;
-	houseName: string;
-	isAvailable: boolean;
-}
-
-export interface houseData {
-	id: number;
-	name: string;
-	street: string;
-	streetnumber: string;
-	zipcode: string;
+export interface HouseDetailData {
 	id: number;
 	name: string;
 	street: string;
 	streetNumber: string;
 	zipCode: string;
 	city: string;
-	organizationName: string;
 	timeZone: string;
+	rooms: RoomSummaryData[];
 }
 
-export interface houseWithRoomsData {
-	id: number;
-	name: string;
-	street: string;
-	streetNumber: string;
-	zipCode: string;
-	city: string;
-	organizationName: string;
-	timeZone: string;
-	rooms: roomData[];
-}
-
-export interface houseList {
-	houses: houseData[];
-}
-
+// Room types
 export interface roomData {
 	id: number;
 	roomNumber: string;
@@ -122,20 +111,16 @@ export interface RoomListProps {
 	id: number;
 }
 
-export interface CreateUserProfileDTO {
-	email: string;
-	password: string;
-	confirmPassword?: string;
-	firstName: string;
-	lastName: string;
-	phoneNumber?: string;
-	timeZone?: string;
+export interface RoomSummaryData {
+	id: number;
+	roomNumber: string;
+	floor: number;
+	name: string;
+	description: string | null;
+	isAvailable: boolean;
 }
 
-export interface UserModalProps {
-	user: userData;
-	onClose: () => void;
-}
+// Booking types
 
 export interface BookingCreateData {
 	houseId: number;
@@ -153,7 +138,7 @@ export interface BookingModalProps {
 }
 
 // Matchar UserResponseDTO i backend
-export interface bookingUser {
+export interface BookingUser {
 	id: number;
 	firstName: string;
 	lastName: string;
@@ -163,7 +148,7 @@ export interface bookingUser {
 }
 
 // Matchar BookingResponseDTO i backend
-export interface bookingData {
+export interface BookingData {
 	id: number;
 	title: string;
 	description: string | null;
@@ -173,38 +158,20 @@ export interface bookingData {
 	houseName: string;
 	roomNumber: string;
 	roomName: string;
-	owner: bookingUser;
-	participants: bookingUser[];
+	owner: BookingUser;
+	participants: BookingUser[];
 }
 
 export interface RoomBookingDetailsProps {
 	roomId: number;
 }
 
+// Organization types
+
 export interface OrganizationSummaryData {
-  id: number;
-  name: string;
-  memberRole: 'ADMIN' | 'MEMBER' | 'OWNER';
-}
-
-export interface RoomSummaryData {
-  id: number;
-  roomNumber: string;
-  floor: number;
-  name: string;
-  description: string | null;
-  isAvailable: boolean;
-}
-
-export interface HouseDetailData {
 	id: number;
 	name: string;
-	street: string;
-	streetNumber: string;
-	zipCode: string;
-	city: string;
-	timeZone: string;
-	rooms: RoomSummaryData[];
+	memberRole: "ADMIN" | "MEMBER" | "OWNER";
 }
 
 export interface OrganizationDetailData {
@@ -213,16 +180,7 @@ export interface OrganizationDetailData {
 	houses: HouseDetailData[];
 }
 
-export interface BookingData {
-	  id: number;
-	  title: string;
-	  description: string | null;
-	  startTime: string;
-	  duration: number;
-	  roomId: number;
-	  roomName: string;
-	  ownerId: number;
-}
+// InitialData type for use in AuthContext
 
 export interface InitialData {
 	user: userData;

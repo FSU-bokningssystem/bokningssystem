@@ -1,7 +1,6 @@
 package com.example.bokningssystem.service;
 
 import com.example.bokningssystem.dtos.*;
-import com.example.bokningssystem.entities.Booking;
 import com.example.bokningssystem.entities.Membership;
 import com.example.bokningssystem.entities.Organization;
 import com.example.bokningssystem.entities.User;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 @Service
 public class UserContextService {
@@ -25,18 +25,16 @@ public class UserContextService {
     private final MembershipRepository membershipRepository;
     private final OrganizationRepository organizationRepository;
     private final OrganizationMapper organizationMapper;
-    private final BookingRepository bookingRepository;
     private final BookingMapper bookingMapper;
 
     public UserContextService(UserRepository userRepository, UserMapper userMapper, MembershipRepository membershipRepository,
                               OrganizationRepository organizationRepository, OrganizationMapper organizationMapper,
-                              BookingRepository bookingRepository, BookingMapper bookingMapper) {
+                              BookingMapper bookingMapper) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.membershipRepository = membershipRepository;
         this.organizationRepository = organizationRepository;
         this.organizationMapper = organizationMapper;
-        this.bookingRepository = bookingRepository;
         this.bookingMapper = bookingMapper;
     }
 
@@ -83,11 +81,10 @@ public class UserContextService {
         }
 
         // Hämta användarens alla bokningar
-        List<Booking> userBookings = bookingRepository.findByOwnerIdOrUsersId(userId, userId);
-        List<BookingDTO> bookingDTOS = userBookings.stream()
-                .map(bookingMapper::toDTO)
+        List<BookingResponseDTO> bookingDTOs = Stream.concat(user.getOwnedBookings().stream(), user.getParticipatingBookings().stream())
+                .map(bookingMapper::toBookingResponseDTO)
                 .toList();
 
-        return new InitialResponseDTO(userDto, orgSummaries, activeOrgDTO, bookingDTOS);
+        return new InitialResponseDTO(userDto, orgSummaries, activeOrgDTO, bookingDTOs);
     }
 }

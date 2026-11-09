@@ -1,12 +1,15 @@
 import { CalendarX2 } from "lucide-react";
-import type { bookingData } from "../../types/types";
+import type { BookingData } from "../../types/types";
 import MyBookingCard from "./MyBookingCard";
 
-const BookingCalendar = ({ bookings }: { bookings: bookingData[] }) => {
-	const upcoming = bookings.filter(
-		(booking: any) => new Date(booking.endTime) >= new Date(),
-	);
-	// const pastBookings = bookings.filter((booking: any) => new Date(booking.endTime) < new Date());
+const BookingCalendar = ({ bookings }: { bookings: BookingData[] }) => {
+	const upcoming = bookings
+		.filter((booking: BookingData) => new Date(booking.endTime) >= new Date())
+		.sort(
+			(a, b) =>
+				new Date(a.startTime).getTime() - new Date(b.startTime).getTime(),
+		);
+	// const pastBookings = bookings.filter((booking: BookingData) => new Date(booking.endTime) < new Date());
 	// Används inte just nu, men kan vara användbart i framtiden om man vill visa historik för bokningar.
 
 	return (
