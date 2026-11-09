@@ -1,7 +1,7 @@
 import { CalendarDays, Clock, House, User, Users } from "lucide-react";
-import type { bookingData, bookingUser } from "../../types/types";
+import type { BookingData, BookingUser } from "../../types/types";
 
-const MyBookingCard = ({ booking }: { booking: bookingData }) => {
+const MyBookingCard = ({ booking }: { booking: BookingData }) => {
 	const start = new Date(booking.startTime);
 	const end = new Date(booking.endTime);
 	const durationMinutes = Math.round(
@@ -29,7 +29,7 @@ const MyBookingCard = ({ booking }: { booking: bookingData }) => {
 		return `${m} min`;
 	};
 
-	const initials = (u: bookingUser) =>
+	const initials = (u: BookingUser) =>
 		`${u.firstName.charAt(0)}${u.lastName.charAt(0)}`.toUpperCase();
 
 	return (
@@ -115,4 +115,4 @@ const MyBookingCard = ({ booking }: { booking: bookingData }) => {
 	);
 };
 
-export default BookingCard;
+export default MyBookingCard;

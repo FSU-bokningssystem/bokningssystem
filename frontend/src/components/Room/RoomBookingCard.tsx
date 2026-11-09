@@ -1,5 +1,5 @@
 import { CalendarDays, Clock, User, Users } from "lucide-react";
-import type { bookingData, bookingUser } from "../../types/types";
+import type { bookingData, BookingUser } from "../../types/types";
 
 const BookingCard = ({ booking }: { booking: bookingData }) => {
 	const start = new Date(booking.startTime);
@@ -29,7 +29,7 @@ const BookingCard = ({ booking }: { booking: bookingData }) => {
 		return `${m} min`;
 	};
 
-	const initials = (u: bookingUser) =>
+	const initials = (u: BookingUser) =>
 		`${u.firstName.charAt(0)}${u.lastName.charAt(0)}`.toUpperCase();
 
 	return (
