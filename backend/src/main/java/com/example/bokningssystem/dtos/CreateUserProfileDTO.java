@@ -19,11 +19,8 @@ public class CreateUserProfileDTO {
        // Telefon är valfritt
        private String phoneNumber;
 
-       @NotBlank(message = "Lösenord krävs")
-       @Size(min = 6, message = "Lösenordet måste vara minst 6 tecken långt")
+       //Valideras i service
        private String password;
-
-       @NotBlank(message = "Lösenordsbekräftelse krävs")
        private String confirmPassword;
 
        private String timeZone;

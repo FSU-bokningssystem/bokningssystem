@@ -3,7 +3,7 @@ export interface userData {
 	firstName: string;
 	id: number;
 	lastName: string;
-	phone: string;
+	phone: string | null;
 	timeZone: string;
 }
 
@@ -54,6 +54,11 @@ export interface houseData {
 	street: string;
 	streetnumber: string;
 	zipcode: string;
+	id: number;
+	name: string;
+	street: string;
+	streetNumber: string;
+	zipCode: string;
 	city: string;
 	organizationName: string;
 	timeZone: string;
@@ -80,7 +85,7 @@ export interface roomData {
 	roomNumber: string;
 	floor: number;
 	name: string;
-	description: string;
+	description: string | null;
 	houseName: string;
 	isAvailable: boolean;
 }
@@ -98,9 +103,19 @@ export interface roomCreateData {
 	houseId: number;
 }
 
+export interface roomFormValues {
+	roomNumber: string;
+	floor: number | null;
+	name: string;
+	description: string;
+	isAvailable?: boolean;
+}
+
 export interface RoomModalProps {
 	onClose: () => void;
-	submitData: (values: roomCreateData) => void;
+	submitData: (values: roomFormValues) => void;
+	room?: roomData;
+	error?: string | null;
 }
 
 export interface RoomListProps {
@@ -164,4 +179,54 @@ export interface bookingData {
 
 export interface RoomBookingDetailsProps {
 	roomId: number;
+}
+
+export interface OrganizationSummaryData {
+  id: number;
+  name: string;
+  memberRole: 'ADMIN' | 'MEMBER' | 'OWNER';
+}
+
+export interface RoomSummaryData {
+  id: number;
+  roomNumber: string;
+  floor: number;
+  name: string;
+  description: string | null;
+  isAvailable: boolean;
+}
+
+export interface HouseDetailData {
+	id: number;
+	name: string;
+	street: string;
+	streetNumber: string;
+	zipCode: string;
+	city: string;
+	timeZone: string;
+	rooms: RoomSummaryData[];
+}
+
+export interface OrganizationDetailData {
+	id: number;
+	name: string;
+	houses: HouseDetailData[];
+}
+
+export interface BookingData {
+	  id: number;
+	  title: string;
+	  description: string | null;
+	  startTime: string;
+	  duration: number;
+	  roomId: number;
+	  roomName: string;
+	  ownerId: number;
+}
+
+export interface InitialData {
+	user: userData;
+	userOrganizations: OrganizationSummaryData[];
+	activeOrganization: OrganizationDetailData | null;
+	bookings: BookingData[];
 }

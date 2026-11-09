@@ -2,6 +2,7 @@ import { fetchFromApi } from "../api/fetchData";
 import { useQuery } from "@tanstack/react-query";
 import HouseList from "../components/House/HouseList";
 import LoadingSpinner from "../UI/LoadingSpinner";
+import type { houseData } from "../types/types";
 
 const HousesPage = () => {
   const {
@@ -10,7 +11,7 @@ const HousesPage = () => {
     error,
   } = useQuery({
     queryKey: ["houses"],
-    queryFn: () => fetchFromApi("house"),
+    queryFn: () => fetchFromApi<houseData[]>("house"),
   });
 
   if (isLoading) return <LoadingSpinner />;

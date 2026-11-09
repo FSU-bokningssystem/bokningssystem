@@ -2,7 +2,7 @@
 
 const API_BASE_URL = "http://localhost:8080/";
 
-const fetchFromApi = async (endpoint: string) => {
+const fetchFromApi = async <T>(endpoint: string): Promise<T> => {
 	try {
 		const res = await fetch(`${API_BASE_URL}${endpoint}`);
 		if (!res.ok) {
@@ -30,7 +30,7 @@ const fetchFromApi = async (endpoint: string) => {
 					);
 			}
 		}
-		const data = await res.json();
+		const data: T = await res.json();
 		return data;
 	} catch (error) {
 		throw error;

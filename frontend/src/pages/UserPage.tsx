@@ -2,6 +2,7 @@ import UserList from "../components/User/UserList";
 import { fetchFromApi } from "../api/fetchData";
 import { useQuery } from "@tanstack/react-query";
 import LoadingSpinner from "../UI/LoadingSpinner";
+import type { userData } from "../types/types";
 
 const UserPage = () => {
   const {
@@ -10,7 +11,7 @@ const UserPage = () => {
     error,
   } = useQuery({
     queryKey: ["users"],
-    queryFn: () => fetchFromApi("user"),
+    queryFn: () => fetchFromApi<userData[]>("user"),
   });
 
   if (isLoading) return <LoadingSpinner />;

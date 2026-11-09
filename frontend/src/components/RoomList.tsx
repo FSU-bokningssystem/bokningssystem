@@ -1,7 +1,7 @@
 import RoomRow from "./RoomRow";
 import { fetchFromApi } from "../api/fetchData";
 import { useQuery } from "@tanstack/react-query";
-import type { roomData, RoomListProps } from "../types/types";
+import type { houseWithRoomsData, RoomListProps } from "../types/types";
 
 const Roomlist = (props: RoomListProps) => {
   const {
@@ -10,7 +10,7 @@ const Roomlist = (props: RoomListProps) => {
     error,
   } = useQuery({
     queryKey: ["house", props.id],
-    queryFn: () => fetchFromApi("house/" + props.id),
+    queryFn: () => fetchFromApi<houseWithRoomsData>("house/" + props.id),
   });
 
   if (isLoading) return <p className="text-gray-500">Laddar lokaler...</p>;
@@ -29,7 +29,7 @@ const Roomlist = (props: RoomListProps) => {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
-            {theHouse?.rooms?.map((room: roomData) => (
+            {theHouse?.rooms?.map((room) => (
               <RoomRow key={room.id} room={room} />
             ))}
           </tbody>
