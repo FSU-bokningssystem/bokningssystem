@@ -2,8 +2,12 @@ package com.example.bokningssystem.service;
 
 import com.example.bokningssystem.dtos.CreateUserProfileDTO;
 import com.example.bokningssystem.dtos.UserResponseDTO;
+import com.example.bokningssystem.dtos.UserWithBookingsResponseDTO;
+import com.example.bokningssystem.mapper.UserMapper;
+import com.example.bokningssystem.dtos.CreateUserProfileDTO;
 import com.example.bokningssystem.entities.Credential;
 import com.example.bokningssystem.entities.User;
+import com.example.bokningssystem.mapper.UserWithBookingsMapper;
 import com.example.bokningssystem.mapper.UserMapper;
 import com.example.bokningssystem.repository.CredentialRepository;
 import com.example.bokningssystem.repository.UserRepository;
@@ -17,12 +21,14 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final UserWithBookingsMapper userWithBookingsMapper;
     private final CredentialRepository credentialRepository;
 
-    public UserService(UserRepository userRepository, CredentialRepository credentialRepository, UserMapper userMapper) {
+    public UserService(UserRepository userRepository, CredentialRepository credentialRepository, UserMapper userMapper, UserWithBookingsMapper userWithBookingsMapper) {
         this.userRepository = userRepository;
         this.credentialRepository = credentialRepository;
         this.userMapper = userMapper;
+        this.userWithBookingsMapper = userWithBookingsMapper;
     }
 
     public List<UserResponseDTO> getAll() {
@@ -32,9 +38,9 @@ public class UserService {
                 .toList();
     }
 
-    public User getUserById(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Användare hittades inte med id: " + id));
+    public UserResponseDTO getUserById(Long id) {
+        return userMapper.toResponseDTO(userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Användare hittades inte med id: " + id)));
     }
 
     @Transactional
@@ -54,6 +60,11 @@ public class UserService {
         credentialRepository.save(credential);
 
         return userMapper.toResponseDTO(savedUser);
+    }
+
+    public UserWithBookingsResponseDTO getUserWithBookings(Long id) {
+        return userWithBookingsMapper.toUserWithBookingsResponseDTO(userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Användare hittades inte med id: " + id)));
     }
 
     @Transactional
