@@ -1,68 +1,38 @@
-# Daily standup: sprint N
+# Daily standup: sprint 3
 
-<!--
-  INSTRUKTION
-  Håll standupen muntligt, max 15 minuter. Logga sedan kort här, en rad per person.
-  Det ska ta två minuter att fylla i. Stödord räcker.
-  Lägg till ett nytt avsnitt för varje dag, nyaste dagen längst ner.
-  Hinder löses inte på standupen. Skriv vem som hjälper till, och ta det efteråt.
-  Närvaro: Ja / Nej / Sen / Distans.
--->
+## Tisdag 2026-11-10
 
-> **Exempel (Sysslo, sprint 1):**
->
-> ### Tisdag 2026-11-03
->
-> | Namn | Närvaro | Igår | Idag | Hinder |
-> |---|---|---|---|---|
-> | Amir | Ja | Sprint planning | Projektskelett #9 | – |
-> | Sara | Ja | Sprint planning | Skapa hushåll #3, backend | – |
-> | Jonas | Distans | Sprint planning | Lista sysslor #7 | – |
-> | Lina | Ja | Sprint planning | Formulär ny syssla #4 | Vet inte hur datum ska skickas. Jonas hjälper efter standup. |
-
----
-
-## Måndag ÅÅÅÅ-MM-DD
-
-| Namn | Närvaro | Igår | Idag | Hinder |
-|---|---|---|---|---|
-| | | | | |
-| | | | | |
-| | | | | |
-| | | | | |
-
-## Tisdag ÅÅÅÅ-MM-DD
-
-| Namn | Närvaro | Igår | Idag | Hinder |
-|---|---|---|---|---|
-| | | | | |
-| | | | | |
-| | | | | |
-| | | | | |
+| Namn     | Närvaro | Igår                              | Idag                              | Hinder |
+| -------- | ------- | --------------------------------- | --------------------------------- | ------ |
+| Staffan  | Ja      | Se egna bokningar                 |                                   | Mässa  |
+| Johan    | Ja      | Ta bort användare ur organisation | Ta bort användare ur organisation |        |
+| Axel     | Ja      | Presentation och inloggningssida  | Presentation och inloggningssida  |        |
+| Anton    | Nej     |                                   |                                   |        |
+| Jonathan | Nej     |                                   |                                   |        |
 
 ## Onsdag ÅÅÅÅ-MM-DD
 
 | Namn | Närvaro | Igår | Idag | Hinder |
-|---|---|---|---|---|
-| | | | | |
-| | | | | |
-| | | | | |
-| | | | | |
+| ---- | ------- | ---- | ---- | ------ |
+|      |         |      |      |        |
+|      |         |      |      |        |
+|      |         |      |      |        |
+|      |         |      |      |        |
 
 ## Torsdag ÅÅÅÅ-MM-DD
 
 | Namn | Närvaro | Igår | Idag | Hinder |
-|---|---|---|---|---|
-| | | | | |
-| | | | | |
-| | | | | |
-| | | | | |
+| ---- | ------- | ---- | ---- | ------ |
+|      |         |      |      |        |
+|      |         |      |      |        |
+|      |         |      |      |        |
+|      |         |      |      |        |
 
 ## Fredag ÅÅÅÅ-MM-DD
 
 | Namn | Närvaro | Igår | Idag | Hinder |
-|---|---|---|---|---|
-| | | | | |
-| | | | | |
-| | | | | |
-| | | | | |
+| ---- | ------- | ---- | ---- | ------ |
+|      |         |      |      |        |
+|      |         |      |      |        |
+|      |         |      |      |        |
+|      |         |      |      |        |
