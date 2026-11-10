@@ -93,4 +93,23 @@ public class GlobalExceptionHandler {
                 "Det finns redan en lokal med detta rumsnummer på den våningen.");
         return ResponseEntity.status(409).body(error);
     }
+    @ExceptionHandler(MembershipNotFoundException.class)
+    public ResponseEntity<ErrorResponse> membershipNotFound(MembershipNotFoundException ex) {
+        return ResponseEntity.status(404).body(new ErrorResponse(404, ex.getMessage()));
+    }
+
+    @ExceptionHandler(LastOwnerException.class)
+    public ResponseEntity<ErrorResponse> lastOwner(LastOwnerException ex) {
+        return ResponseEntity.status(409).body(new ErrorResponse(409, ex.getMessage()));
+    }
+    @ExceptionHandler(OwnsBookingsException.class)
+    public ResponseEntity<ErrorResponse> ownsBooking(OwnsBookingsException ex){
+        return ResponseEntity.status(409).body(new ErrorResponse(409, ex.getMessage()));
+    }
+
+
+    @ExceptionHandler(BookingNotFoundException.class)
+    public ResponseEntity<ErrorResponse> bookingNotFound(BookingNotFoundException ex) {
+        return ResponseEntity.status(404).body(new ErrorResponse(404, ex.getMessage()));
+    }
 }

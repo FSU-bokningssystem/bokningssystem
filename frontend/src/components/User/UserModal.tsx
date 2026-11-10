@@ -30,7 +30,7 @@ const UserModal = ({ user, onClose, onUserUpdated }: UserModalProps) => {
   });
 
   const role = userMemberships[0]?.memberRole;
-  const isOwner = role === "OWNER";
+  const isOwner = role === "OWNER" || role === "ADMIN";
 
   console.log(userMemberships);
   console.log(isOwner);

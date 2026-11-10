@@ -2,11 +2,14 @@ package com.example.bokningssystem.service;
 
 import com.example.bokningssystem.dtos.BookingRequestDTO;
 import com.example.bokningssystem.dtos.BookingResponseDTO;
+import com.example.bokningssystem.dtos.UserOrgBookingsDTO;
 import com.example.bokningssystem.entities.Booking;
-import com.example.bokningssystem.exceptions.RoomNotAvailableException;
-import com.example.bokningssystem.exceptions.RoomOccupiedException;
+import com.example.bokningssystem.entities.User;
+import com.example.bokningssystem.exceptions.*;
 import com.example.bokningssystem.mapper.BookingMapper;
 import com.example.bokningssystem.repository.BookingRepository;
+import com.example.bokningssystem.repository.MembershipRepository;
+import com.example.bokningssystem.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,10 +21,15 @@ import java.util.List;
 public class BookingService {
     private final BookingMapper bookingMapper;
     private final BookingRepository bookingRepository;
+    private final MembershipRepository membershipRepository;
+    private final UserRepository userRepository;
 
-    public BookingService(BookingMapper bookingMapper, BookingRepository bookingRepository) {
+
+    public BookingService(BookingMapper bookingMapper, BookingRepository bookingRepository, MembershipRepository membershipRepository, UserRepository userRepository) {
         this.bookingMapper = bookingMapper;
         this.bookingRepository = bookingRepository;
+        this.membershipRepository = membershipRepository;
+        this.userRepository = userRepository;
     }
 
     public BookingResponseDTO create(BookingRequestDTO requestDTO){
@@ -57,5 +65,43 @@ public class BookingService {
                 .stream()
                 .map(bookingMapper::toBookingResponseDTO)
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public UserOrgBookingsDTO findUserBookingsInOrganization(long userId, long orgId) {
+        Instant now = Instant.now();
+        return new UserOrgBookingsDTO(
+                ownedFutureBookings(userId, orgId, now).stream().map(bookingMapper::toBookingResponseDTO).toList(),
+                bookingRepository.findByUsersIdAndRoomHouseOrganizationIdAndStartTimeAfter(userId, orgId, now)
+                        .stream().map(bookingMapper::toBookingResponseDTO).toList());
+    }
+
+    public List<Booking> ownedFutureBookings(long userId, long orgId, Instant now) {
+        return bookingRepository.findByOwnerIdAndRoomHouseOrganizationIdAndStartTimeAfter(userId, orgId, now);
+    }
+
+    @Transactional
+    public void removeUserFromFutureBookings(long userId, long orgId) {
+        bookingRepository.findByUsersIdAndRoomHouseOrganizationIdAndStartTimeAfter(userId, orgId, Instant.now())
+                .forEach(b -> b.getUsers().removeIf(u -> u.getId().equals(userId)));
+    }
+
+    @Transactional
+    public BookingResponseDTO transferOwner(long bookingId, long newOwnerId) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new BookingNotFoundException("Hittar inte bokning " + bookingId));
+        long orgId = booking.getRoom().getHouse().getOrganization().getId();
+
+        // Validering: den nya ägaren måste vara medlem i samma organisation
+        membershipRepository.findByUserIdAndOrganizationId(newOwnerId, orgId)
+                .orElseThrow(() -> new MembershipNotFoundException(
+                        "Användare " + newOwnerId + " är inte medlem i organisationen"));
+
+        User newOwner = userRepository.findById(newOwnerId)
+                .orElseThrow(() -> new UserNotFoundException("Hittar inte användare " + newOwnerId));
+
+        booking.getUsers().removeIf(u -> u.getId().equals(newOwnerId)); // ingen ska vara både ägare och deltagare
+        booking.setOwner(newOwner);
+        return bookingMapper.toBookingResponseDTO(booking);
     }
 }
