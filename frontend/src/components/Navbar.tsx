@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Menu, X, User } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { Menu, X, User, ChevronDown, ShieldAlert } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import OrganizationSelector from "./OrganizationSelector";
 import { useAuth } from "../context/AuthContext";
@@ -13,7 +13,19 @@ export const navLinks = [
 
 export const Navbar = () => {
   const [toggle, setToggle] = useState(false);
+  const [adminDropdown, setAdminDropdown] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const { currentUser } = useAuth();
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setAdminDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <header className="w-full bg-white border-b border-gray-200 sticky top-0 z-40 shadow-xs">
@@ -45,9 +57,33 @@ export const Navbar = () => {
               </NavLink>
             );
           })}
+
+          {/* Systemadmin Dropdown */}
+          <div className="relative" ref={dropdownRef}>
+            <button
+              onClick={() => setAdminDropdown(!adminDropdown)}
+              className="flex items-center gap-1 px-4 py-2 rounded-full font-medium text-sm text-gray-700 hover:bg-gray-100 transition-colors focus:outline-none"
+            >
+              <ShieldAlert className="w-4 h-4 text-[#0058a3]" />
+              Systemadmin
+              <ChevronDown className="w-3.5 h-3.5" />
+            </button>
+
+            {adminDropdown && (
+              <div className="absolute left-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-50">
+                <NavLink
+                  to="/create-organization"
+                  onClick={() => setAdminDropdown(false)}
+                  className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                >
+                  Lägg till organisation
+                </NavLink>
+              </div>
+            )}
+          </div>
         </nav>
 
-        {/* Höger: Organisationsväljare + Inloggad Användare (Desktop) */}
+        {/* Högersektion */}
         <div className="hidden md:flex items-center gap-4">
           <OrganizationSelector />
 
@@ -61,7 +97,7 @@ export const Navbar = () => {
           )}
         </div>
 
-        {/* Mobile Navigation Button */}
+        {/* Mobilknapp */}
         <div className="md:hidden flex items-center gap-2">
           <OrganizationSelector />
           <button
@@ -75,7 +111,7 @@ export const Navbar = () => {
         </div>
       </div>
 
-      {/* Dropdown för mobil */}
+      {/* Mobilmenyn */}
       {toggle && (
         <div className="md:hidden bg-white border-b border-gray-200 px-4 pt-2 pb-4 space-y-1 shadow-lg">
           {currentUser && (
@@ -104,6 +140,19 @@ export const Navbar = () => {
               </NavLink>
             );
           })}
+
+          <div className="border-t border-gray-100 pt-2 mt-2">
+            <span className="block px-4 py-1 text-xs font-semibold uppercase tracking-wider text-gray-400">
+              Systemadmin
+            </span>
+            <NavLink
+              to="/create-organization"
+              onClick={() => setToggle(false)}
+              className="block px-4 py-2.5 text-base font-medium text-gray-700 hover:bg-gray-100 rounded-lg"
+            >
+              Lägg till organisation
+            </NavLink>
+          </div>
         </div>
       )}
     </header>
