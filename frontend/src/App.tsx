@@ -5,6 +5,7 @@ import HousesPage from "./pages/HousesPage";
 import OneHousePage from "./pages/OneHousePage";
 import HouseDetails from "./components/House/HouseDetails";
 import RoomDetails from "./components/Room/RoomDetails";
+import { CreateOrganizationPage } from "./pages/CreateOrganizationPage";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
 import { Navbar } from "./components/Navbar";
@@ -31,30 +32,31 @@ const App = () => {
 		);
 	};
 
-	return (
-		<BrowserRouter>
-			<ErrorBoundary FallbackComponent={ErrorFallback}>
-				<AuthProvider>
-					<div className="min-h-screen bg-[#f5f5f5] text-[#111111] flex flex-col font-sans">
-						<Navbar />
-						<main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-							<Routes>
-								<Route path="/" element={<HomePage />} />
-								<Route path="/users" element={<UserPage />} />
-								<Route path="/houses" element={<HousesPage />} />
-								<Route path="/rooms" element={<RoomPage />} />
-								<Route path="/houses/:houseid" element={<OneHousePage />}>
-									<Route index element={<HouseDetails />} />
-									<Route path=":roomNbr" element={<RoomDetails />} />
-								</Route>
-								<Route path="/bookings" element={<MyBookingsPage />} />
-							</Routes>
-						</main>
-					</div>
-				</AuthProvider>
-			</ErrorBoundary>
-		</BrowserRouter>
-	);
+  return (
+    <BrowserRouter>
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <AuthProvider>
+          <div className="min-h-screen bg-[#f5f5f5] text-[#111111] flex flex-col font-sans">
+            <Navbar />
+            <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/users" element={<UserPage />} />
+                <Route path="/houses" element={<HousesPage />} />
+                <Route path="/rooms" element={<RoomPage />} />
+                 <Route path="/create-organization" element={<CreateOrganizationPage />} />
+                <Route path="/houses/:houseid" element={<OneHousePage />}>
+                  <Route index element={<HouseDetails />} />
+                  <Route path=":roomNbr" element={<RoomDetails />} />
+                </Route>
+				<Route path="/bookings" element={<MyBookingsPage />} />
+              </Routes>
+            </main>
+          </div>
+        </AuthProvider>
+      </ErrorBoundary>
+    </BrowserRouter>
+  );
 };
 
 export default App;
