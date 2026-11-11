@@ -5,6 +5,7 @@ import com.example.bokningssystem.dtos.MembershipResponseDTO;
 import com.example.bokningssystem.entities.Booking;
 import com.example.bokningssystem.entities.Membership;
 import com.example.bokningssystem.enums.MemberRole;
+import com.example.bokningssystem.exceptions.ForbiddenException;
 import com.example.bokningssystem.exceptions.LastOwnerException;
 import com.example.bokningssystem.exceptions.MembershipNotFoundException;
 import com.example.bokningssystem.exceptions.OwnsBookingsException;
@@ -38,21 +39,41 @@ public class MembershipService {
     }
 
     @Transactional
-    public void removeUserFromOrganization(long userId, long orgId){
-        Membership membership = membershipRepository.findByUserIdAndOrganizationId(userId, orgId)
-                .orElseThrow(() -> new MembershipNotFoundException(
-                        "Användare " + userId + " är inte medlem i organisationen " + orgId
+    public void removeUserFromOrganization(long actorId, long targetId, long orgId){
+        Membership actor = membershipRepository.findByUserIdAndOrganizationId(actorId, orgId)
+                .orElseThrow(() -> new ForbiddenException(
+                        "Användare " + actorId + " är inte medlem i organisationen " + orgId
                 ));
-        if (membership.getMemberRole() == MemberRole.OWNER
+        Membership target = membershipRepository.findByUserIdAndOrganizationId(targetId, orgId)
+                .orElseThrow(() -> new MembershipNotFoundException(
+                        "Användare " + targetId + " är inte medlem i organisationen " + orgId
+                ));
+
+
+    if( actorId != targetId && !canRemove(actor.getMemberRole(), target.getMemberRole())){
+        throw new ForbiddenException("Du har inte behörighet att ta bort denna användare");
+    }
+
+
+        if (target.getMemberRole() == MemberRole.OWNER
         && membershipRepository.countByOrganizationIdAndMemberRole(orgId, MemberRole.OWNER) <= 1) {
             throw new LastOwnerException("Kan inte ta bort den enda ägaren av organisationen");
         }
-        List<Booking> owned = bookingService.ownedFutureBookings(userId, orgId, Instant.now());
+        List<Booking> owned = bookingService.ownedFutureBookings(targetId, orgId, Instant.now());
         if (!owned.isEmpty()) {
             throw new OwnsBookingsException(
                     "Användaren äger " + owned.size() + " kommande möten. Ge över dem till någon annan först.");
         }
-        bookingService.removeUserFromFutureBookings(userId, orgId);
-        membershipRepository.delete(membership);
+        bookingService.removeUserFromFutureBookings(targetId, orgId);
+        membershipRepository.delete(target);
+    }
+
+
+    private boolean canRemove(MemberRole actorRole, MemberRole targetRole){
+        return switch (actorRole){
+            case OWNER -> true;
+            case ADMIN -> targetRole == MemberRole.MEMBER;
+            case MEMBER -> false;
+        };
     }
 }

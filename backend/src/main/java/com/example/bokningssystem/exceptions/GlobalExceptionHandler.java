@@ -112,4 +112,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> bookingNotFound(BookingNotFoundException ex) {
         return ResponseEntity.status(404).body(new ErrorResponse(404, ex.getMessage()));
     }
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<ErrorResponse> forbidden(ForbiddenException ex) {
+        return ResponseEntity.status(403).body(new ErrorResponse( 403, ex.getMessage()));
+    }
 }

@@ -3,7 +3,9 @@ import { X, Mail, Phone, Globe, User, Edit } from "lucide-react";
 import type { userData } from "../../types/types";
 import EditUserModal from "./EditUserModal";
 import { useAuth } from "../../context/AuthContext";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { deleteFromApi } from "../../api/deleteData";
+import { canRemove } from "../../utils/permissions";
 import { fetchFromApi } from "../../api/fetchData";
 import type { Membership } from "../../types/types";
 
@@ -16,24 +18,42 @@ export interface UserModalProps {
 const UserModal = ({ user, onClose, onUserUpdated }: UserModalProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const displayPhone = user.phone || user.phoneNumber;
-  console.log(user);
-  const id = useAuth().currentUser?.id;
 
-  const {
-    data: userMemberships = [],
-    isLoading,
-    error,
-  } = useQuery<Membership[]>({
-    queryKey: ["membership", id],
-    queryFn: () => fetchFromApi("membership/user/" + id),
-    enabled: !!id,
+  const { currentUser } = useAuth();
+  const actorId = currentUser?.id;
+  const queryClient = useQueryClient();
+  const [removeError, setRemoveError] = useState<string | null>(null);
+
+  const { data: actorMemberships = [] } = useQuery<Membership[]>({
+    queryKey: ["membership", actorId],
+    queryFn: () => fetchFromApi("membership/user/" + actorId),
+    enabled: !!actorId,
+  });
+  const { data: targetMemberships = [] } = useQuery<Membership[]>({
+    queryKey: ["membership", user.id],
+    queryFn: () => fetchFromApi("membership/user/" + user.id),
   });
 
-  const role = userMemberships[0]?.memberRole;
-  const isOwner = role === "OWNER" || role === "ADMIN";
+  const removableOrgs = targetMemberships.filter((t) => {
+    if (t.userId === actorId) return true;
+    const a = actorMemberships.find(
+      (m) => m.organizationId === t.organizationId,
+    );
+    return a && canRemove(a.memberRole, t.memberRole);
+  });
 
-  console.log(userMemberships);
-  console.log(isOwner);
+  const removeMutation = useMutation({
+    mutationFn: (orgId: number) =>
+      deleteFromApi(
+        `membership/organization/${orgId}/user/${user.id}`,
+        actorId!,
+      ),
+    onSuccess: () => {
+      setRemoveError(null);
+      queryClient.invalidateQueries({ queryKey: ["membership"] });
+    },
+    onError: (err: Error) => setRemoveError(err.message),
+  });
 
   return (
     <>
@@ -106,15 +126,7 @@ const UserModal = ({ user, onClose, onUserUpdated }: UserModalProps) => {
               >
                 <Edit className="w-4 h-4" /> Redigera
               </button>
-              {isOwner && (
-                <button
-                  type="button"
-                  onClick={console.log("hej")}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-bold text-white bg-[#a30000] hover:bg-[#004f93] rounded-full transition cursor-pointer"
-                >
-                  <Edit className="w-4 h-4" /> Ta bort ur organisation
-                </button>
-              )}
+
               <button
                 onClick={onClose}
                 type="button"
@@ -122,6 +134,32 @@ const UserModal = ({ user, onClose, onUserUpdated }: UserModalProps) => {
               >
                 Stäng
               </button>
+            </div>
+            <div className="border-t border-gray-100 pt-4 flex justify-between items-center">
+              {removableOrgs.map((m) => (
+                <button
+                  key={m.organizationId}
+                  type="button"
+                  disabled={removeMutation.isPending}
+                  onClick={() => {
+                    if (
+                      confirm(
+                        `Ta bort ${user.firstName} ur ${m.organizationName}?`,
+                      )
+                    ) {
+                      removeMutation.mutate(m.organizationId);
+                    }
+                  }}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-bold        
+    text-white bg-[#a30000] hover:bg-[#800000] rounded-full transition   
+    cursor-pointer disabled:opacity-50"
+                >
+                  Ta bort ur {m.organizationName}
+                </button>
+              ))}
+              {removeError && (
+                <p className="text-sm text-red-600">{removeError}</p>
+              )}
             </div>
           </div>
         </div>

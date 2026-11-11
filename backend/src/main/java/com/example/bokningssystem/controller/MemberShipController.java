@@ -34,9 +34,10 @@ public class MemberShipController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/organization/{orgId}/user/{userId}")
     public void removeUserFromOrganization (
-            @PathVariable @Positive long userId,
+            @RequestHeader("X-User-Id") @Positive  long actorId,
+            @PathVariable("userId") @Positive long targetId,
             @PathVariable @Positive long orgId)
            {
-        memberShipService.removeUserFromOrganization(userId,orgId);
+        memberShipService.removeUserFromOrganization(actorId,targetId,orgId);
     }
 }
