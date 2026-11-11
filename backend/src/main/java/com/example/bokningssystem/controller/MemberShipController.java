@@ -1,6 +1,7 @@
 package com.example.bokningssystem.controller;
 
 import com.example.bokningssystem.dtos.MembershipResponseDTO;
+import com.example.bokningssystem.dtos.OrgMemberDTO;
 import com.example.bokningssystem.service.MembershipService;
 import jakarta.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,12 @@ public class MemberShipController {
     public ResponseEntity<List<MembershipResponseDTO>> getUserMembership(
             @PathVariable @Positive long userId) {
         return ResponseEntity.ok(memberShipService.findMembership(userId));
+    }
+
+    @GetMapping("/organization/{orgId}")
+    public ResponseEntity<List<OrgMemberDTO>> getOrganizationMembers(
+            @PathVariable @Positive long orgId) {
+        return ResponseEntity.ok(memberShipService.findMembersOfOrganization(orgId));
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

@@ -2,6 +2,7 @@ package com.example.bokningssystem.service;
 
 
 import com.example.bokningssystem.dtos.MembershipResponseDTO;
+import com.example.bokningssystem.dtos.OrgMemberDTO;
 import com.example.bokningssystem.entities.Booking;
 import com.example.bokningssystem.entities.Membership;
 import com.example.bokningssystem.enums.MemberRole;
@@ -34,6 +35,17 @@ public class MembershipService {
                         userId,
                         m.getOrganization().getId(),
                         m.getOrganization().getName(),
+                        m.getMemberRole()))
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<OrgMemberDTO> findMembersOfOrganization(long orgId) {
+        return membershipRepository.findAllByOrganizationId(orgId).stream()
+                .map(m -> new OrgMemberDTO(
+                        m.getUser().getId(),
+                        m.getUser().getFirstName(),
+                        m.getUser().getLastName(),
                         m.getMemberRole()))
                 .toList();
     }

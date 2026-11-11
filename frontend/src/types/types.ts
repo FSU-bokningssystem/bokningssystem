@@ -181,3 +181,17 @@ export interface Membership {
   organizationName: string;
   memberRole: MemberRole;
 }
+
+// Matchar OrgMemberDTO i backend
+export interface OrgMember {
+  userId: number;
+  firstName: string;
+  lastName: string;
+  memberRole: MemberRole;
+}
+
+// Matchar UserOrgBookingsDTO i backend
+export interface UserOrgBookings {
+  owned: bookingData[];
+  participating: bookingData[];
+}

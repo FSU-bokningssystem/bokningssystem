@@ -8,6 +8,7 @@ import { deleteFromApi } from "../../api/deleteData";
 import { canRemove } from "../../utils/permissions";
 import { fetchFromApi } from "../../api/fetchData";
 import type { Membership } from "../../types/types";
+import TransferBookingsPanel from "./TransferBookingsPanel";
 
 export interface UserModalProps {
   user: userData & { phoneNumber?: string };
@@ -23,6 +24,7 @@ const UserModal = ({ user, onClose, onUserUpdated }: UserModalProps) => {
   const actorId = currentUser?.id;
   const queryClient = useQueryClient();
   const [removeError, setRemoveError] = useState<string | null>(null);
+  const [selectedOrg, setSelectedOrg] = useState<Membership | null>(null);
 
   const { data: actorMemberships = [] } = useQuery<Membership[]>({
     queryKey: ["membership", actorId],
@@ -50,7 +52,9 @@ const UserModal = ({ user, onClose, onUserUpdated }: UserModalProps) => {
       ),
     onSuccess: () => {
       setRemoveError(null);
+      setSelectedOrg(null);
       queryClient.invalidateQueries({ queryKey: ["membership"] });
+      queryClient.invalidateQueries({ queryKey: ["orgMembers"] });
     },
     onError: (err: Error) => setRemoveError(err.message),
   });
@@ -135,30 +139,38 @@ const UserModal = ({ user, onClose, onUserUpdated }: UserModalProps) => {
                 Stäng
               </button>
             </div>
-            <div className="border-t border-gray-100 pt-4 flex justify-between items-center">
-              {removableOrgs.map((m) => (
-                <button
-                  key={m.organizationId}
-                  type="button"
-                  disabled={removeMutation.isPending}
-                  onClick={() => {
-                    if (
-                      confirm(
-                        `Ta bort ${user.firstName} ur ${m.organizationName}?`,
-                      )
-                    ) {
-                      removeMutation.mutate(m.organizationId);
-                    }
+            <div className="border-t border-gray-100 pt-4 mt-4 flex flex-wrap gap-2 items-center">
+              {selectedOrg ? (
+                <TransferBookingsPanel
+                  userId={user.id}
+                  orgId={selectedOrg.organizationId}
+                  orgName={selectedOrg.organizationName}
+                  isRemoving={removeMutation.isPending}
+                  onCancel={() => {
+                    setSelectedOrg(null);
+                    setRemoveError(null);
                   }}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-bold        
-    text-white bg-[#a30000] hover:bg-[#800000] rounded-full transition   
-    cursor-pointer disabled:opacity-50"
-                >
-                  Ta bort ur {m.organizationName}
-                </button>
-              ))}
+                  onRemove={() =>
+                    removeMutation.mutate(selectedOrg.organizationId)
+                  }
+                />
+              ) : (
+                removableOrgs.map((m) => (
+                  <button
+                    key={m.organizationId}
+                    type="button"
+                    onClick={() => {
+                      setRemoveError(null);
+                      setSelectedOrg(m);
+                    }}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-bold text-white bg-[#a30000] hover:bg-[#800000] rounded-full transition cursor-pointer"
+                  >
+                    Ta bort ur {m.organizationName}
+                  </button>
+                ))
+              )}
               {removeError && (
-                <p className="text-sm text-red-600">{removeError}</p>
+                <p className="w-full text-sm text-red-600">{removeError}</p>
               )}
             </div>
           </div>
