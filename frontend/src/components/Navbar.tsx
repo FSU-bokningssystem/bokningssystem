@@ -5,10 +5,11 @@ import OrganizationSelector from "./OrganizationSelector";
 import { useAuth } from "../context/AuthContext";
 
 export const navLinks = [
-  { id: "", title: "Hem" },
-  { id: "users", title: "Användare" },
-  { id: "houses", title: "Hus" },
-  { id: "rooms", title: "Rum & Lokaler" },
+	{ id: "", title: "Hem" },
+	{ id: "users", title: "Användare" },
+	{ id: "houses", title: "Hus" },
+	{ id: "rooms", title: "Rum & Lokaler" },
+	{ id: "bookings", title: "Mina Bokningar" },
 ];
 
 export const Navbar = () => {
@@ -87,15 +88,15 @@ export const Navbar = () => {
         <div className="hidden md:flex items-center gap-4">
           <OrganizationSelector />
 
-          {currentUser && (
-            <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 bg-gray-100 px-3 py-1.5 rounded-full border border-gray-200">
-              <User className="w-3.5 h-3.5 text-gray-500" />
-              <span>
-                {currentUser.firstName} {currentUser.lastName}
-              </span>
-            </div>
-          )}
-        </div>
+					{currentUser && (
+						<div className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 bg-gray-100 px-3 py-1.5 rounded-full border border-gray-200">
+							<User className="w-3.5 h-3.5 text-gray-500" />
+							<span>
+								{currentUser.firstName} {currentUser.lastName}
+							</span>
+						</div>
+					)}
+				</div>
 
         {/* Mobilknapp */}
         <div className="md:hidden flex items-center gap-2">
