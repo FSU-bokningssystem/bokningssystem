@@ -3,9 +3,11 @@ package com.example.bokningssystem.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.jspecify.annotations.NonNull;
 
-import java.time.Instant;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -37,6 +39,14 @@ public class User {
     @Size(max = 64)
     @Column(name = "time_zone", nullable = false, length = 64)
     private String timeZone;
+
+    @OneToMany(mappedBy = "owner")
+    private Set<Booking> ownedBookings = new LinkedHashSet<>();
+
+    @NonNull
+    @ManyToMany(mappedBy = "participants")
+    private Set<Booking> participatingBookings = new LinkedHashSet<>();
+
 
     public Long getId() {
         return id;
@@ -80,6 +90,22 @@ public class User {
 
     public void setTimeZone(String timeZone) {
         this.timeZone = timeZone;
+    }
+
+    public Set<Booking> getOwnedBookings() {
+        return ownedBookings;
+    }
+
+    public void setOwnedBookings(Set<Booking> ownedBookings) {
+        this.ownedBookings = ownedBookings;
+    }
+
+    public @NonNull Set<Booking> getParticipatingBookings() {
+        return participatingBookings;
+    }
+
+    public void setParticipatingBookings(@NonNull Set<Booking> participatingBookings) {
+        this.participatingBookings = participatingBookings;
     }
 
     public User() {}

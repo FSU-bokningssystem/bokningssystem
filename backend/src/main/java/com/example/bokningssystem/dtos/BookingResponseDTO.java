@@ -10,7 +10,9 @@ public record BookingResponseDTO(
         LocalDateTime startTime,
         LocalDateTime endTime,
         long houseId,
+        String houseName,
         String roomNumber,
+        String roomName,
         UserResponseDTO owner,
         List<UserResponseDTO> participants) {
 }

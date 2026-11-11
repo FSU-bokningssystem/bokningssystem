@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import type { CreateUserProfileDTO } from '../types/types';
+import type { CreateUserProfileDTO, userData } from '../types/types';
 import { postToApi } from '../api/postData';
 import { useAuth } from '../context/AuthContext';
 import { X, UserPlus } from 'lucide-react';
@@ -25,7 +25,7 @@ export const UserForm: React.FC = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
     setStatusMessage(null);
 
@@ -37,17 +37,10 @@ export const UserForm: React.FC = () => {
     setLoading(true);
 
     try {
-      const created = await postToApi("user/register", formData);
+      const created = await postToApi<userData>("user/register", formData);
 
-      loginAs({
-        id: created.id,
-        firstName: created.firstName,
-        lastName: created.lastName,
-        email: created.email,
-        phone: created.phone,
-        timeZone: created.time_zone ?? created.timeZone,
-      });
-
+      await loginAs(created.id);
+        
       setStatusMessage({ text: 'Användarprofilen har skapats och du är nu inloggad!', type: 'success' });
       setFormData({
         email: '',

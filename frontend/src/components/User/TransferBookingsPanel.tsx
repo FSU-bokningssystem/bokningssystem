@@ -5,7 +5,7 @@ import { patchToApi } from "../../api/patchData";
 import type {
   OrgMember,
   UserOrgBookings,
-  bookingData,
+  BookingData,
 } from "../../types/types";
 
 interface TransferBookingsPanelProps {
@@ -99,7 +99,7 @@ const TransferBookingsPanel = ({
 };
 
 interface TransferRowProps {
-  booking: bookingData;
+  booking: BookingData;
   candidates: OrgMember[];
   onTransferred: () => void;
 }

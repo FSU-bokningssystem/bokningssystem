@@ -72,7 +72,7 @@ public class BookingService {
         Instant now = Instant.now();
         return new UserOrgBookingsDTO(
                 ownedFutureBookings(userId, orgId, now).stream().map(bookingMapper::toBookingResponseDTO).toList(),
-                bookingRepository.findByUsersIdAndRoomHouseOrganizationIdAndStartTimeAfter(userId, orgId, now)
+                bookingRepository.findByParticipantsIdAndRoomHouseOrganizationIdAndStartTimeAfter(userId, orgId, now)
                         .stream().map(bookingMapper::toBookingResponseDTO).toList());
     }
 
@@ -82,8 +82,8 @@ public class BookingService {
 
     @Transactional
     public void removeUserFromFutureBookings(long userId, long orgId) {
-        bookingRepository.findByUsersIdAndRoomHouseOrganizationIdAndStartTimeAfter(userId, orgId, Instant.now())
-                .forEach(b -> b.getUsers().removeIf(u -> u.getId().equals(userId)));
+        bookingRepository.findByParticipantsIdAndRoomHouseOrganizationIdAndStartTimeAfter(userId, orgId, Instant.now())
+                .forEach(b -> b.getParticipants().removeIf(u -> u.getId().equals(userId)));
     }
 
     @Transactional
@@ -100,7 +100,7 @@ public class BookingService {
         User newOwner = userRepository.findById(newOwnerId)
                 .orElseThrow(() -> new UserNotFoundException("Hittar inte användare " + newOwnerId));
 
-        booking.getUsers().removeIf(u -> u.getId().equals(newOwnerId)); // ingen ska vara både ägare och deltagare
+        booking.getParticipants().removeIf(u -> u.getId().equals(newOwnerId)); // ingen ska vara både ägare och deltagare
         booking.setOwner(newOwner);
         return bookingMapper.toBookingResponseDTO(booking);
     }

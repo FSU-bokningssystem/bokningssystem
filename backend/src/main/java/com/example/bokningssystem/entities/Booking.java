@@ -47,7 +47,7 @@ public class Booking {
 
     @ManyToMany
     @JoinTable(name = "participants", joinColumns = {@JoinColumn(name = "booking_id")}, inverseJoinColumns = {@JoinColumn(name = "user_id")})
-    private Set<User> users = new LinkedHashSet<>();
+    private Set<User> participants = new LinkedHashSet<>();
 
     public Booking() {
     }
@@ -117,12 +117,12 @@ public class Booking {
         this.owner = owner;
     }
 
-    public Set<User> getUsers() {
-        return users;
+    public Set<User> getParticipants() {
+        return participants;
     }
 
-    public void setUsers(Set<User> users) {
-        this.users = users;
+    public void setParticipants(Set<User> users) {
+        this.participants = users;
     }
 
     @Transient

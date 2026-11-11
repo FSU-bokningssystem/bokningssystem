@@ -59,7 +59,7 @@ const UserList = ({ users }: { users: userData[] }) => {
                     <Info className="w-3.5 h-3.5" /> Detaljer
                   </button>
                   <button
-                    onClick={() => loginAs(user)}
+                    onClick={() => loginAs(user.id)}
                     disabled={isCurrent}
                     className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold transition ${
                       isCurrent
