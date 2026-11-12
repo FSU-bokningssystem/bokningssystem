@@ -1,11 +1,7 @@
 package com.example.bokningssystem.controller;
 
-import com.example.bokningssystem.dtos.InitialResponseDTO;
-import com.example.bokningssystem.dtos.CreateUserProfileDTO;
-import com.example.bokningssystem.dtos.UserWithBookingsResponseDTO;
+import com.example.bokningssystem.dtos.*;
 
-import com.example.bokningssystem.entities.User;
-import com.example.bokningssystem.dtos.UserResponseDTO;
 import com.example.bokningssystem.service.UserContextService;
 import com.example.bokningssystem.service.UserService;
 import jakarta.validation.Valid;
@@ -51,15 +47,15 @@ public class UserController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponseDTO> registerUser(@Valid @RequestBody CreateUserProfileDTO dto) {
-        UserResponseDTO createdUser = userService.createUserProfile(dto);
+    public ResponseEntity<UserResponseDTO> registerUser(@Valid @RequestBody UserRegistrationDTO dto) {
+        UserResponseDTO createdUser = userService.registerUser(dto);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDTO> editUser(
             @PathVariable Long id,
-            @Valid @RequestBody CreateUserProfileDTO dto
+            @Valid @RequestBody UserRegistrationDTO dto
     ) {
         UserResponseDTO editedUser = userService.editUserProfile(id, dto);
         return ResponseEntity.ok(editedUser);
