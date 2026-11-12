@@ -1,7 +1,7 @@
 import { CalendarDays, Clock, User, Users } from "lucide-react";
-import type { bookingData, BookingUser } from "../../types/types";
+import type { BookingData, BookingUser } from "../../types/types";
 
-const BookingCard = ({ booking }: { booking: bookingData }) => {
+const BookingCard = ({ booking }: { booking: BookingData }) => {
 	const start = new Date(booking.startTime);
 	const end = new Date(booking.endTime);
 	const durationMinutes = Math.round(
