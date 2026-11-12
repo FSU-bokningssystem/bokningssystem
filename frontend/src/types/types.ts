@@ -188,3 +188,26 @@ export interface InitialData {
 	activeOrganization: OrganizationDetailData | null;
 	bookings: BookingData[];
 }
+
+export type MemberRole = "OWNER" | "ADMIN" | "MEMBER";
+
+export interface Membership {
+	userId: number;
+	organizationId: number;
+	organizationName: string;
+	memberRole: MemberRole;
+}
+
+// Matchar OrgMemberDTO i backend
+export interface OrgMember {
+	userId: number;
+	firstName: string;
+	lastName: string;
+	memberRole: MemberRole;
+}
+
+// Matchar UserOrgBookingsDTO i backend
+export interface UserOrgBookings {
+	owned: BookingData[];
+	participating: BookingData[];
+}

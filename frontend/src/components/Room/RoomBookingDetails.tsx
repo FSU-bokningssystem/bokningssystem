@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { CalendarX2 } from "lucide-react";
 import { fetchFromApi } from "../../api/fetchData";
-import type { bookingData, RoomBookingDetailsProps } from "../../types/types";
+import type { BookingData, RoomBookingDetailsProps } from "../../types/types";
 import BookingCard from "./RoomBookingCard";
 
 const RoomBookingDetails = ({ roomId }: RoomBookingDetailsProps) => {
@@ -9,7 +9,7 @@ const RoomBookingDetails = ({ roomId }: RoomBookingDetailsProps) => {
     data: bookings,
     isLoading,
     error,
-  } = useQuery<bookingData[]>({
+  } = useQuery<BookingData[]>({
     queryKey: ["bookinglist", roomId],
     queryFn: () => fetchFromApi("booking/room/" + roomId),
   });
