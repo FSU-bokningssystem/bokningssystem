@@ -20,20 +20,16 @@
 | Anton    | Ja      | Lägga till organisation           | Lösa merge-konflikter                        |        |
 | Jonathan | Nej     |                                   |                                              | Mässa  |
 
-## Torsdag ÅÅÅÅ-MM-DD
+## Torsdag 2026-11-12
 
-| Namn | Närvaro | Igår | Idag | Hinder |
-| ---- | ------- | ---- | ---- | ------ |
-|      |         |      |      |        |
-|      |         |      |      |        |
-|      |         |      |      |        |
-|      |         |      |      |        |
+Ingen standup pga många borta + lektion.
 
-## Fredag ÅÅÅÅ-MM-DD
+## Fredag 2026-11-13
 
-| Namn | Närvaro | Igår | Idag | Hinder |
-| ---- | ------- | ---- | ---- | ------ |
-|      |         |      |      |        |
-|      |         |      |      |        |
-|      |         |      |      |        |
-|      |         |      |      |        |
+| Namn     | Närvaro | Igår                  | Idag            | Hinder |
+| -------- | ------- | --------------------- | --------------- | ------ |
+| Staffan  | Ja      | Ändra bokningar       | Ändra bokningar |        |
+| Johan    | Ja      | Borta                 | Ta bort profil  |        |
+| Axel     | Nej     |                       |                 | Sjuk   |
+| Anton    | Ja      | Möte med praktikplats | Organisera DTOs |        |
+| Jonathan | Ja      | Inlogg                | Inlogg          |        |
