@@ -12,6 +12,8 @@ public record BookingChangeDTO(
 
         String roomNumber,
 
+        Long houseId,
+
         String title,
 
         String description,

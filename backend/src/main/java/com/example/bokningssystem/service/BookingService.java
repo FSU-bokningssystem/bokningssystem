@@ -9,7 +9,6 @@ import com.example.bokningssystem.entities.User;
 import com.example.bokningssystem.exceptions.*;
 import com.example.bokningssystem.mapper.BookingMapper;
 import com.example.bokningssystem.repository.BookingRepository;
-import com.example.bokningssystem.repository.HouseRepository;
 import com.example.bokningssystem.repository.RoomRepository;
 import com.example.bokningssystem.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -17,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -60,20 +60,20 @@ public class BookingService {
     public BookingResponseDTO change(BookingChangeDTO dto) {
         Booking oldBooking = bookingRepository.findById(dto.id())
                 .orElseThrow(() -> new BookingNotFoundException("Hittade inte bokning " + dto.id() + "."));
-        // Om DTO:n innehåller en beskrivning, uppdatera beskrivningen.
-        if (dto.description() != null) oldBooking.setDescription(dto.description());
+
+        Long tempHouseId = oldBooking.getRoom().getHouse().getId();
+        if (dto.houseId()!=null) tempHouseId=dto.houseId();
         // Om DTO:n innehåller ett rumsnummer, kontrollera om rumsnumret finns, är tillgängligt, och tillhör ett hus i samma organisation. I så fall, uppdatera rummet. Annars kasta fel.
         if ((dto.roomNumber() != null)) {
-            Room newRoom = roomRepository.findByRoomNumberIgnoreCase(dto.roomNumber())
-                    .orElseThrow(() -> new RoomNotFoundException("Hittade inte rum " + dto.roomNumber() +"."));
+            final String possibleErrorMsg = "Hittade inte rum "+dto.roomNumber()+" i hus " + tempHouseId+".";
+            Room newRoom = roomRepository.findByRoomNumberIgnoreCaseAndHouseId(dto.roomNumber(),tempHouseId)
+                    .orElseThrow(()->new RoomInHouseNotFoundException(possibleErrorMsg));
             if(newRoom.getHouse().getOrganization().getId()!=oldBooking.getRoom().getHouse().getOrganization().getId()) {
                 throw new CantMoveBookingOutsideOrganizationException("Du får inte flytta bokningen utanför organisationen.");
             }
             if(!newRoom.getIsAvailable()) throw new RoomNotAvailableException("Rum " + dto.roomNumber() + " går inte att boka.");
             oldBooking.setRoom(newRoom);
         }
-        //Om DTO:n innehåller en titel, uppdatera titeln.
-        if (dto.title() != null) oldBooking.setTitle(dto.title());
         // Om DTO:n har ett ägarId, kontrollera om ägaren finns och är medlem av rätt organisation, och uppdatera i så fall ägaren.
         if (dto.ownerId() != null) {
             User newOwner = userRepository.findById(dto.ownerId())
@@ -86,14 +86,39 @@ public class BookingService {
         // Sluttid saknas: Ändra start-tid till ny starttid, behåll samma längd på mötet (så kl 10-11 ändras till 12-13).
         // Sluttid finns: Ändra både starttid och längd.
         if(dto.startTime() != null) {
-
+            oldBooking.setStartTime(dto.startTime().atZone(oldBooking.getRoom().getHouse().getActualTimeZone()).toInstant());
+            if(dto.endTime()!=null) {
+                oldBooking.setDuration((int) ChronoUnit.MINUTES.between(dto.startTime(), dto.endTime()));
+            }
         }
         //Om starttid saknas men det finns en sluttid, ändra mötets längd.
         if(dto.startTime() == null && dto.endTime() != null) {
-
+            oldBooking.setDuration((int) ChronoUnit.MINUTES.between(
+                    oldBooking.getStartTime(),
+                    dto.endTime().atZone(oldBooking.getRoom().getHouse().getActualTimeZone()).toInstant()
+            ));
         }
+        //Kontrollera att detta inte har resulterat i en negativ längd på mötet (alltså sluttid före starttid)
+        if(oldBooking.getDuration()<0) throw new TimeOrderException("Sluttiden måste vara efter starttiden.");
         // Kontrollera att den ändrade bokningen inte överlappar med andra bokningar.
-
+        List<Booking> futureBookings = oldBooking.getRoom().getBookings()
+                .stream()
+                .filter(booking->booking.getEndTime().isAfter(Instant.now()))
+                .toList();
+        for(Booking futureBooking: futureBookings) {
+            if(futureBooking.getId()!= oldBooking.getId()){
+                if (futureBooking.overlapsWith(oldBooking.getStartTime(), oldBooking.getEndTime())) {
+                    LocalDateTime start = LocalDateTime.ofInstant(futureBooking.getStartTime(), futureBooking.getRoom().getHouse().getActualTimeZone());
+                    LocalDateTime end = LocalDateTime.ofInstant(futureBooking.getEndTime(), futureBooking.getRoom().getHouse().getActualTimeZone());
+                    throw new RoomOccupiedException(
+                            "Rum " + oldBooking.getRoom().getRoomNumber() + " är bokat " + start + " till " + end + ".");
+                }
+            }
+        }
+        // Om DTO:n innehåller en beskrivning, uppdatera beskrivningen.
+        if (dto.description() != null) oldBooking.setDescription(dto.description());
+        //Om DTO:n innehåller en titel, uppdatera titeln.
+        if (dto.title() != null) oldBooking.setTitle(dto.title());
         Booking newBooking = bookingRepository.save(oldBooking);
         return bookingMapper.toBookingResponseDTO(newBooking);
     }

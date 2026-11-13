@@ -2,8 +2,10 @@ package com.example.bokningssystem.controller;
 
 import com.example.bokningssystem.dtos.BookingRequestDTO;
 import com.example.bokningssystem.dtos.BookingResponseDTO;
+import com.example.bokningssystem.dtos.booking.BookingChangeDTO;
 import com.example.bokningssystem.service.BookingService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +27,11 @@ public class BookingController {
     @PostMapping
     public ResponseEntity<BookingResponseDTO> create (@Valid @RequestBody BookingRequestDTO requestDTO) {
         return ResponseEntity.ok(bookingService.create(requestDTO));
+    }
+
+    @PutMapping
+    public ResponseEntity<BookingResponseDTO> change (@Valid @RequestBody BookingChangeDTO changeDTO) {
+        return ResponseEntity.ok(bookingService.change(changeDTO));
     }
 
     @GetMapping
