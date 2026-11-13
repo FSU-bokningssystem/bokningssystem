@@ -1,26 +1,27 @@
 package com.example.bokningssystem.dtos;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 
 public record UserRegistrationDTO(
-        @NotNull (message = "Du måste uppge ditt förnamn")
+        @NotBlank(message = "Du måste ange ditt förnamn")
         String firstName,
 
-        @NotNull (message = "Du måste uppge ditt efternamn")
+        @NotBlank(message = "Du måste ange ditt efternamn")
         String lastName,
 
-        @NotNull (message = "Du måste uppe en mail-adress")
-        @Email (message = "Ange en giltig e-postadress")
+        @NotBlank(message = "Du måste ange en mail-adress")
+        @Email(message = "Ange en giltig e-postadress")
         String email,
 
         String phone,
 
-        @NotNull (message = "Du måste uppge din tids-zon")
+        @NotBlank(message = "Du måste ange din tids-zon")
         String timeZone,
 
-        @NotNull(message = "Du måste välja ett lösenord")
+        @NotBlank(message = "Du måste välja ett lösenord")
         String password,
 
+        @NotBlank(message = "Du måste bekräfta ditt lösenord")
         String confirmPassword
 ) {}

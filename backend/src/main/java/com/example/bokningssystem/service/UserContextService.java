@@ -1,17 +1,12 @@
 package com.example.bokningssystem.service;
 
 import com.example.bokningssystem.dtos.*;
-import com.example.bokningssystem.entities.Booking;
-import com.example.bokningssystem.entities.Membership;
-import com.example.bokningssystem.entities.Organization;
-import com.example.bokningssystem.entities.User;
+import com.example.bokningssystem.entities.*;
 import com.example.bokningssystem.mapper.BookingMapper;
 import com.example.bokningssystem.mapper.OrganizationMapper;
 import com.example.bokningssystem.mapper.UserMapper;
-import com.example.bokningssystem.repository.BookingRepository;
-import com.example.bokningssystem.repository.MembershipRepository;
-import com.example.bokningssystem.repository.OrganizationRepository;
-import com.example.bokningssystem.repository.UserRepository;
+import com.example.bokningssystem.repository.*;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,28 +22,39 @@ public class UserContextService {
     private final OrganizationRepository organizationRepository;
     private final OrganizationMapper organizationMapper;
     private final BookingMapper bookingMapper;
+    private final CredentialRepository credentialRepository;
 
     public UserContextService(UserRepository userRepository, UserMapper userMapper, MembershipRepository membershipRepository,
                               OrganizationRepository organizationRepository, OrganizationMapper organizationMapper,
-                              BookingMapper bookingMapper) {
+                              BookingMapper bookingMapper, CredentialRepository credentialRepository) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.membershipRepository = membershipRepository;
         this.organizationRepository = organizationRepository;
         this.organizationMapper = organizationMapper;
         this.bookingMapper = bookingMapper;
+        this.credentialRepository = credentialRepository;
     }
 
     @Transactional(readOnly = true)
-    public InitialResponseDTO getInitialDataForUser(Long userId, Long selectedOrgId) {
+    public InitialResponseDTO getInitialDataForUser(Long selectedOrgId) {
 
-        // Hämta inloggad användare
-        User user = userRepository.findById(userId)
+        // Hämta e-posten för den inloggade användaren direkt från Spring Security
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        // Slå upp användaren via e-posten från token
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Användare hittades inte"));
+
         UserResponseDTO userDto = userMapper.toResponseDTO(user);
 
+        // Hämta systemrollen från Credential (med "USER" som fallback om den saknas)
+        String userRole = credentialRepository.findById(user.getId())
+                .map(Credential::getRole)
+                .orElse("USER");
+
         // Hämta ALLA organisationer användaren är medlem i
-        List<Membership> userMemberShips = membershipRepository.findByUserId(userId);
+        List<Membership> userMemberShips = membershipRepository.findByUserId(user.getId());
 
         List<OrganizationSummaryDTO> orgSummaries = userMemberShips.stream()
                 .map(m -> new OrganizationSummaryDTO(
@@ -59,14 +65,12 @@ public class UserContextService {
 
         /* Bestäm vilken organisation som ska vara aktiv. Standardval är första organisationen
         i listan över användarens organisationer*/
-        Long requestedOrgId = selectedOrgId;
-
-        boolean isMember = requestedOrgId != null && userMemberShips.stream()
-                .anyMatch(m -> m.getOrganization().getId().equals(requestedOrgId));
+        boolean isMember = selectedOrgId != null && userMemberShips.stream()
+                .anyMatch(m -> m.getOrganization().getId().equals(selectedOrgId));
 
         Long targetOrgId;
         if (isMember) {
-            targetOrgId = requestedOrgId;
+            targetOrgId = selectedOrgId;
         } else if (!userMemberShips.isEmpty()) {
             targetOrgId = userMemberShips.get(0).getOrganization().getId();
         } else {
@@ -82,11 +86,13 @@ public class UserContextService {
         }
 
         // Hämta användarens alla bokningar
-        List<BookingResponseDTO> bookingDTOs = Stream.concat(user.getOwnedBookings().stream(), user.getParticipatingBookings().stream())
+        List<BookingResponseDTO> bookingDTOs = Stream.concat(
+                        user.getOwnedBookings().stream(),
+                        user.getParticipatingBookings().stream())
                 .distinct()
                 .map(bookingMapper::toBookingResponseDTO)
                 .toList();
 
-        return new InitialResponseDTO(userDto, orgSummaries, activeOrgDTO, bookingDTOs);
+        return new InitialResponseDTO(userDto, orgSummaries, activeOrgDTO, bookingDTOs, userRole);
     }
 }

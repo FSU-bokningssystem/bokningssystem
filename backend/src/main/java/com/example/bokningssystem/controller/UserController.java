@@ -1,11 +1,9 @@
 package com.example.bokningssystem.controller;
 
 import com.example.bokningssystem.dtos.*;
-
 import com.example.bokningssystem.service.UserContextService;
 import com.example.bokningssystem.service.UserService;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -44,14 +42,6 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserById(id));
     }
 
-
-
-    @PostMapping("/register")
-    public ResponseEntity<UserResponseDTO> registerUser(@Valid @RequestBody UserRegistrationDTO dto) {
-        UserResponseDTO createdUser = userService.registerUser(dto);
-        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
-    }
-
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDTO> editUser(
             @PathVariable Long id,
@@ -62,9 +52,7 @@ public class UserController {
     }
 
     @GetMapping("me/context")
-    public ResponseEntity<InitialResponseDTO> getInitialData(@RequestParam Long userId,
-                                                             @RequestParam(required = false) Long selectedOrgId) {
-        InitialResponseDTO responseData = userContextService.getInitialDataForUser(userId, selectedOrgId);
-        return ResponseEntity.ok(responseData);
+    public ResponseEntity<InitialResponseDTO> getUserContext(@RequestParam(required = false) Long selectedOrgId) {
+        return ResponseEntity.ok(userContextService.getInitialDataForUser(selectedOrgId));
     }
 }

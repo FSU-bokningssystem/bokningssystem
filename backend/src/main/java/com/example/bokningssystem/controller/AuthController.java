@@ -1,12 +1,13 @@
 package com.example.bokningssystem.controller;
 
+import com.example.bokningssystem.dtos.AuthResponseDTO;
 import com.example.bokningssystem.dtos.LoginDTO;
-import com.example.bokningssystem.service.JwtService;
+import com.example.bokningssystem.dtos.UserRegistrationDTO;
+import com.example.bokningssystem.dtos.UserResponseDTO;
+import com.example.bokningssystem.service.AuthService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,29 +17,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final AuthenticationManager authenticationManager;
-    private final UserDetailsService userDetailsService;
-    private final JwtService jwtService;
+    private final AuthService authService;
 
-    public AuthController(AuthenticationManager authenticationManager, UserDetailsService userDetailsService, JwtService jwtService) {
-        this.authenticationManager = authenticationManager;
-        this.userDetailsService = userDetailsService;
-        this.jwtService = jwtService;
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<UserResponseDTO> registerUser(@Valid @RequestBody UserRegistrationDTO dto) {
+        UserResponseDTO createdUser = authService.registerUser(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 
     @PostMapping("login")
     // Autentisera användaren med e-post och lösenord
-    public ResponseEntity<String> login(@RequestBody LoginDTO dto) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(dto.email(), dto.password())
-        );
-
-        // Hämta UserDetails via e-post
-        UserDetails userDetails = userDetailsService.loadUserByUsername(dto.email());
-
-        // Generera Jwt med e-post i subject-fältet
-        String token = jwtService.generateToken(userDetails);
-
-        return ResponseEntity.ok(token);
+    public ResponseEntity<AuthResponseDTO> login(@Valid @RequestBody LoginDTO dto) {
+        return ResponseEntity.ok(authService.login(dto));
     }
 }
