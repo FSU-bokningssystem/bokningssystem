@@ -66,6 +66,8 @@ public class Organization {
         this.memberships = memberships;
     }
 
+
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

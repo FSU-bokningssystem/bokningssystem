@@ -18,6 +18,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(404).body(error);
     }
 
+    @ExceptionHandler(BookingNotFoundException.class)
+    public ResponseEntity<ErrorResponse> bookingNotFound(BookingNotFoundException ex) {
+        ErrorResponse error = new ErrorResponse(404, ex.getMessage());
+        return ResponseEntity.status(404).body(error);
+    }
+
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorResponse> houseNotFound(UserNotFoundException ex) {
         ErrorResponse error = new ErrorResponse(404, ex.getMessage());
@@ -50,6 +56,18 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidTimeZoneException.class)
     public ResponseEntity<ErrorResponse> invalidTimeZoneException(InvalidTimeZoneException ex) {
+        ErrorResponse error = new ErrorResponse(400, ex.getMessage());
+        return ResponseEntity.status(400).body(error);
+    }
+
+    @ExceptionHandler(CantMoveBookingOutsideOrganizationException.class)
+    public ResponseEntity<ErrorResponse> cantMoveBookingOutsideOrganizationException (CantMoveBookingOutsideOrganizationException ex) {
+        ErrorResponse error = new ErrorResponse(400, ex.getMessage());
+        return ResponseEntity.status(400).body(error);
+    }
+
+    @ExceptionHandler(CantReassignBookingOutsideOrganization.class)
+    public ResponseEntity<ErrorResponse> cantReassignBookingOutsideOrganizationException (CantReassignBookingOutsideOrganization ex) {
         ErrorResponse error = new ErrorResponse(400, ex.getMessage());
         return ResponseEntity.status(400).body(error);
     }
