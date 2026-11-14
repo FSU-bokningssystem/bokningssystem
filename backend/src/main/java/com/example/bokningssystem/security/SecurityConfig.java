@@ -18,6 +18,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
+/** Bestämmer regler för webbtrafik, sessioner, kryptering och vilka endpoints som är öppna respektive stängda */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity

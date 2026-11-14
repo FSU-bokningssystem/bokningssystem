@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/** Kopplar samman vår databasmodell User/Credential med Spring Securitys autentiseringsmekanism */
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
@@ -23,6 +24,8 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("Användare hittades inte med epost: " + email));
 
         String roleName = credential.getRole();
+        // Säkerställer att rollnamnet börjar med "ROLE_",
+        // så att @PreAuthorize("hasrole('ADMIN')") kan användas i våra controllers
         if (!roleName.startsWith("ROLE_")) {
             roleName = "ROLE_" + roleName;
         }

@@ -3,7 +3,6 @@ package com.example.bokningssystem.controller;
 import com.example.bokningssystem.dtos.AuthResponseDTO;
 import com.example.bokningssystem.dtos.LoginDTO;
 import com.example.bokningssystem.dtos.UserRegistrationDTO;
-import com.example.bokningssystem.dtos.UserResponseDTO;
 import com.example.bokningssystem.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -24,13 +23,13 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponseDTO> registerUser(@Valid @RequestBody UserRegistrationDTO dto) {
-        UserResponseDTO createdUser = authService.registerUser(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+    public ResponseEntity<AuthResponseDTO> register(@Valid @RequestBody UserRegistrationDTO dto) {
+        AuthResponseDTO response = authService.registerUser(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PostMapping("login")
-    // Autentisera användaren med e-post och lösenord
+    // Autentiserar användaren med e-post och lösenord
     public ResponseEntity<AuthResponseDTO> login(@Valid @RequestBody LoginDTO dto) {
         return ResponseEntity.ok(authService.login(dto));
     }

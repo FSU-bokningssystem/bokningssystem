@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/** Hanterar autentisering, registrering och lösenordskryptering */
 @Service
 public class AuthService {
 
@@ -44,19 +45,18 @@ public class AuthService {
     }
 
     public AuthResponseDTO login(LoginDTO dto) {
-        // Verifiera lösenord och e-post via Spring Security
+        // Verifierar lösenord och e-post via Spring Security
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(dto.email(), dto.password())
         );
 
-        // Hämta UserDetails och generera JWT
+        // Hämtar UserDetails och genererar JWT-sträng
         UserDetails userDetails = userDetailsService.loadUserByUsername(dto.email());
         String token = jwtService.generateToken(userDetails);
 
-        // Hämta Credential (och kopplad User) för att plocka ut roll och ID
+        // Hämtar Credential (och kopplad User) för att plocka ut roll och ID
         Credential credential = credentialRepository.findByUserEmail(dto.email())
                 .orElseThrow(() -> new UsernameNotFoundException("Användare hittades inte"));
-
         User user = credential.getUser();
 
         return new AuthResponseDTO(
@@ -68,7 +68,7 @@ public class AuthService {
     }
 
     @Transactional
-    public UserResponseDTO registerUser(UserRegistrationDTO dto) {
+    public AuthResponseDTO registerUser(UserRegistrationDTO dto) {
         if (userRepository.existsByEmail(dto.email())) {
             throw new IllegalArgumentException("E-postadressen är redan registrerad");
         }
@@ -78,7 +78,16 @@ public class AuthService {
 
         savePassword(savedUser, dto.password(), dto.confirmPassword());
 
-        return userMapper.toResponseDTO(savedUser);
+        // Hämtar UserDetails och genererar JWT direkt för den nyskapade användaren
+        UserDetails userDetails = userDetailsService.loadUserByUsername(savedUser.getEmail());
+        String token = jwtService.generateToken(userDetails);
+
+        return new AuthResponseDTO(
+                token,
+                savedUser.getId(),
+                savedUser.getEmail(),
+                UserRole.USER.name()
+        );
     }
 
     @Transactional
@@ -90,7 +99,8 @@ public class AuthService {
         // Hasha lösenordet från DTO
         String encodedPassword = passwordEncoder.encode(password);
 
-        // Skapa Credential och koppla den till savedUser
+        // Letar upp befintlig Credential för användaren eller skapar en ny Credential
+        // med standardrollen USER och sparar i databasen
         Credential credential = credentialRepository.findByUser(user)
                 .orElseGet(() -> new Credential(user, encodedPassword, UserRole.USER.name()));
 
