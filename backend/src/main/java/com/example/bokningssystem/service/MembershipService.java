@@ -1,8 +1,8 @@
 package com.example.bokningssystem.service;
 
 
-import com.example.bokningssystem.dtos.MembershipResponseDTO;
-import com.example.bokningssystem.dtos.OrgMemberDTO;
+import com.example.bokningssystem.dtos.membershipDtos.MembershipResponseDTO;
+import com.example.bokningssystem.dtos.organizationDtos.OrgMemberDTO;
 import com.example.bokningssystem.entities.Booking;
 import com.example.bokningssystem.entities.Membership;
 import com.example.bokningssystem.enums.MemberRole;

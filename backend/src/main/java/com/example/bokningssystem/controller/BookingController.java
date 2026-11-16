@@ -1,9 +1,9 @@
 package com.example.bokningssystem.controller;
 
-import com.example.bokningssystem.dtos.BookingRequestDTO;
-import com.example.bokningssystem.dtos.BookingResponseDTO;
-import com.example.bokningssystem.dtos.TransferOwnerDTO;
-import com.example.bokningssystem.dtos.UserOrgBookingsDTO;
+import com.example.bokningssystem.dtos.bookingDtos.BookingRequestDTO;
+import com.example.bokningssystem.dtos.bookingDtos.BookingResponseDTO;
+import com.example.bokningssystem.dtos.bookingDtos.TransferOwnerDTO;
+import com.example.bokningssystem.dtos.bookingDtos.UserOrgBookingsDTO;
 import com.example.bokningssystem.service.BookingService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;

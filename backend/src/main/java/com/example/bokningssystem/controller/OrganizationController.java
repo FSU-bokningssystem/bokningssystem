@@ -1,7 +1,7 @@
 package com.example.bokningssystem.controller;
 
-import com.example.bokningssystem.dtos.OrganizationCreateDTO;
-import com.example.bokningssystem.dtos.OrganizationDetailDTO;
+import com.example.bokningssystem.dtos.organizationDtos.OrganizationCreateDTO;
+import com.example.bokningssystem.dtos.organizationDtos.OrganizationDetailDTO;
 import com.example.bokningssystem.service.OrganizationService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

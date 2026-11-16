@@ -1,11 +1,10 @@
 package com.example.bokningssystem.controller;
 
-import com.example.bokningssystem.dtos.InitialResponseDTO;
-import com.example.bokningssystem.dtos.CreateUserProfileDTO;
-import com.example.bokningssystem.dtos.UserWithBookingsResponseDTO;
+import com.example.bokningssystem.dtos.userDtos.InitialResponseDTO;
+import com.example.bokningssystem.dtos.userDtos.CreateUserProfileDTO;
+import com.example.bokningssystem.dtos.userDtos.UserWithBookingsResponseDTO;
 
-import com.example.bokningssystem.entities.User;
-import com.example.bokningssystem.dtos.UserResponseDTO;
+import com.example.bokningssystem.dtos.userDtos.UserResponseDTO;
 import com.example.bokningssystem.service.UserContextService;
 import com.example.bokningssystem.service.UserService;
 import jakarta.validation.Valid;

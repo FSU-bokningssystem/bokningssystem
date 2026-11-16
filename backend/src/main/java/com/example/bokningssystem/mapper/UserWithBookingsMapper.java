@@ -1,7 +1,7 @@
 package com.example.bokningssystem.mapper;
 
-import com.example.bokningssystem.dtos.BookingForUserResponseDTO;
-import com.example.bokningssystem.dtos.UserWithBookingsResponseDTO;
+import com.example.bokningssystem.dtos.bookingDtos.BookingForUserResponseDTO;
+import com.example.bokningssystem.dtos.userDtos.UserWithBookingsResponseDTO;
 import com.example.bokningssystem.entities.Booking;
 import com.example.bokningssystem.entities.User;
 import org.springframework.stereotype.Component;
