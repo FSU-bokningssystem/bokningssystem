@@ -1,4 +1,4 @@
-# Sprint review: sprint N
+# Sprint review: sprint 3
 
 <!--
   INSTRUKTION
@@ -14,33 +14,25 @@
   Demot ska köras på riktigt, inte med skärmdumpar. Testa det innan.
 -->
 
-**Datum:**
-**Deltagare:**
+**Datum:** 2026-11-16
+**Deltagare:** Staffan, Jonathan, Anton, Axel
 
 ## Del 1: Förberedelse
 
 ### Sprintmål
 
-<!-- Kopiera från planning.md. -->
+- Fungerande inlogg på sidan.
+- Intern organisering (DTOs/types).
 
-
-
-**Uppnåddes sprintmålet?** Ja / Delvis / Nej
+**Uppnåddes sprintmålet?** Nej.
 
 ### Blev klart
 
-> **Exempel:**
->
-> | Issue | Story | Visas av |
-> |---|---|---|
-> | #3 | Skapa ett hushåll | Sara |
-> | #4 | Lägga till en syssla | Lina |
-> | #7 | Visa lista med sysslor | Jonas |
-
-| Issue | Story | Visas av |
-|---|---|---|
-| | | |
-| | | |
+| Issue | Story                                 | Visas av |
+| ----- | ------------------------------------- | -------- |
+| 62    | Lägg till organisation och admin-roll | Anton    |
+| 54    | Dynamisk uppdateringar av bokningar   | Staffan  |
+| 12    | Ta bort användare ur organisation     | Johan    |
 
 ### Blev inte klart
 
@@ -48,22 +40,25 @@
 
 > **Exempel:** #9 Projektskelett blev klart, men databasen körs bara lokalt hos Amir. Vi underskattade hur lång tid Docker-uppsättningen tog.
 
-| Issue | Story | Varför inte klar | Vad händer med den? |
-|---|---|---|---|
-| | | | |
+| Issue   | Story                                | Varför inte klar                           | Vad händer med den? |
+| ------- | ------------------------------------ | ------------------------------------------ | ------------------- |
+| 63      | Presentations- och inloggningssida   | Axel är inte på reviewen och kan säga      |                     |
+| 64 + 65 | Organisera typer och organisera DTOs | Anton fick lite annat att göra             | Ska fixa idag       |
+| 61      | Inlogg                               | Backend klar, behöver fixa med token också |
+| 63      | Presentation och inloggningssida     | Avvaktar att inlogg är på plats            |
 
 ### Demoplan
 
 <!-- I vilken ordning visar ni? Vem gör vad? Berätta det som en användares väg genom appen, inte story för story. -->
 
 > **Exempel:**
+>
 > 1. Sara skapar hushållet "Korridor 4B".
 > 2. Lina lägger till tre sysslor.
 > 3. Jonas visar att sysslorna finns kvar efter omladdning.
 
-1.
-2.
-3.
+1. Staffan lägger till en bokning och visar att den sedan även läggs till i "mina bokningar"
+2. Anton visar hur man lägger till en organisation.
 
 ### Frågor till läraren
 
@@ -82,8 +77,5 @@
 
 ### Ändringar i backloggen
 
-<!-- Nya stories, ändrad prioritet, stories som tagits bort. Länka issues. -->
-
-> **Exempel:** Ny story #15 "Turordning per vecka" som Must. "Tilldela en syssla" (#5) sänks till Should.
-
--
+- Nya user stories: Lägg till/ta bort deltagare på möte, Lägg till deltagare i samband med att bokning skapas, Organisationsbaserad användarvy, Utloggning, Ta bort sig själv som deltagare på möte.
+- Ny task: tidszon-lista.
