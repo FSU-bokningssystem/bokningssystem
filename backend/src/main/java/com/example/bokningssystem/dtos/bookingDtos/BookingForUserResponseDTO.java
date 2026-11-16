@@ -1,4 +1,6 @@
-package com.example.bokningssystem.dtos;
+package com.example.bokningssystem.dtos.bookingDtos;
+
+import com.example.bokningssystem.dtos.userDtos.UserShortResponseDTO;
 
 import java.time.LocalDateTime;
 import java.util.List;

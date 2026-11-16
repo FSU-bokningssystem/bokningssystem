@@ -1,7 +1,7 @@
 package com.example.bokningssystem.controller;
 
-import com.example.bokningssystem.dtos.HouseShortResponseDTO;
-import com.example.bokningssystem.dtos.HouseWithRoomsResponseDTO;
+import com.example.bokningssystem.dtos.houseDtos.HouseShortResponseDTO;
+import com.example.bokningssystem.dtos.houseDtos.HouseWithRoomsResponseDTO;
 import com.example.bokningssystem.service.HouseService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;

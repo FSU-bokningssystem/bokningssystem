@@ -1,4 +1,4 @@
-package com.example.bokningssystem.dtos;
+package com.example.bokningssystem.dtos.organizationDtos;
 
 import com.example.bokningssystem.enums.MemberRole;
 

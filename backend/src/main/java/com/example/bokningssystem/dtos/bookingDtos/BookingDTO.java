@@ -1,4 +1,4 @@
-package com.example.bokningssystem.dtos;
+package com.example.bokningssystem.dtos.bookingDtos;
 
 import java.time.Instant;
 

@@ -1,14 +1,16 @@
 package com.example.bokningssystem.service;
 
-import com.example.bokningssystem.dtos.*;
-import com.example.bokningssystem.entities.Booking;
+import com.example.bokningssystem.dtos.bookingDtos.BookingResponseDTO;
+import com.example.bokningssystem.dtos.organizationDtos.OrganizationDetailDTO;
+import com.example.bokningssystem.dtos.organizationDtos.OrganizationSummaryDTO;
+import com.example.bokningssystem.dtos.userDtos.InitialResponseDTO;
+import com.example.bokningssystem.dtos.userDtos.UserResponseDTO;
 import com.example.bokningssystem.entities.Membership;
 import com.example.bokningssystem.entities.Organization;
 import com.example.bokningssystem.entities.User;
 import com.example.bokningssystem.mapper.BookingMapper;
 import com.example.bokningssystem.mapper.OrganizationMapper;
 import com.example.bokningssystem.mapper.UserMapper;
-import com.example.bokningssystem.repository.BookingRepository;
 import com.example.bokningssystem.repository.MembershipRepository;
 import com.example.bokningssystem.repository.OrganizationRepository;
 import com.example.bokningssystem.repository.UserRepository;

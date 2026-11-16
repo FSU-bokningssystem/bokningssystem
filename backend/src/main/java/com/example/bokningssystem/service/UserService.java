@@ -1,14 +1,12 @@
 package com.example.bokningssystem.service;
 
-import com.example.bokningssystem.dtos.CreateUserProfileDTO;
-import com.example.bokningssystem.dtos.UserResponseDTO;
-import com.example.bokningssystem.dtos.UserWithBookingsResponseDTO;
+import com.example.bokningssystem.dtos.userDtos.CreateUserProfileDTO;
+import com.example.bokningssystem.dtos.userDtos.UserResponseDTO;
+import com.example.bokningssystem.dtos.userDtos.UserWithBookingsResponseDTO;
 import com.example.bokningssystem.mapper.UserMapper;
-import com.example.bokningssystem.dtos.CreateUserProfileDTO;
 import com.example.bokningssystem.entities.Credential;
 import com.example.bokningssystem.entities.User;
 import com.example.bokningssystem.mapper.UserWithBookingsMapper;
-import com.example.bokningssystem.mapper.UserMapper;
 import com.example.bokningssystem.repository.CredentialRepository;
 import com.example.bokningssystem.repository.UserRepository;
 import org.springframework.stereotype.Service;

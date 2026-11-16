@@ -1,4 +1,4 @@
-package com.example.bokningssystem.dtos;
+package com.example.bokningssystem.dtos.roomDtos;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

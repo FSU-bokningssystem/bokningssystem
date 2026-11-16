@@ -1,8 +1,8 @@
 package com.example.bokningssystem.controller;
 
-import com.example.bokningssystem.dtos.RoomCreateDTO;
-import com.example.bokningssystem.dtos.RoomResponseDTO;
-import com.example.bokningssystem.dtos.RoomUpdateDTO;
+import com.example.bokningssystem.dtos.roomDtos.RoomCreateDTO;
+import com.example.bokningssystem.dtos.roomDtos.RoomResponseDTO;
+import com.example.bokningssystem.dtos.roomDtos.RoomUpdateDTO;
 import com.example.bokningssystem.service.RoomService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,6 @@
-package com.example.bokningssystem.dtos;
+package com.example.bokningssystem.dtos.organizationDtos;
+
+import com.example.bokningssystem.dtos.houseDtos.HouseDTO;
 
 import java.util.List;
 
