@@ -132,6 +132,17 @@ export interface BookingCreateData {
 	ownerId: number;
 }
 
+export interface BookingEditData {
+	bookingId: number;
+	roomNumber: string | null;
+	houseId: number | null;
+	title: string | null;
+	description: string | null;
+	startTime: string | null;
+	endTime: string | null;
+	ownerId: number | null;
+}
+
 export interface BookingModalProps {
 	onClose: () => void;
 	submitData: (values: BookingCreateData) => void;
