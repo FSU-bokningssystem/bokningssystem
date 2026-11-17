@@ -1,4 +1,4 @@
-# Daily standup: sprint N
+# Daily standup: sprint 4
 
 <!--
   INSTRUKTION
@@ -9,60 +9,39 @@
   Närvaro: Ja / Nej / Sen / Distans.
 -->
 
-> **Exempel (Sysslo, sprint 1):**
->
-> ### Tisdag 2026-11-03
->
-> | Namn | Närvaro | Igår | Idag | Hinder |
-> |---|---|---|---|---|
-> | Amir | Ja | Sprint planning | Projektskelett #9 | – |
-> | Sara | Ja | Sprint planning | Skapa hushåll #3, backend | – |
-> | Jonas | Distans | Sprint planning | Lista sysslor #7 | – |
-> | Lina | Ja | Sprint planning | Formulär ny syssla #4 | Vet inte hur datum ska skickas. Jonas hjälper efter standup. |
+## Tisdag 2026-11-17
 
----
-
-## Måndag ÅÅÅÅ-MM-DD
-
-| Namn | Närvaro | Igår | Idag | Hinder |
-|---|---|---|---|---|
-| | | | | |
-| | | | | |
-| | | | | |
-| | | | | |
-
-## Tisdag ÅÅÅÅ-MM-DD
-
-| Namn | Närvaro | Igår | Idag | Hinder |
-|---|---|---|---|---|
-| | | | | |
-| | | | | |
-| | | | | |
-| | | | | |
+| Namn     | Närvaro | Igår           | Idag                            | Hinder                                                                                                         |
+| -------- | ------- | -------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| Staffan  | Ja      | Ändra bokning  | Ändra bokning                   |                                                                                                                |
+| Johan    | Ja      | Ta bort profil | Ta bort profil                  | Hade funderingar på om det behövdes ändringar i DB:n men vi kom fram till att det gick att lösa på annat sätt. |
+| Jonathan | Nej     |                | Jobbar                          |                                                                                                                |
+| Axel     | Ja      | Inlogg         | Utlogg                          |                                                                                                                |
+| Anton    | Ja      | DTOs flyttade  | Organisationsbaserad användarvy | Avvaktar PR på in- och utlogg                                                                                  |
 
 ## Onsdag ÅÅÅÅ-MM-DD
 
 | Namn | Närvaro | Igår | Idag | Hinder |
-|---|---|---|---|---|
-| | | | | |
-| | | | | |
-| | | | | |
-| | | | | |
+| ---- | ------- | ---- | ---- | ------ |
+|      |         |      |      |        |
+|      |         |      |      |        |
+|      |         |      |      |        |
+|      |         |      |      |        |
 
 ## Torsdag ÅÅÅÅ-MM-DD
 
 | Namn | Närvaro | Igår | Idag | Hinder |
-|---|---|---|---|---|
-| | | | | |
-| | | | | |
-| | | | | |
-| | | | | |
+| ---- | ------- | ---- | ---- | ------ |
+|      |         |      |      |        |
+|      |         |      |      |        |
+|      |         |      |      |        |
+|      |         |      |      |        |
 
 ## Fredag ÅÅÅÅ-MM-DD
 
 | Namn | Närvaro | Igår | Idag | Hinder |
-|---|---|---|---|---|
-| | | | | |
-| | | | | |
-| | | | | |
-| | | | | |
+| ---- | ------- | ---- | ---- | ------ |
+|      |         |      |      |        |
+|      |         |      |      |        |
+|      |         |      |      |        |
+|      |         |      |      |        |
