@@ -37,7 +37,7 @@ const fetchInitialData = async (selectedOrgId?: number) => {
 
       let endpoint = `user/me/context`;
       if (savedOrgId) {
-        endpoint += `&selectedOrgId=${savedOrgId}`;
+        endpoint += `?selectedOrgId=${savedOrgId}`;
       }
 
       const data = await fetchFromApi<InitialData>(endpoint);
