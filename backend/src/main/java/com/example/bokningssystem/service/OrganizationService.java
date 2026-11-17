@@ -1,7 +1,7 @@
 package com.example.bokningssystem.service;
 
-import com.example.bokningssystem.dtos.OrganizationCreateDTO;
-import com.example.bokningssystem.dtos.OrganizationDetailDTO;
+import com.example.bokningssystem.dtos.organizationDtos.OrganizationCreateDTO;
+import com.example.bokningssystem.dtos.organizationDtos.OrganizationDetailDTO;
 import com.example.bokningssystem.entities.Membership;
 import com.example.bokningssystem.entities.Organization;
 import com.example.bokningssystem.entities.User;

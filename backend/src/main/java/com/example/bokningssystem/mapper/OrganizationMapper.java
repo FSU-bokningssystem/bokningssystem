@@ -1,7 +1,7 @@
 package com.example.bokningssystem.mapper;
 
-import com.example.bokningssystem.dtos.HouseDTO;
-import com.example.bokningssystem.dtos.OrganizationDetailDTO;
+import com.example.bokningssystem.dtos.houseDtos.HouseDTO;
+import com.example.bokningssystem.dtos.organizationDtos.OrganizationDetailDTO;
 import com.example.bokningssystem.entities.Organization;
 import org.springframework.stereotype.Component;
 

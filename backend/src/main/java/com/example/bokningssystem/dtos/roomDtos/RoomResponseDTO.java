@@ -1,4 +1,4 @@
-package com.example.bokningssystem.dtos;
+package com.example.bokningssystem.dtos.roomDtos;
 
 public record RoomResponseDTO(
         long id,

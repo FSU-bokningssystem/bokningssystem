@@ -1,6 +1,9 @@
 package com.example.bokningssystem.service;
 
 import com.example.bokningssystem.dtos.*;
+import com.example.bokningssystem.dtos.userDtos.CreateUserProfileDTO;
+import com.example.bokningssystem.dtos.userDtos.UserResponseDTO;
+import com.example.bokningssystem.dtos.userDtos.UserWithBookingsResponseDTO;
 import com.example.bokningssystem.mapper.UserMapper;
 import com.example.bokningssystem.entities.User;
 import com.example.bokningssystem.mapper.UserWithBookingsMapper;
