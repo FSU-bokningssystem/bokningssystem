@@ -138,4 +138,9 @@ public class BookingService {
                 .map(bookingMapper::toBookingResponseDTO)
                 .toList();
     }
+
+    public void delete (Long id){
+        //Här ska vi ha validering på att den inloggade användaren ska ha rättighet att ta bort bokningen (husägare eller bokningsägare).
+        bookingRepository.deleteById(id);
+    }
 }

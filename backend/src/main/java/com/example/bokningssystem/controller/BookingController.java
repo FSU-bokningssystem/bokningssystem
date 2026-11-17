@@ -43,4 +43,10 @@ public class BookingController {
     public ResponseEntity<List<BookingResponseDTO>> findByRoomId(@PathVariable long roomId) {
         return ResponseEntity.ok(bookingService.findByRoomId(roomId));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable long id){
+        bookingService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }

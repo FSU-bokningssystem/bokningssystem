@@ -161,7 +161,9 @@ const EditBookingModal = ({ booking, onClose }: BookingEditModalProps) => {
 							id="roomNumber"
 							name="roomNumber"
 							className="w-full rounded-lg border border-gray-300 bg-gray-50 px-3.5 py-2 text-sm text-gray-900 focus:border-[#0058a3] focus:ring-[#0058a3]">
-							<option value="">{booking.roomNumber}</option>
+							<option value="">
+								{booking.roomNumber} - {booking.roomName}
+							</option>
 							{auth.activeOrganization?.houses
 								.find((h) => h.id === houseIdNbr)
 								?.rooms.map(
