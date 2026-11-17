@@ -3,6 +3,7 @@ package com.example.bokningssystem.service;
 import com.example.bokningssystem.dtos.CreateUserProfileDTO;
 import com.example.bokningssystem.dtos.UserResponseDTO;
 import com.example.bokningssystem.dtos.UserWithBookingsResponseDTO;
+import com.example.bokningssystem.exceptions.UserNotFoundException;
 import com.example.bokningssystem.mapper.UserMapper;
 import com.example.bokningssystem.dtos.CreateUserProfileDTO;
 import com.example.bokningssystem.entities.Credential;
@@ -95,4 +96,19 @@ public class UserService {
         User updatedUser = userRepository.save(user);
         return userMapper.toResponseDTO(updatedUser);
     }
+
+    @Transactional
+    public void anonymizeUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(()-> new UserNotFoundException("Hittar inte användare " + userId));
+        user.setFirstName("Borttagen");
+        user.setLastName("Användare");
+        user.setEmail("borttagen"+ userId + "@anvandare");
+        user.setPhone(null);
+
+        credentialRepository.findByUser(user).ifPresent(credentialRepository::delete);
+        userRepository.save(user);
+    }
+
+
 }
