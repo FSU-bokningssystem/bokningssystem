@@ -4,11 +4,11 @@ import UserListItem from "./UserListItem";
 import UserModal from "./UserModal";
 import AddUserModal from "./AddUserModal";
 import type { userData } from "../../types/types";
-import { UserCheck, LogIn, UserPlus, Info } from "lucide-react";
+import { UserCheck, UserPlus, Info } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 
 const UserList = ({ users }: { users: userData[] }) => {
-  const { loginAs, currentUser } = useAuth();
+  const { currentUser } = useAuth();
   const [selectedUser, setSelectedUser] = useState<userData | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const queryClient = useQueryClient();
@@ -51,31 +51,17 @@ const UserList = ({ users }: { users: userData[] }) => {
                   <UserListItem user={user} />
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
+                  {isCurrent && (
+                    <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-green-100 text-green-700 border border-green-300">
+                      <UserCheck className="w-3.5 h-3.5" /> Inloggad
+                    </span>
+                  )}
                   <button
                     type="button"
                     onClick={() => setSelectedUser(user)}
                     className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-full transition cursor-pointer"
                   >
                     <Info className="w-3.5 h-3.5" /> Detaljer
-                  </button>
-                  <button
-                    onClick={() => loginAs(user.id)}
-                    disabled={isCurrent}
-                    className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold transition ${
-                      isCurrent
-                        ? "bg-green-100 text-green-700 border border-green-300 cursor-default"
-                        : "bg-[#0058a3] hover:bg-[#004f93] text-white cursor-pointer"
-                    }`}
-                  >
-                    {isCurrent ? (
-                      <>
-                        <UserCheck className="w-3.5 h-3.5" /> Inloggad
-                      </>
-                    ) : (
-                      <>
-                        <LogIn className="w-3.5 h-3.5" /> Logga in som
-                      </>
-                    )}
                   </button>
                 </div>
               </li>
