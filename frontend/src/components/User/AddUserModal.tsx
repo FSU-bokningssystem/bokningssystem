@@ -1,7 +1,6 @@
 import React, { useState, type SubmitEvent } from 'react';
-import type { CreateUserProfileDTO, userData } from '../../types/types';
+import type { RegisterUser } from '../../types/types';
 import { postToApi } from '../../api/postData';
-import { useAuth } from '../../context/AuthContext';
 import { X, UserPlus } from 'lucide-react';
 
 interface AddUserModalProps {
@@ -10,15 +9,14 @@ interface AddUserModalProps {
 }
 
 const AddUserModal: React.FC<AddUserModalProps> = ({ onClose, onUserCreated }) => {
-  const { loginAs } = useAuth();
-  const [formData, setFormData] = useState<CreateUserProfileDTO>({
+  const [formData, setFormData] = useState<RegisterUser>({
     email: '',
     password: '',
     confirmPassword: '',
     firstName: '',
     lastName: '',
-    phoneNumber: '',
-    timeZone: '',
+    phone: '',
+    timeZone: 'Europe/Stockholm',
   });
 
   const [loading, setLoading] = useState(false);
@@ -41,9 +39,7 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ onClose, onUserCreated }) =
     setLoading(true);
 
     try {
-      const created = await postToApi<userData>("user/register", formData);
-
-      await loginAs(created.id);
+      await postToApi('auth/register', formData);
 
       if (onUserCreated) onUserCreated();
       onClose();
@@ -166,11 +162,11 @@ const AddUserModal: React.FC<AddUserModalProps> = ({ onClose, onUserCreated }) =
               </label>
               <input
                 type="tel"
-                id="phoneNumber"
-                name="phoneNumber"
+                id="phone"
+                name="phone"
                 placeholder="(valfritt)"
                 className="w-full px-3.5 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#0058a3] focus:border-[#0058a3] transition"
-                value={formData.phoneNumber}
+                value={formData.phone}
                 onChange={handleChange}
               />
             </div>
