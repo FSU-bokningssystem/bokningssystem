@@ -6,6 +6,7 @@ import com.example.bokningssystem.dtos.booking.BookingChangeDTO;
 import com.example.bokningssystem.service.BookingService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -45,7 +46,7 @@ public class BookingController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable long id){
+    public ResponseEntity<Void> delete(@PathVariable @NotNull @Positive long id){
         bookingService.delete(id);
         return ResponseEntity.noContent().build();
     }

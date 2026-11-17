@@ -10,7 +10,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> findByRoomId(Long roomId);
 
-    void deleteById(Long id);
 
 }
 

@@ -141,6 +141,10 @@ public class BookingService {
 
     public void delete (Long id){
         //Här ska vi ha validering på att den inloggade användaren ska ha rättighet att ta bort bokningen (husägare eller bokningsägare).
-        bookingRepository.deleteById(id);
+        if(bookingRepository.existsById(id)) {
+            bookingRepository.deleteById(id);
+        } else {
+            throw new BookingNotFoundException("Hittade inte bokning " + id + ".");
+        }
     }
 }
