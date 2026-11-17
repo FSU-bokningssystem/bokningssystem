@@ -1,19 +1,15 @@
-import { X, Plus } from "lucide-react";
-import { useState } from "react";
-import type {
-	BookingData,
-	BookingEditData,
-	BookingModalProps,
-} from "../../types/types";
+import { X, SquarePen } from "lucide-react";
+import type { BookingEditData, BookingEditModalProps } from "../../types/types";
 import type React from "react";
 import { useAuth } from "../../context/AuthContext";
+import { useQueryClient } from "@tanstack/react-query";
+import { putToApi } from "../../api/putData";
+import { useState } from "react";
 
-const EditBookingModal = (
-	booking: BookingData,
-	{ onClose, submitData }: BookingModalProps,
-) => {
+const EditBookingModal = ({ booking, onClose }: BookingEditModalProps) => {
 	const auth = useAuth();
-	let houseIdNbr = Number(booking.houseId);
+	const queryClient = useQueryClient();
+	const [houseIdNbr, setHouseIdNbr] = useState(Number(booking.houseId));
 
 	const dateToString = (date: Date) => {
 		const pad = (num: number) => num.toString().padStart(2, "0");
@@ -28,18 +24,16 @@ const EditBookingModal = (
 		return dateToString(now);
 	};
 
-	const [startTime, setStartTime] = useState(minDateTime());
-	const [endTime, setEndTime] = useState("");
-	const [newTitle, setNewTitle] = useState(null);
-	const [newDescription, setNewDescription] = useState(null);
-	const [newHouseId, setNewHouseId] = useState(null);
-	const [newRoomNumber, setNewRoomNumber] = useState(null);
-	const [newOwnerId, setNewOwnerId] = useState(null);
+	const submitEditData = async (values: BookingEditData) => {
+		try {
+			const newBooking = await putToApi("booking", values);
+			await queryClient.invalidateQueries({ queryKey: ["bookinglist"] });
+			auth.updateBooking(newBooking);
 
-	const handleStartTimeChange = (value: string) => {
-		setStartTime(value);
-		if (!endTime || value >= endTime) {
-			setEndTime(value);
+			onClose();
+			alert("Bokningen har uppdaterats!");
+		} catch (error: any) {
+			alert(error.message || "Ett fel uppstod vid uppdatering av bokningen.");
 		}
 	};
 
@@ -49,40 +43,55 @@ const EditBookingModal = (
 		const formData = new FormData(e.currentTarget);
 
 		const values: BookingEditData = {
-			bookingId: booking.id,
-			houseId: formData.get("house") ? Number(formData.get("house")) : null,
-			roomNumber: formData.get("roomNumber")
-				? (formData.get("roomNumber") as string)
-				: null,
-			title: formData.get("title") ? (formData.get("title") as string) : null,
-			description: formData.get("description")
-				? (formData.get("description") as string)
-				: null,
-			startTime: formData.get("startTime")
-				? (formData.get("startTime") as string)
-				: null,
-			endTime: formData.get("endTime")
-				? (formData.get("endTime") as string)
-				: null,
-			ownerId: null,
+			id: booking.id,
+			houseId:
+				formData.get("house") === "" ? null : Number(formData.get("house")),
+			roomNumber:
+				formData.get("roomNumber") === ""
+					? null
+					: (formData.get("roomNumber") as string),
+			title:
+				formData.get("title") === booking.title
+					? null
+					: (formData.get("title") as string),
+			description:
+				formData.get("description") === booking.description
+					? null
+					: (formData.get("description") as string),
+			startTime:
+				formData.get("startTime") === booking.startTime.slice(0, 16)
+					? null
+					: (formData.get("startTime") as string),
+			endTime:
+				formData.get("endTime") === booking.endTime.slice(0, 16)
+					? null
+					: (formData.get("endTime") as string),
+			ownerId:
+				formData.get("ownerId") === "" ? null : Number(formData.get("ownerId")),
 		};
-
-		if (values.startTime >= values.endTime) {
+		if (
+			values.startTime &&
+			values.endTime &&
+			values.startTime >= values.endTime
+		) {
 			alert("Sluttiden måste vara efter starttiden.");
 			return;
 		}
-		if (values.startTime < minDateTime()) {
+		if (values.startTime && values.startTime < minDateTime()) {
 			alert("Starttiden måste vara i framtiden.");
 			return;
 		}
-		if (values.title.length < 4 || values.title.length > 45) {
-			alert("Titeln måste vara mellan 4 och 45 tecken.");
+		if (
+			values.houseId != null &&
+			!auth.activeOrganization?.houses
+				.find((h) => h.id === values.houseId)
+				?.rooms.some((r) => r.roomNumber === values.roomNumber)
+		) {
+			alert("Det valda rummet finns inte i det valda huset.");
 			return;
 		}
-		if (values.description.length === 0) {
-			values.description = "Du måste fylla i en beskrivning.";
-		}
-		submitData(values);
+
+		submitEditData(values);
 	};
 
 	return (
@@ -115,7 +124,7 @@ const EditBookingModal = (
 							name="title"
 							id="title"
 							className="w-full rounded-lg border border-gray-300 bg-gray-50 px-3.5 py-2 text-sm text-gray-900 focus:border-[#0058a3] focus:ring-[#0058a3]"
-							placeholder={booking.title}
+							defaultValue={booking.title}
 							minLength={4}
 							maxLength={45}
 							size={45}
@@ -132,7 +141,7 @@ const EditBookingModal = (
 							name="house"
 							className="w-full rounded-lg border border-gray-300 bg-gray-50 px-3.5 py-2 text-sm text-gray-900 focus:border-[#0058a3] focus:ring-[#0058a3]"
 							onChange={(e) => {
-								houseIdNbr = Number(e.target.value);
+								setHouseIdNbr(Number(e.target.value));
 							}}>
 							<option value="">{booking.houseName}</option>
 							{auth.activeOrganization?.houses.map((house) => (
@@ -155,11 +164,14 @@ const EditBookingModal = (
 							<option value="">{booking.roomNumber}</option>
 							{auth.activeOrganization?.houses
 								.find((h) => h.id === houseIdNbr)
-								?.rooms.map((room) => (
-									<option key={room.id} value={room.roomNumber}>
-										{room.name}
-									</option>
-								))}
+								?.rooms.map(
+									(room) =>
+										room.isAvailable && (
+											<option key={room.roomNumber} value={room.roomNumber}>
+												{room.roomNumber} - {room.name}
+											</option>
+										),
+								)}
 						</select>
 					</div>
 					<div>
@@ -172,12 +184,9 @@ const EditBookingModal = (
 							name="description"
 							id="description"
 							className="w-full rounded-lg border border-gray-300 bg-gray-50 px-3.5 py-2 text-sm text-gray-900 focus:border-[#0058a3] focus:ring-[#0058a3]"
-							placeholder={booking.description}
+							defaultValue={booking.description ?? ""}
 							rows={4}
 							cols={80}
-							onChange={(e) => {
-								values.description = e.target.value;
-							}}
 						/>
 					</div>
 
@@ -192,11 +201,9 @@ const EditBookingModal = (
 							name="startTime"
 							id="startTime"
 							className="w-full rounded-lg border border-gray-300 bg-gray-50 px-3.5 py-2 text-sm text-gray-900 focus:border-[#0058a3] focus:ring-[#0058a3]"
-							required
-							value={startTime}
+							defaultValue={booking.startTime.slice(0, 16)}
 							min={minDateTime()}
 							step={300}
-							onChange={(e) => handleStartTimeChange(e.target.value)}
 						/>
 					</div>
 					<div>
@@ -211,10 +218,9 @@ const EditBookingModal = (
 							id="endTime"
 							className="w-full rounded-lg border border-gray-300 bg-gray-50 px-3.5 py-2 text-sm text-gray-900 focus:border-[#0058a3] focus:ring-[#0058a3]"
 							required
-							value={endTime}
+							defaultValue={booking.endTime.slice(0, 16)}
 							min={minDateTime()}
 							step={300}
-							onChange={(e) => setEndTime(e.target.value)}
 						/>
 					</div>
 					<div>
@@ -231,9 +237,9 @@ const EditBookingModal = (
 							<option value="">
 								{booking.owner.firstName} {booking.owner.lastName}
 							</option>
-							{houses.map((house) => (
-								<option key={house.id} value={house.ownerId}>
-									{house.ownerName}
+							{auth.activeOrganization?.users.map((user) => (
+								<option key={user.id} value={user.id}>
+									{user.firstName} {user.lastName}
 								</option>
 							))}
 						</select>
@@ -249,8 +255,8 @@ const EditBookingModal = (
 						<button
 							type="submit"
 							className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-bold text-white bg-[#0058a3] hover:bg-[#004f93] rounded-full transition shadow-xs">
-							<Plus className="h-4 w-4" />
-							Boka
+							<SquarePen className="h-4 w-4" />
+							Uppdatera
 						</button>
 					</div>
 				</form>

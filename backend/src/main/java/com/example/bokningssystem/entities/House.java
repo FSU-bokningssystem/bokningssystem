@@ -4,6 +4,7 @@ import com.example.bokningssystem.exceptions.InvalidTimeZoneException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.jspecify.annotations.NonNull;
 
 import java.time.ZoneId;
 import java.util.LinkedHashSet;
@@ -55,6 +56,11 @@ public class House {
 
     @OneToMany(mappedBy = "house")
     private Set<Room> rooms = new LinkedHashSet<>();
+    @NonNull
+    @ManyToMany
+    @JoinTable(name = "houseowners", joinColumns = {@JoinColumn(name = "house_id")}, inverseJoinColumns = {@JoinColumn(name = "user_id")})
+    private Set<User> owners = new LinkedHashSet<>();
+
 
     public House() {
     }
@@ -146,6 +152,15 @@ public class House {
 
     public void setRooms(Set<Room> rooms) {
         this.rooms = rooms;
+    }
+
+    @NonNull
+    public Set<User> getOwners() {
+        return owners;
+    }
+
+    public void setOwners(@NonNull Set<User> owners) {
+        this.owners = owners;
     }
 
     @Override

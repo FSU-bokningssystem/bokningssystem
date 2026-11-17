@@ -10,5 +10,6 @@ public record HouseDTO(
         String zipCode,
         String city,
         String timeZone,
-        List<RoomDTO> rooms
+        List<RoomDTO> rooms,
+        List<UserShortResponseDTO> owners
 ) {}

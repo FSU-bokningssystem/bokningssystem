@@ -50,7 +50,7 @@ public class UserMapper {
     }
 
     public UserShortResponseDTO userShortResponseDTO (User user) {
-        return new UserShortResponseDTO(user.getFirstName(),user.getLastName(),user.getEmail());
+        return new UserShortResponseDTO(user.getId(), user.getFirstName(),user.getLastName(),user.getEmail());
     }
 
 

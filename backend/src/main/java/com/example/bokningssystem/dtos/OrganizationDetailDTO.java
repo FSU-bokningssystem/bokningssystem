@@ -5,6 +5,7 @@ import java.util.List;
 public record OrganizationDetailDTO(
         Long id,
         String name,
-        List<HouseDTO> houses
+        List<HouseDTO> houses,
+        List<UserShortResponseDTO> users
 ) {
 }
