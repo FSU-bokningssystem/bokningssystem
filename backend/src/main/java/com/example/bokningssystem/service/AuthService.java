@@ -1,6 +1,9 @@
 package com.example.bokningssystem.service;
 
-import com.example.bokningssystem.dtos.*;
+
+import com.example.bokningssystem.dtos.userDtos.AuthResponseDTO;
+import com.example.bokningssystem.dtos.userDtos.LoginDTO;
+import com.example.bokningssystem.dtos.userDtos.UserRegistrationDTO;
 import com.example.bokningssystem.entities.Credential;
 import com.example.bokningssystem.entities.User;
 import com.example.bokningssystem.enums.UserRole;

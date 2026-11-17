@@ -10,5 +10,6 @@ public record InitialResponseDTO(
         UserResponseDTO user,
         List<OrganizationSummaryDTO> userOrganizations,
         OrganizationDetailDTO activeOrganization,
-        List<BookingResponseDTO> bookings
+        List<BookingResponseDTO> bookings,
+        String userRole
 ) {}

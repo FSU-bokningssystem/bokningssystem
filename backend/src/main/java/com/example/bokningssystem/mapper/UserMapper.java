@@ -1,10 +1,9 @@
 package com.example.bokningssystem.mapper;
 
-import com.example.bokningssystem.dtos.userDtos.CreateUserProfileDTO;
+import com.example.bokningssystem.dtos.userDtos.UserRegistrationDTO;
 import com.example.bokningssystem.dtos.userDtos.UserResponseDTO;
 import com.example.bokningssystem.dtos.userDtos.UserShortResponseDTO;
 import com.example.bokningssystem.entities.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component

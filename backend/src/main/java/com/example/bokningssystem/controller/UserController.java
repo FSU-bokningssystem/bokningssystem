@@ -1,7 +1,7 @@
 package com.example.bokningssystem.controller;
 
+import com.example.bokningssystem.dtos.userDtos.UserRegistrationDTO;
 import com.example.bokningssystem.dtos.userDtos.InitialResponseDTO;
-import com.example.bokningssystem.dtos.userDtos.CreateUserProfileDTO;
 import com.example.bokningssystem.dtos.userDtos.UserWithBookingsResponseDTO;
 
 import com.example.bokningssystem.dtos.userDtos.UserResponseDTO;

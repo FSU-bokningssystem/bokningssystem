@@ -1,8 +1,8 @@
 package com.example.bokningssystem.controller;
 
-import com.example.bokningssystem.dtos.AuthResponseDTO;
-import com.example.bokningssystem.dtos.LoginDTO;
-import com.example.bokningssystem.dtos.UserRegistrationDTO;
+import com.example.bokningssystem.dtos.userDtos.AuthResponseDTO;
+import com.example.bokningssystem.dtos.userDtos.LoginDTO;
+import com.example.bokningssystem.dtos.userDtos.UserRegistrationDTO;
 import com.example.bokningssystem.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

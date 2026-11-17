@@ -1,4 +1,4 @@
-package com.example.bokningssystem.dtos;
+package com.example.bokningssystem.dtos.userDtos;
 
 public record AuthResponseDTO(
         String token,
