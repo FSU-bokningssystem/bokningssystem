@@ -6,6 +6,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.security.authentication.BadCredentialsException;
 
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -115,5 +116,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ForbiddenException.class)
     public ResponseEntity<ErrorResponse> forbidden(ForbiddenException ex) {
         return ResponseEntity.status(403).body(new ErrorResponse( 403, ex.getMessage()));
+    }
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> badCredentials(BadCredentialsException ex) {
+        return ResponseEntity.status(401)
+                .body(new ErrorResponse(401, "Fel e-postadress eller lösenord."));
     }
 }

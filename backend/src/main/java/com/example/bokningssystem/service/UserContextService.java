@@ -5,12 +5,16 @@ import com.example.bokningssystem.dtos.organizationDtos.OrganizationDetailDTO;
 import com.example.bokningssystem.dtos.organizationDtos.OrganizationSummaryDTO;
 import com.example.bokningssystem.dtos.userDtos.InitialResponseDTO;
 import com.example.bokningssystem.dtos.userDtos.UserResponseDTO;
+import com.example.bokningssystem.entities.Credential;
 import com.example.bokningssystem.entities.Membership;
 import com.example.bokningssystem.entities.Organization;
 import com.example.bokningssystem.entities.User;
 import com.example.bokningssystem.mapper.BookingMapper;
 import com.example.bokningssystem.mapper.OrganizationMapper;
 import com.example.bokningssystem.mapper.UserMapper;
+import com.example.bokningssystem.repository.CredentialRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import com.example.bokningssystem.repository.MembershipRepository;
 import com.example.bokningssystem.repository.OrganizationRepository;
 import com.example.bokningssystem.repository.UserRepository;
@@ -20,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Stream;
 
+/** Ansvarar för att samla ihop all startdata(profil, organisationer,
+    aktiv organisation och bokningar) för den inloggade användaren */
 @Service
 public class UserContextService {
 
@@ -29,28 +35,39 @@ public class UserContextService {
     private final OrganizationRepository organizationRepository;
     private final OrganizationMapper organizationMapper;
     private final BookingMapper bookingMapper;
+    private final CredentialRepository credentialRepository;
 
     public UserContextService(UserRepository userRepository, UserMapper userMapper, MembershipRepository membershipRepository,
                               OrganizationRepository organizationRepository, OrganizationMapper organizationMapper,
-                              BookingMapper bookingMapper) {
+                              BookingMapper bookingMapper, CredentialRepository credentialRepository) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.membershipRepository = membershipRepository;
         this.organizationRepository = organizationRepository;
         this.organizationMapper = organizationMapper;
         this.bookingMapper = bookingMapper;
+        this.credentialRepository = credentialRepository;
     }
 
     @Transactional(readOnly = true)
-    public InitialResponseDTO getInitialDataForUser(Long userId, Long selectedOrgId) {
+    public InitialResponseDTO getInitialDataForUser(Long selectedOrgId) {
 
-        // Hämta inloggad användare
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Användare hittades inte"));
+        // Hämtar e-posten för den inloggade användaren direkt från Spring Security
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        // Slå upp användaren via e-posten från token
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Användare hittades inte"));
+
         UserResponseDTO userDto = userMapper.toResponseDTO(user);
 
-        // Hämta ALLA organisationer användaren är medlem i
-        List<Membership> userMemberShips = membershipRepository.findByUserId(userId);
+        // Hämtar systemrollen från Credential (med USER som fallback om den saknas)
+        String userRole = credentialRepository.findById(user.getId())
+                .map(Credential::getRole)
+                .orElse("USER");
+
+        // Hämtar ALLA organisationer användaren är medlem i
+        List<Membership> userMemberShips = membershipRepository.findByUserId(user.getId());
 
         List<OrganizationSummaryDTO> orgSummaries = userMemberShips.stream()
                 .map(m -> new OrganizationSummaryDTO(
@@ -59,36 +76,39 @@ public class UserContextService {
                         m.getMemberRole()))
                 .toList();
 
-        /* Bestäm vilken organisation som ska vara aktiv. Standardval är första organisationen
-        i listan över användarens organisationer*/
-        Long requestedOrgId = selectedOrgId;
+        // Kontrollerar om användaren är medlem i den valda organisationen
+        boolean isMember = selectedOrgId != null && userMemberShips.stream()
+                .anyMatch(m -> m.getOrganization().getId().equals(selectedOrgId));
 
-        boolean isMember = requestedOrgId != null && userMemberShips.stream()
-                .anyMatch(m -> m.getOrganization().getId().equals(requestedOrgId));
-
+        // Bestämmer vilken organisation som ska vara aktiv
         Long targetOrgId;
+        // Om användaren är medlem i vald organisation sätts den som aktiv
         if (isMember) {
-            targetOrgId = requestedOrgId;
+            targetOrgId = selectedOrgId;
+            // Annars sätts den första organisationen i användarens lista som aktiv
         } else if (!userMemberShips.isEmpty()) {
             targetOrgId = userMemberShips.get(0).getOrganization().getId();
+            // Saknar användaren medlemskap i en organisation sätts värdet till null
         } else {
             targetOrgId = null;
         }
 
-        // Hämta och mappa den aktiva organisationen med hus och rum
+        // Hämtar och mappar den aktiva organisationen med hus och rum
         OrganizationDetailDTO activeOrgDTO = null;
         if (targetOrgId != null) {
             Organization organization = organizationRepository.findById(targetOrgId)
-                    .orElseThrow(() -> new RuntimeException("Organisation hittades inte"));
+                    .orElseThrow(() -> new IllegalArgumentException("Organisation hittades inte"));
             activeOrgDTO = organizationMapper.toDetailDTO(organization);
         }
 
-        // Hämta användarens alla bokningar
-        List<BookingResponseDTO> bookingDTOs = Stream.concat(user.getOwnedBookings().stream(), user.getParticipatingBookings().stream())
+        // Hämtar användarens alla bokningar(både såna som den är ägare av eller deltagare i)
+        List<BookingResponseDTO> bookingDTOs = Stream.concat(
+                        user.getOwnedBookings().stream(),
+                        user.getParticipatingBookings().stream())
                 .distinct()
                 .map(bookingMapper::toBookingResponseDTO)
                 .toList();
 
-        return new InitialResponseDTO(userDto, orgSummaries, activeOrgDTO, bookingDTOs);
+        return new InitialResponseDTO(userDto, orgSummaries, activeOrgDTO, bookingDTOs, userRole);
     }
 }
