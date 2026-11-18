@@ -5,6 +5,7 @@ import com.example.bokningssystem.dtos.houseDtos.HouseShortResponseDTO;
 import com.example.bokningssystem.dtos.houseDtos.HouseWithRoomsResponseDTO;
 import com.example.bokningssystem.dtos.roomDtos.RoomDTO;
 import com.example.bokningssystem.dtos.roomDtos.RoomResponseDTO;
+import com.example.bokningssystem.dtos.userDtos.UserShortResponseDTO;
 import com.example.bokningssystem.entities.House;
 import org.springframework.stereotype.Component;
 

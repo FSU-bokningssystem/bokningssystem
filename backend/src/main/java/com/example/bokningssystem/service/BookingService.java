@@ -1,23 +1,18 @@
 package com.example.bokningssystem.service;
 
+import com.example.bokningssystem.dtos.bookingDtos.BookingChangeDTO;
 import com.example.bokningssystem.dtos.bookingDtos.BookingRequestDTO;
 import com.example.bokningssystem.dtos.bookingDtos.BookingResponseDTO;
 import com.example.bokningssystem.dtos.bookingDtos.UserOrgBookingsDTO;
-import com.example.bokningssystem.dtos.BookingRequestDTO;
-import com.example.bokningssystem.dtos.BookingResponseDTO;
-import com.example.bokningssystem.dtos.booking.BookingChangeDTO;
 import com.example.bokningssystem.entities.Booking;
 import com.example.bokningssystem.entities.User;
 import com.example.bokningssystem.exceptions.*;
 import com.example.bokningssystem.entities.Room;
-import com.example.bokningssystem.entities.User;
-import com.example.bokningssystem.exceptions.*;
 import com.example.bokningssystem.mapper.BookingMapper;
 import com.example.bokningssystem.repository.BookingRepository;
 import com.example.bokningssystem.repository.MembershipRepository;
 import com.example.bokningssystem.repository.UserRepository;
 import com.example.bokningssystem.repository.RoomRepository;
-import com.example.bokningssystem.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,20 +28,17 @@ public class BookingService {
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
     private final MembershipRepository membershipRepository;
-    private final UserRepository userRepository;
 
     public BookingService(
             BookingMapper bookingMapper,
             BookingRepository bookingRepository,
             RoomRepository roomRepository,
-            UserRepository userRepository
+            UserRepository userRepository,
+            MembershipRepository membershipRepository
     ) {
-
-    public BookingService(BookingMapper bookingMapper, BookingRepository bookingRepository, MembershipRepository membershipRepository, UserRepository userRepository) {
         this.bookingMapper = bookingMapper;
         this.bookingRepository = bookingRepository;
         this.membershipRepository = membershipRepository;
-        this.userRepository = userRepository;
         this.roomRepository = roomRepository;
         this.userRepository = userRepository;
     }

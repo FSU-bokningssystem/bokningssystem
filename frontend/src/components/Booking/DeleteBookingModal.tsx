@@ -2,21 +2,22 @@ import { X, Trash } from "lucide-react";
 import type { BookingEditModalProps } from "../../types/types";
 import { useAuth } from "../../context/AuthContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteToApi } from "../../api/deleteData";
+import { deleteFromApi } from "../../api/deleteData";
 import { useState } from "react";
 
 const DeleteBookingModal = ({ booking, onClose }: BookingEditModalProps) => {
 	const auth = useAuth();
+
 	const queryClient = useQueryClient();
 	const [showAsk, setShowAsk] = useState(true);
 
 	const closeModal = () => {
-		if (deleteBooking.isPending) return;
+		if (removeMutation.isPending) return;
 		onClose();
 	};
 
-	const deleteBooking = useMutation({
-		mutationFn: () => deleteToApi("booking", String(booking.id)),
+	const removeMutation = useMutation({
+		mutationFn: () => deleteFromApi(`booking/${booking.id}`),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["bookinglist"] });
 			auth.removeBooking(booking);
@@ -25,13 +26,13 @@ const DeleteBookingModal = ({ booking, onClose }: BookingEditModalProps) => {
 
 	const submitDelete = () => {
 		setShowAsk(false);
-		deleteBooking.mutate();
+		removeMutation.mutate();
 	};
 
 	const modalMessage = () => {
-		if (deleteBooking.isPending) return <div>Bokningen tas bort...</div>;
-		if (deleteBooking.isError) return <div>Något gick fel</div>;
-		if (deleteBooking.isSuccess)
+		if (removeMutation.isPending) return <div>Bokningen tas bort...</div>;
+		if (removeMutation.isError) return <div>Något gick fel</div>;
+		if (removeMutation.isSuccess)
 			return (
 				<>
 					<div>Bokningen borttagen!</div>

@@ -64,7 +64,7 @@ const RoomDetails = () => {
 
 	const updateMutation = useMutation({
 		mutationFn: ({ id, values }: { id: number; values: roomFormValues }) =>
-			putToApi(`room/${id}`, values),
+			putToApi<roomData>(`room/${id}`, values),
 		onSuccess: (updated: roomData) => {
 			queryClient.setQueryData<houseWithRoomsData>(
 				["house", theHouse.id],

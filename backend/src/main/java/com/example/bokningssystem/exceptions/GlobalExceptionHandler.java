@@ -19,11 +19,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(404).body(error);
     }
 
-    @ExceptionHandler(BookingNotFoundException.class)
-    public ResponseEntity<ErrorResponse> bookingNotFound(BookingNotFoundException ex) {
-        ErrorResponse error = new ErrorResponse(404, ex.getMessage());
-        return ResponseEntity.status(404).body(error);
-    }
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorResponse> houseNotFound(UserNotFoundException ex) {

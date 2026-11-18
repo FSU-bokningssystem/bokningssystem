@@ -1,5 +1,9 @@
 import { X, SquarePen } from "lucide-react";
-import type { BookingEditData, BookingEditModalProps } from "../../types/types";
+import type {
+	BookingEditData,
+	BookingEditModalProps,
+	BookingData,
+} from "../../types/types";
 import type React from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useQueryClient } from "@tanstack/react-query";
@@ -26,7 +30,7 @@ const EditBookingModal = ({ booking, onClose }: BookingEditModalProps) => {
 
 	const submitEditData = async (values: BookingEditData) => {
 		try {
-			const newBooking = await putToApi("booking", values);
+			const newBooking = await putToApi<BookingData>("booking", values);
 			await queryClient.invalidateQueries({ queryKey: ["bookinglist"] });
 			auth.updateBooking(newBooking);
 
