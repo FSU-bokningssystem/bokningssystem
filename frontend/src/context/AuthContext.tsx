@@ -1,26 +1,16 @@
-import {
-	createContext,
-	useContext,
-	useState,
-	useEffect,
-	type ReactNode,
-} from "react";
-import type {
-	userData,
-	InitialData,
-	OrganizationSummaryData,
-	OrganizationDetailData,
-	BookingData,
-} from "../types/types";
-import { fetchFromApi } from "../api/fetchData";
+import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import type { userData, InitialData, OrganizationSummaryData, OrganizationDetailData, BookingData, AuthResponse, RegisterUser, Login } from '../types/types';
+import { fetchFromApi } from '../api/fetchData';
+import { postToApi } from '../api/postData';
 
 interface AuthContextType {
 	currentUser: userData | null;
-	userOrganizations: OrganizationSummaryData[];
+	userRole: string | null;userOrganizations: OrganizationSummaryData[];
 	activeOrganization: OrganizationDetailData | null;
 	bookings: BookingData[];
-	loading: boolean;
-	loginAs: (userId: number, selectedOrgId?: number) => Promise<void>;
+	isAuthenticated: boolean;loading: boolean;
+	login: (credentials: Login) => Promise<void>;
+  register: (data: RegisterUser) => Promise<void>;
 	switchOrganization: (organizationId: number) => Promise<void>;
 	updateBooking: (booking: BookingData) => void;
 	removeBooking: (booking: BookingData) => void;
@@ -30,20 +20,16 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-	const [currentUser, setCurrentUser] = useState<userData | null>(() => {
-		const saved = localStorage.getItem("activeUser");
-		return saved ? JSON.parse(saved) : null;
-	});
+  const [currentUser, setCurrentUser] = useState<userData | null>(null);
+  const [userRole, setUserRole] = useState<string | null>(null);
+  const [userOrganizations, setUserOrganizations] = useState<OrganizationSummaryData[]>([]);
+  const [activeOrganization, setActiveOrganization] = useState<OrganizationDetailData | null>(null);
+  const [bookings, setBookings] = useState<BookingData[]>([]);
 
-	const [userOrganizations, setUserOrganizations] = useState<
-		OrganizationSummaryData[]
-	>([]);
-	const [activeOrganization, setActiveOrganization] =
-		useState<OrganizationDetailData | null>(null);
-	const [bookings, setBookings] = useState<BookingData[]>([]);
-	const [loading, setLoading] = useState(false);
+  // Starta med loading = true om en token finns, så ProtectedRoute väntar in fetchInitialData vid F5
+  const [loading, setLoading] = useState<boolean>(() => Boolean(localStorage.getItem('token')));
 
-	const fetchInitialData = async (userId: number, selectedOrgId?: number) => {
+	const fetchInitialData = async ( selectedOrgId?: number) => {
 		setLoading(true);
 		try {
 			const savedOrgId =
@@ -52,49 +38,69 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 					? Number(localStorage.getItem("activeOrgId"))
 					: undefined);
 
-			let endpoint = `user/me/context?userId=${userId}`;
+			let endpoint = `user/me/context`;
 			if (savedOrgId) {
-				endpoint += `&selectedOrgId=${savedOrgId}`;
+				endpoint += `?selectedOrgId=${savedOrgId}`;
 			}
 
 			const data = await fetchFromApi<InitialData>(endpoint);
 
 			setCurrentUser(data.user);
-			setUserOrganizations(data.userOrganizations);
+			setUserRole(data.userRole);setUserOrganizations(data.userOrganizations);
 			setActiveOrganization(data.activeOrganization);
 			setBookings(data.bookings);
 
-			localStorage.setItem("activeUser", JSON.stringify(data.user));
+      if (data.activeOrganization?.id) {
+        localStorage.setItem('activeOrgId', data.activeOrganization.id.toString());
+      } else {
+        localStorage.removeItem('activeOrgId');
+      }
+    } catch (error) {
+      console.error('Det uppstod ett fel vid hämtning av initial data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-			if (data.activeOrganization?.id) {
-				localStorage.setItem(
-					"activeOrgId",
-					data.activeOrganization.id.toString(),
-				);
-			} else {
-				localStorage.removeItem("activeOrgId");
-			}
-		} catch (error) {
-			console.error("Det uppstod ett fel vid hämtning av initial data:", error);
-		} finally {
-			setLoading(false);
-		}
-	};
-
-	useEffect(() => {
-		if (currentUser?.id) {
-			fetchInitialData(currentUser.id);
+	// Vid sidomladdning (F5): om det finns en token i localStorage, hämta användarens kontextuseEffect(() => {
+		const token = localStorage.getItem('token');
+    if (token) {
+			fetchInitialData();
 		}
 	}, []);
 
-	const loginAs = async (userId: number, selectedOrgId?: number) => {
+	const login = async (credentials: Login) => {
+    setLoading(true);
+    try {
+      const authData = await postToApi<AuthResponse>('auth/login', credentials);
+      localStorage.setItem('token', authData.token);
 		localStorage.removeItem("activeOrgId");
-		await fetchInitialData(userId, selectedOrgId);
+      setUserRole(authData.userRole);
+		await fetchInitialData();
+    } catch (error) {
+      setLoading(false);
+      throw error; // Skicka vidare felet så att Login-formuläret kan visa felmeddelandet
+    }
+  };
+
+  const register = async (registrationData: RegisterUser) => {
+    setLoading(true);
+    try {
+      const authData = await postToApi<AuthResponse>('auth/register', registrationData);
+      localStorage.setItem('token', authData.token);
+      localStorage.removeItem('activeOrgId');
+      setUserRole(authData.userRole);
+
+      await fetchInitialData();
+    } catch (error) {
+      setLoading(false);
+      throw error; // Skicka vidare felet så att Register-formuläret kan visa felmeddelandet 
+    }
 	};
 
 	const switchOrganization = async (organizationId: number) => {
-		if (currentUser?.id) {
-			await fetchInitialData(currentUser.id, organizationId);
+		if (currentUser) {
+			await fetchInitialData(organizationId);
 		}
 	};
 
@@ -137,16 +143,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 		localStorage.removeItem("activeUser");
 		localStorage.removeItem("activeOrgId");
 	};
+  const logout = () => {
+    setCurrentUser(null);
+    setUserRole(null);
+    setUserOrganizations([]);
+    setActiveOrganization(null);
+    setBookings([]);
+    localStorage.removeItem('token');
+    localStorage.removeItem('activeOrgId');
+    localStorage.removeItem('activeUser');
+  };
+
+  const isAuthenticated = Boolean(currentUser && localStorage.getItem('token'));
 
 	return (
 		<AuthContext.Provider
 			value={{
 				currentUser,
-				userOrganizations,
+				userRole,userOrganizations,
 				activeOrganization,
 				bookings,
-				loading,
-				loginAs,
+				isAuthenticated,loading,
+				login,
+        register,
 				switchOrganization,
 				updateBooking,
 				removeBooking,

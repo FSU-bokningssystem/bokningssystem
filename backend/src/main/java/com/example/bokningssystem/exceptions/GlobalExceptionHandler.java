@@ -6,6 +6,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.security.authentication.BadCredentialsException;
 
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -110,5 +111,33 @@ public class GlobalExceptionHandler {
         ErrorResponse error = new ErrorResponse(409,
                 "Det finns redan en lokal med detta rumsnummer på den våningen.");
         return ResponseEntity.status(409).body(error);
+    }
+    @ExceptionHandler(MembershipNotFoundException.class)
+    public ResponseEntity<ErrorResponse> membershipNotFound(MembershipNotFoundException ex) {
+        return ResponseEntity.status(404).body(new ErrorResponse(404, ex.getMessage()));
+    }
+
+    @ExceptionHandler(LastOwnerException.class)
+    public ResponseEntity<ErrorResponse> lastOwner(LastOwnerException ex) {
+        return ResponseEntity.status(409).body(new ErrorResponse(409, ex.getMessage()));
+    }
+    @ExceptionHandler(OwnsBookingsException.class)
+    public ResponseEntity<ErrorResponse> ownsBooking(OwnsBookingsException ex){
+        return ResponseEntity.status(409).body(new ErrorResponse(409, ex.getMessage()));
+    }
+
+
+    @ExceptionHandler(BookingNotFoundException.class)
+    public ResponseEntity<ErrorResponse> bookingNotFound(BookingNotFoundException ex) {
+        return ResponseEntity.status(404).body(new ErrorResponse(404, ex.getMessage()));
+    }
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<ErrorResponse> forbidden(ForbiddenException ex) {
+        return ResponseEntity.status(403).body(new ErrorResponse( 403, ex.getMessage()));
+    }
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> badCredentials(BadCredentialsException ex) {
+        return ResponseEntity.status(401)
+                .body(new ErrorResponse(401, "Fel e-postadress eller lösenord."));
     }
 }

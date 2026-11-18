@@ -21,14 +21,19 @@ export interface userList {
 	users: Array<userData>;
 }
 
-export interface CreateUserProfileDTO {
+export interface Login {
 	email: string;
 	password: string;
-	confirmPassword?: string;
+}
+
+export interface RegisterUser {
+	email: string;
+	password: string;
+	confirmPassword: string;
 	firstName: string;
 	lastName: string;
-	phoneNumber?: string;
-	timeZone?: string;
+	phone?: string;
+	timeZone: string;
 }
 
 export interface UserModalProps {
@@ -213,4 +218,35 @@ export interface InitialData {
 	userOrganizations: OrganizationSummaryData[];
 	activeOrganization: OrganizationDetailData | null;
 	bookings: BookingData[];
+	userRole: string;
+}
+
+export interface AuthResponse {
+  token: string;
+  userId: number;
+  email: string;
+  userRole: string;
+}
+
+export type MemberRole = "OWNER" | "ADMIN" | "MEMBER";
+
+export interface Membership {
+	userId: number;
+	organizationId: number;
+	organizationName: string;
+	memberRole: MemberRole;
+}
+
+// Matchar OrgMemberDTO i backend
+export interface OrgMember {
+	userId: number;
+	firstName: string;
+	lastName: string;
+	memberRole: MemberRole;
+}
+
+// Matchar UserOrgBookingsDTO i backend
+export interface UserOrgBookings {
+	owned: BookingData[];
+	participating: BookingData[];
 }

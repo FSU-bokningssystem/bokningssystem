@@ -1,11 +1,11 @@
 package com.example.bokningssystem.mapper;
 
-import com.example.bokningssystem.dtos.BookingForUserResponseDTO;
-import com.example.bokningssystem.dtos.BookingDTO;
-import com.example.bokningssystem.dtos.BookingResponseDTO;
-import com.example.bokningssystem.dtos.BookingRequestDTO;
-import com.example.bokningssystem.dtos.UserResponseDTO;
-import com.example.bokningssystem.dtos.UserShortResponseDTO;
+import com.example.bokningssystem.dtos.bookingDtos.BookingForUserResponseDTO;
+import com.example.bokningssystem.dtos.bookingDtos.BookingDTO;
+import com.example.bokningssystem.dtos.bookingDtos.BookingResponseDTO;
+import com.example.bokningssystem.dtos.bookingDtos.BookingRequestDTO;
+import com.example.bokningssystem.dtos.userDtos.UserResponseDTO;
+import com.example.bokningssystem.dtos.userDtos.UserShortResponseDTO;
 import com.example.bokningssystem.entities.Booking;
 import com.example.bokningssystem.entities.Room;
 import com.example.bokningssystem.entities.User;

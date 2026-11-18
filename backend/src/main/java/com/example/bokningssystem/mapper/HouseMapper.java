@@ -1,6 +1,10 @@
 package com.example.bokningssystem.mapper;
 
-import com.example.bokningssystem.dtos.*;
+import com.example.bokningssystem.dtos.houseDtos.HouseDTO;
+import com.example.bokningssystem.dtos.houseDtos.HouseShortResponseDTO;
+import com.example.bokningssystem.dtos.houseDtos.HouseWithRoomsResponseDTO;
+import com.example.bokningssystem.dtos.roomDtos.RoomDTO;
+import com.example.bokningssystem.dtos.roomDtos.RoomResponseDTO;
 import com.example.bokningssystem.entities.House;
 import org.springframework.stereotype.Component;
 

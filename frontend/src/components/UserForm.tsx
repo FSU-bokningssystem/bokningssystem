@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import type { CreateUserProfileDTO, userData } from '../types/types';
-import { postToApi } from '../api/postData';
+import type { RegisterUser } from '../types/types';
 import { useAuth } from '../context/AuthContext';
 import { X, UserPlus } from 'lucide-react';
 
 export const UserForm: React.FC = () => {
-  const { loginAs } = useAuth();
-  const [formData, setFormData] = useState<CreateUserProfileDTO>({
+  const { register } = useAuth();
+  const [formData, setFormData] = useState<RegisterUser>({
     email: '',
     password: '',
     confirmPassword: '',
     firstName: '',
     lastName: '',
-    phoneNumber: '',
+    phone: '',
     timeZone: '',
   });
 
@@ -37,10 +36,8 @@ export const UserForm: React.FC = () => {
     setLoading(true);
 
     try {
-      const created = await postToApi<userData>("user/register", formData);
+      await register(formData);
 
-      await loginAs(created.id);
-        
       setStatusMessage({ text: 'Användarprofilen har skapats och du är nu inloggad!', type: 'success' });
       setFormData({
         email: '',
@@ -48,7 +45,7 @@ export const UserForm: React.FC = () => {
         confirmPassword: '',
         firstName: '',
         lastName: '',
-        phoneNumber: '',
+        phone: '',
         timeZone: '',
       });
     } catch (err: any) {
@@ -168,7 +165,7 @@ export const UserForm: React.FC = () => {
               name="phoneNumber"
               placeholder="(valfritt)"
               className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#0058a3] focus:border-[#0058a3] transition"
-              value={formData.phoneNumber}
+              value={formData.phone}
               onChange={handleChange}
             />
           </div>

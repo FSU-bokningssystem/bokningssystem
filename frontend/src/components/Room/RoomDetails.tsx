@@ -23,22 +23,29 @@ import type {
 	BookingCreateData,
 	roomData,
 	roomFormValues,
+	BookingData,
 } from "../../types/types";
+import { useAuth } from "../../context/AuthContext";
 
 const RoomDetails = () => {
 	// Bokning
 	const [openModal, setOpenModal] = useState(false);
 	const queryClient = useQueryClient();
 
+	const auth = useAuth();
+
 	const openForm = () => setOpenModal(true);
 	const closeForm = () => setOpenModal(false);
 
 	const handleSubmit = async (values: BookingCreateData) => {
 		try {
-			await postToApi("booking", values);
+			const newBooking: BookingData = await postToApi("booking", values);
 			await queryClient.invalidateQueries({ queryKey: ["bookinglist"] });
 			closeForm();
 			alert("Bokningen har skapats!");
+			auth.bookings.push(newBooking); // Lägg till den nya bokningen i auth.bookings
+			//När vi ordnar så att auth innehåller bokningar i rum så ska även bokningen läggas till där.
+			// Alltså: auth.activeOrganization.houses[currentHouseIndex].rooms[currentRoomIndex].bookings.push(newBooking); Med lite mer kod för att hitta rätt hus och rum.
 		} catch (error: any) {
 			alert(error.message || "Ett fel uppstod vid skapandet av bokningen.");
 		}
