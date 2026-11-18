@@ -1,7 +1,32 @@
-import { CalendarDays, Clock, User, Users } from "lucide-react";
+import {
+	CalendarDays,
+	Clock,
+	User,
+	Users,
+	SquarePen,
+	Trash,
+} from "lucide-react";
 import type { BookingData, BookingUser } from "../../types/types";
+import EditBookingModal from "../Booking/EditBookingModal";
+import DeleteBookingModal from "../Booking/DeleteBookingModal";
+import { useAuth } from "../../context/AuthContext";
+import { useState } from "react";
 
 const BookingCard = ({ booking }: { booking: BookingData }) => {
+	const auth = useAuth();
+	const currentUser = auth.currentUser;
+
+	// Modal-förberedelser
+	const [isEditOpen, setIsEditOpen] = useState(false);
+	const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+	//Kontrollerar först om det finns en inloggad användare, sedan om den inloggade användaren är ägare av bokningen eller om den inloggade användaren är ägare av huset som bokningen tillhör.
+	const canEdit =
+		currentUser != null &&
+		(booking.owner.id === currentUser.id ||
+			auth.activeOrganization?.houses
+				.find((h) => h.id === booking.houseId)
+				?.owners.some((o) => o.id === currentUser.id));
+
 	const start = new Date(booking.startTime);
 	const end = new Date(booking.endTime);
 	const durationMinutes = Math.round(
@@ -54,6 +79,25 @@ const BookingCard = ({ booking }: { booking: BookingData }) => {
 				<div className="flex justify-between items-start gap-2 flex-wrap">
 					<h4 className="text-lg font-semibold text-gray-900">
 						{booking.title}
+						{
+							// Om användaren har behörighet att redigera bokningen, visa redigeringsknappen
+							canEdit && (
+								<>
+									<button
+										type="button"
+										onClick={() => setIsEditOpen(true)}
+										className="ml-2 inline-flex items-center text-blue-600 hover:text-blue-800">
+										<SquarePen className="w-5 h-5" />
+									</button>
+									<button
+										type="button"
+										onClick={() => setIsDeleteOpen(true)}
+										className="ml-2 inline-flex items-center text-red-600 hover:text-red-800">
+										<Trash className="w-5 h-5" />
+									</button>
+								</>
+							)
+						}
 					</h4>
 					<span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-700 border border-gray-200">
 						<Clock className="w-3 h-3" />
@@ -107,6 +151,18 @@ const BookingCard = ({ booking }: { booking: BookingData }) => {
 					)}
 				</div>
 			</div>
+			{isEditOpen && (
+				<EditBookingModal
+					booking={booking}
+					onClose={() => setIsEditOpen(false)}
+				/>
+			)}
+			{isDeleteOpen && (
+				<DeleteBookingModal
+					booking={booking}
+					onClose={() => setIsDeleteOpen(false)}
+				/>
+			)}
 		</li>
 	);
 };

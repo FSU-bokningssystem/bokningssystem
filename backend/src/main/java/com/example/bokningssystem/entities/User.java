@@ -47,6 +47,9 @@ public class User {
     @ManyToMany(mappedBy = "participants")
     private Set<Booking> participatingBookings = new LinkedHashSet<>();
 
+    @OneToMany(mappedBy = "user")
+    private Set<Membership> memberships = new LinkedHashSet<>();
+
 
     public Long getId() {
         return id;
@@ -106,6 +109,22 @@ public class User {
 
     public void setParticipatingBookings(@NonNull Set<Booking> participatingBookings) {
         this.participatingBookings = participatingBookings;
+    }
+
+    public Set<Membership> getMemberships() {
+        return memberships;
+    }
+
+    public void setMemberships(Set<Membership> memberships) {
+        this.memberships = memberships;
+    }
+
+    @Transient
+    public boolean isMemberOf(Long organizationId){
+        for (Membership membership : memberships){
+            if(membership.getOrganization().getId() == organizationId) return true;
+        }
+        return false;
     }
 
     public User() {}

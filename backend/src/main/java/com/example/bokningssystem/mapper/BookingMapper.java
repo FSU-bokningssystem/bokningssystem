@@ -25,6 +25,7 @@ public class BookingMapper {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
+
     public BookingMapper(RoomRepository roomRepository, UserRepository userRepository, UserMapper userMapper) {
         this.roomRepository = roomRepository;
         this.userRepository = userRepository;

@@ -9,6 +9,14 @@ export interface userData {
 	timeZone: string;
 }
 
+// matchar UserShortResponseDTO i backend
+export interface UserSummaryData {
+	id: number;
+	firstName: string;
+	lastName: string;
+	email: string;
+}
+
 export interface userList {
 	users: Array<userData>;
 }
@@ -71,6 +79,7 @@ export interface HouseDetailData {
 	city: string;
 	timeZone: string;
 	rooms: RoomSummaryData[];
+	owners: UserSummaryData[];
 }
 
 // Room types
@@ -137,9 +146,25 @@ export interface BookingCreateData {
 	ownerId: number;
 }
 
+export interface BookingEditData {
+	id: number;
+	roomNumber: string | null;
+	houseId: number | null;
+	title: string | null;
+	description: string | null;
+	startTime: string | null;
+	endTime: string | null;
+	ownerId: number | null;
+}
+
 export interface BookingModalProps {
 	onClose: () => void;
 	submitData: (values: BookingCreateData) => void;
+}
+
+export interface BookingEditModalProps {
+	booking: BookingData;
+	onClose: () => void;
 }
 
 // Matchar UserResponseDTO i backend
@@ -182,6 +207,7 @@ export interface OrganizationSummaryData {
 export interface OrganizationDetailData {
 	id: number;
 	name: string;
+	users: UserSummaryData[];
 	houses: HouseDetailData[];
 }
 

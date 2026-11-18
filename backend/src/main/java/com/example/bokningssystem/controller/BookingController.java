@@ -4,9 +4,11 @@ import com.example.bokningssystem.dtos.bookingDtos.BookingRequestDTO;
 import com.example.bokningssystem.dtos.bookingDtos.BookingResponseDTO;
 import com.example.bokningssystem.dtos.bookingDtos.TransferOwnerDTO;
 import com.example.bokningssystem.dtos.bookingDtos.UserOrgBookingsDTO;
+import com.example.bokningssystem.dtos.bookingDtos.BookingChangeDTO;
 import com.example.bokningssystem.service.BookingService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +16,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @CrossOrigin(allowCredentials = "true",
-        originPatterns = {"http://localhost:*"})
+        methods = {
+                RequestMethod.GET,
+                RequestMethod.POST,
+                RequestMethod.PUT,
+                RequestMethod.DELETE
+        },
+        originPatterns = "http://localhost:[*]")
 @RestController
 @RequestMapping("/booking")
 @Validated
@@ -30,6 +38,11 @@ public class BookingController {
         return ResponseEntity.ok(bookingService.create(requestDTO));
     }
 
+    @PutMapping
+    public ResponseEntity<BookingResponseDTO> change (@Valid @RequestBody BookingChangeDTO changeDTO) {
+        return ResponseEntity.ok(bookingService.change(changeDTO));
+    }
+
     @GetMapping
     public ResponseEntity<List<BookingResponseDTO>> findAll() {
         return ResponseEntity.ok(bookingService.findAll());
@@ -38,6 +51,12 @@ public class BookingController {
     @GetMapping("/room/{roomId}")
     public ResponseEntity<List<BookingResponseDTO>> findByRoomId(@PathVariable long roomId) {
         return ResponseEntity.ok(bookingService.findByRoomId(roomId));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable @NotNull @Positive long id){
+        bookingService.delete(id);
+        return ResponseEntity.noContent().build();
     }
     @GetMapping("/user/{userId}/organization/{orgId}")
     public ResponseEntity<UserOrgBookingsDTO> findUserBookingsInOrganization(

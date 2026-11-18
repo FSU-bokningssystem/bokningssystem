@@ -5,6 +5,7 @@ import com.example.bokningssystem.dtos.houseDtos.HouseShortResponseDTO;
 import com.example.bokningssystem.dtos.houseDtos.HouseWithRoomsResponseDTO;
 import com.example.bokningssystem.dtos.roomDtos.RoomDTO;
 import com.example.bokningssystem.dtos.roomDtos.RoomResponseDTO;
+import com.example.bokningssystem.dtos.userDtos.UserShortResponseDTO;
 import com.example.bokningssystem.entities.House;
 import org.springframework.stereotype.Component;
 
@@ -13,9 +14,11 @@ import java.util.List;
 @Component
 public class HouseMapper {
     private final RoomMapper roomMapper;
+    private final UserMapper userMapper;
 
-    public HouseMapper(RoomMapper roomMapper) {
+    public HouseMapper(RoomMapper roomMapper, UserMapper userMapper) {
         this.roomMapper = roomMapper;
+        this.userMapper = userMapper;
     }
 
     public HouseShortResponseDTO toHouseShortResponseDTO (House house) {
@@ -44,6 +47,9 @@ public class HouseMapper {
         List<RoomDTO> rooms = house.getRooms().stream()
                 .map(roomMapper::toDTO)
                 .toList();
+        List<UserShortResponseDTO> owners = house.getOwners().stream()
+                .map(userMapper::userShortResponseDTO)
+                .toList();
 
         return new HouseDTO(
                 house.getId(),
@@ -53,7 +59,8 @@ public class HouseMapper {
                 house.getZipcode(),
                 house.getCity(),
                 house.getTimeZone(),
-                rooms
+                rooms,
+                owners
         );
     }
 }
