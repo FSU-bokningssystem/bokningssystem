@@ -1,7 +1,7 @@
 package com.example.bokningssystem.controller;
 
-import com.example.bokningssystem.dtos.MembershipResponseDTO;
-import com.example.bokningssystem.dtos.OrgMemberDTO;
+import com.example.bokningssystem.dtos.membershipDtos.MembershipResponseDTO;
+import com.example.bokningssystem.dtos.organizationDtos.OrgMemberDTO;
 import com.example.bokningssystem.service.MembershipService;
 import jakarta.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;

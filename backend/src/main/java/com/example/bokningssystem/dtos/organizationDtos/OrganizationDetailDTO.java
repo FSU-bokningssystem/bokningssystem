@@ -1,0 +1,12 @@
+package com.example.bokningssystem.dtos.organizationDtos;
+
+import com.example.bokningssystem.dtos.houseDtos.HouseDTO;
+
+import java.util.List;
+
+public record OrganizationDetailDTO(
+        Long id,
+        String name,
+        List<HouseDTO> houses
+) {
+}

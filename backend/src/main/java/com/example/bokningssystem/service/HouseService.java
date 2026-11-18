@@ -1,7 +1,7 @@
 package com.example.bokningssystem.service;
 
-import com.example.bokningssystem.dtos.HouseShortResponseDTO;
-import com.example.bokningssystem.dtos.HouseWithRoomsResponseDTO;
+import com.example.bokningssystem.dtos.houseDtos.HouseShortResponseDTO;
+import com.example.bokningssystem.dtos.houseDtos.HouseWithRoomsResponseDTO;
 import com.example.bokningssystem.entities.House;
 import com.example.bokningssystem.exceptions.HouseNotFoundException;
 import com.example.bokningssystem.mapper.HouseMapper;

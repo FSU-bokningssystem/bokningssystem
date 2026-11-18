@@ -1,8 +1,8 @@
 package com.example.bokningssystem.service;
 
-import com.example.bokningssystem.dtos.RoomCreateDTO;
-import com.example.bokningssystem.dtos.RoomResponseDTO;
-import com.example.bokningssystem.dtos.RoomUpdateDTO;
+import com.example.bokningssystem.dtos.roomDtos.RoomCreateDTO;
+import com.example.bokningssystem.dtos.roomDtos.RoomResponseDTO;
+import com.example.bokningssystem.dtos.roomDtos.RoomUpdateDTO;
 import com.example.bokningssystem.entities.Room;
 import com.example.bokningssystem.exceptions.RoomNotFoundException;
 import com.example.bokningssystem.mapper.RoomMapper;

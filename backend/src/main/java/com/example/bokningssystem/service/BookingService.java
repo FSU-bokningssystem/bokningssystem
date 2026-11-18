@@ -1,8 +1,8 @@
 package com.example.bokningssystem.service;
 
-import com.example.bokningssystem.dtos.BookingRequestDTO;
-import com.example.bokningssystem.dtos.BookingResponseDTO;
-import com.example.bokningssystem.dtos.UserOrgBookingsDTO;
+import com.example.bokningssystem.dtos.bookingDtos.BookingRequestDTO;
+import com.example.bokningssystem.dtos.bookingDtos.BookingResponseDTO;
+import com.example.bokningssystem.dtos.bookingDtos.UserOrgBookingsDTO;
 import com.example.bokningssystem.entities.Booking;
 import com.example.bokningssystem.entities.User;
 import com.example.bokningssystem.exceptions.*;
