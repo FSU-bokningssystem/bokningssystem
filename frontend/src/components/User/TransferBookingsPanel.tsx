@@ -13,8 +13,9 @@ interface TransferBookingsPanelProps {
   orgId: number;
   orgName: string;
   onCancel: () => void;
-  onRemove: () => void;
+  onRemove: (anonymize: boolean) => void;
   isRemoving: boolean;
+  canAnonymize: boolean;
 }
 
 const formatTime = (iso: string) => iso.replace("T", " ").slice(0, 16);
@@ -28,9 +29,11 @@ const TransferBookingsPanel = ({
   onCancel,
   onRemove,
   isRemoving,
+  canAnonymize,
 }: TransferBookingsPanelProps) => {
   const queryClient = useQueryClient();
   const bookingsKey = ["userOrgBookings", userId, orgId];
+  const [anonymize, setAnonymize] = useState(false);
 
   const { data: bookings, isLoading } = useQuery<UserOrgBookings>({
     queryKey: bookingsKey,
@@ -77,6 +80,22 @@ const TransferBookingsPanel = ({
         </p>
       )}
 
+      {canAnonymize && (
+        <label className="flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-800">
+          <input
+            type="checkbox"
+            checked={anonymize}
+            onChange={(e) => setAnonymize(e.target.checked)}
+            className="mt-0.5"
+          />
+          <span>
+            Ta även bort användarens personuppgifter. {orgName} är personens
+            sista organisation. Namn, e-post och telefon skrivs över och kontot
+            kan inte längre användas. <strong>Detta går inte att ångra.</strong>
+          </span>
+        </label>
+      )}
+
       <div className="flex justify-end gap-2">
         <button
           type="button"
@@ -88,10 +107,12 @@ const TransferBookingsPanel = ({
         <button
           type="button"
           disabled={owned.length > 0 || isRemoving}
-          onClick={onRemove}
+          onClick={() => onRemove(canAnonymize && anonymize)}
           className="px-4 py-2 text-sm font-bold text-white bg-[#a30000] hover:bg-[#800000] rounded-full transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Ta bort ur {orgName}
+          {canAnonymize && anonymize
+            ? "Ta bort användaren permanent"
+            : `Ta bort ur ${orgName}`}
         </button>
       </div>
     </div>

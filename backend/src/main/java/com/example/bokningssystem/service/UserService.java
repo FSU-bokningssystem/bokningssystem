@@ -103,7 +103,7 @@ public class UserService {
                 .orElseThrow(()-> new UserNotFoundException("Hittar inte användare " + userId));
         user.setFirstName("Borttagen");
         user.setLastName("Användare");
-        user.setEmail("borttagen"+ userId + "@anvandare");
+        user.setEmail("borttagen"+ userId + "@anvandare.invalid");
         user.setPhone(null);
 
         credentialRepository.findByUser(user).ifPresent(credentialRepository::delete);

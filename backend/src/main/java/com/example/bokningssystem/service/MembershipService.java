@@ -64,12 +64,13 @@ public class MembershipService {
     if( actorId != targetId && !canRemove(actor.getMemberRole(), target.getMemberRole())){
         throw new ForbiddenException("Du har inte behörighet att ta bort denna användare");
     }
-    /// om användarens profil ska tas bort
+    // om användarens profil ska tas bort
     if (anonymize){
         if(actorId == targetId){
             throw new ForbiddenException("Du får inte anonymisera dig själv!");
 
-        } if (membershipRepository.findAllByUserId(targetId).size() > 1 ){
+        }
+        if (membershipRepository.findAllByUserId(targetId).size() > 1 ){
             throw new HasOtherMembershipsException("Användaren är med i andra organisationer!");
         }
     }
