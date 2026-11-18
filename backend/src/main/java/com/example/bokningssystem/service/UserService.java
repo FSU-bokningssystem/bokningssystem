@@ -66,4 +66,19 @@ public class UserService {
         User updatedUser = userRepository.save(user);
         return userMapper.toResponseDTO(updatedUser);
     }
+
+    @Transactional
+    public void anonymizeUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(()-> new UserNotFoundException("Hittar inte användare " + userId));
+        user.setFirstName("Borttagen");
+        user.setLastName("Användare");
+        user.setEmail("borttagen"+ userId + "@anvandare.invalid");
+        user.setPhone(null);
+
+        credentialRepository.findByUser(user).ifPresent(credentialRepository::delete);
+        userRepository.save(user);
+    }
+
+
 }

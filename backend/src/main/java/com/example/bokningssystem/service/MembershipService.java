@@ -5,10 +5,7 @@ import com.example.bokningssystem.dtos.organizationDtos.OrgMemberDTO;
 import com.example.bokningssystem.entities.Booking;
 import com.example.bokningssystem.entities.Membership;
 import com.example.bokningssystem.enums.MemberRole;
-import com.example.bokningssystem.exceptions.ForbiddenException;
-import com.example.bokningssystem.exceptions.LastOwnerException;
-import com.example.bokningssystem.exceptions.MembershipNotFoundException;
-import com.example.bokningssystem.exceptions.OwnsBookingsException;
+import com.example.bokningssystem.exceptions.*;
 import com.example.bokningssystem.repository.MembershipRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,11 +17,13 @@ import java.util.List;
 public class MembershipService {
     private final MembershipRepository membershipRepository;
     private final BookingService bookingService;
+    private final UserService userService;
 
 
-    public MembershipService(MembershipRepository membershipRepository, BookingService bookingService) {
+    public MembershipService(MembershipRepository membershipRepository, BookingService bookingService, UserService userService) {
         this.membershipRepository = membershipRepository;
         this.bookingService = bookingService;
+        this.userService = userService;
     }
 
     @Transactional(readOnly = true)
@@ -50,7 +49,7 @@ public class MembershipService {
     }
 
     @Transactional
-    public void removeUserFromOrganization(long actorId, long targetId, long orgId){
+    public void removeUserFromOrganization(long actorId, long targetId, long orgId, boolean anonymize){
         Membership actor = membershipRepository.findByUserIdAndOrganizationId(actorId, orgId)
                 .orElseThrow(() -> new ForbiddenException(
                         "Användare " + actorId + " är inte medlem i organisationen " + orgId
@@ -63,6 +62,16 @@ public class MembershipService {
 
     if( actorId != targetId && !canRemove(actor.getMemberRole(), target.getMemberRole())){
         throw new ForbiddenException("Du har inte behörighet att ta bort denna användare");
+    }
+    // om användarens profil ska tas bort
+    if (anonymize){
+        if(actorId == targetId){
+            throw new ForbiddenException("Du får inte anonymisera dig själv!");
+
+        }
+        if (membershipRepository.findAllByUserId(targetId).size() > 1 ){
+            throw new HasOtherMembershipsException("Användaren är med i andra organisationer!");
+        }
     }
 
 
@@ -77,6 +86,10 @@ public class MembershipService {
         }
         bookingService.removeUserFromFutureBookings(targetId, orgId);
         membershipRepository.delete(target);
+
+        if(anonymize){
+            userService.anonymizeUser(targetId);
+        }
     }
 
 

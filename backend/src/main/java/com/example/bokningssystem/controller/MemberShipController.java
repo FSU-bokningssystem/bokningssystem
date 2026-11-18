@@ -43,8 +43,9 @@ public class MemberShipController {
     public void removeUserFromOrganization (
             @RequestHeader("X-User-Id") @Positive  long actorId,
             @PathVariable("userId") @Positive long targetId,
-            @PathVariable @Positive long orgId)
+            @PathVariable @Positive long orgId,
+            @RequestParam(defaultValue = "false") boolean anonymize)
            {
-        memberShipService.removeUserFromOrganization(actorId,targetId,orgId);
+        memberShipService.removeUserFromOrganization(actorId,targetId,orgId,anonymize);
     }
 }
