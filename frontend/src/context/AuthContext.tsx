@@ -23,6 +23,7 @@ interface AuthContextType {
 	loginAs: (userId: number, selectedOrgId?: number) => Promise<void>;
 	switchOrganization: (organizationId: number) => Promise<void>;
 	updateBooking: (booking: BookingData) => void;
+	removeBooking: (booking: BookingData) => void;
 	logout: () => void;
 }
 
@@ -119,6 +120,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 		}
 	};
 
+	const removeBooking = (booking: BookingData) => {
+		// Tar fram en ny lista med bokningar som inte innehåller den uppdaterade bokningen. Kontrollerar sedan om den inloggade användaren är ägare av den uppdaterade bokningen eller om den inloggade användaren är deltagare i bokningen, och lägger då till den uppdaterade bokningen i listan. Annars behålls bara de övriga bokningarna.
+
+		const userId = currentUser?.id;
+		if (userId == null) return;
+
+		setBookings(bookings.filter((b) => b.id !== booking.id));
+	};
+
 	const logout = () => {
 		setCurrentUser(null);
 		setUserOrganizations([]);
@@ -139,6 +149,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 				loginAs,
 				switchOrganization,
 				updateBooking,
+				removeBooking,
 				logout,
 			}}>
 			{children}

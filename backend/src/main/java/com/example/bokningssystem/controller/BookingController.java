@@ -14,7 +14,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @CrossOrigin(allowCredentials = "true",
-        originPatterns = {"http://localhost:*"})
+        methods = {
+                RequestMethod.GET,
+                RequestMethod.POST,
+                RequestMethod.PUT,
+                RequestMethod.DELETE
+        },
+        originPatterns = "http://localhost:[*]")
 @RestController
 @RequestMapping("/booking")
 @Validated

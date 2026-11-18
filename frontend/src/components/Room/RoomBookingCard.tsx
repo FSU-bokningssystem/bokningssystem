@@ -1,6 +1,14 @@
-import { CalendarDays, Clock, User, Users, SquarePen } from "lucide-react";
+import {
+	CalendarDays,
+	Clock,
+	User,
+	Users,
+	SquarePen,
+	Trash,
+} from "lucide-react";
 import type { BookingData, BookingUser } from "../../types/types";
 import EditBookingModal from "../Booking/EditBookingModal";
+import DeleteBookingModal from "../Booking/DeleteBookingModal";
 import { useAuth } from "../../context/AuthContext";
 import { useState } from "react";
 
@@ -10,6 +18,7 @@ const BookingCard = ({ booking }: { booking: BookingData }) => {
 
 	// Modal-förberedelser
 	const [isEditOpen, setIsEditOpen] = useState(false);
+	const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 	//Kontrollerar först om det finns en inloggad användare, sedan om den inloggade användaren är ägare av bokningen eller om den inloggade användaren är ägare av huset som bokningen tillhör.
 	const canEdit =
 		currentUser != null &&
@@ -73,13 +82,20 @@ const BookingCard = ({ booking }: { booking: BookingData }) => {
 						{
 							// Om användaren har behörighet att redigera bokningen, visa redigeringsknappen
 							canEdit && (
-								<button
-									type="button"
-									onClick={() => setIsEditOpen(true)}
-									className="ml-2 inline-flex items-center text-blue-600 hover:text-blue-800"
-									aria-label={`Redigera bokningen ${booking.title}`}>
-									<SquarePen className="w-5 h-5" />
-								</button>
+								<>
+									<button
+										type="button"
+										onClick={() => setIsEditOpen(true)}
+										className="ml-2 inline-flex items-center text-blue-600 hover:text-blue-800">
+										<SquarePen className="w-5 h-5" />
+									</button>
+									<button
+										type="button"
+										onClick={() => setIsDeleteOpen(true)}
+										className="ml-2 inline-flex items-center text-red-600 hover:text-red-800">
+										<Trash className="w-5 h-5" />
+									</button>
+								</>
 							)
 						}
 					</h4>
@@ -139,6 +155,12 @@ const BookingCard = ({ booking }: { booking: BookingData }) => {
 				<EditBookingModal
 					booking={booking}
 					onClose={() => setIsEditOpen(false)}
+				/>
+			)}
+			{isDeleteOpen && (
+				<DeleteBookingModal
+					booking={booking}
+					onClose={() => setIsDeleteOpen(false)}
 				/>
 			)}
 		</li>
