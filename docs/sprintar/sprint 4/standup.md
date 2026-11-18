@@ -19,14 +19,17 @@
 | Axel     | Ja      | Inlogg         | Utlogg                          |                                                                                                                |
 | Anton    | Ja      | DTOs flyttade  | Organisationsbaserad användarvy | Avvaktar PR på in- och utlogg                                                                                  |
 
-## Onsdag ÅÅÅÅ-MM-DD
+## Onsdag 2026-11-18
 
-| Namn | Närvaro | Igår | Idag | Hinder |
-| ---- | ------- | ---- | ---- | ------ |
-|      |         |      |      |        |
-|      |         |      |      |        |
-|      |         |      |      |        |
-|      |         |      |      |        |
+| Namn     | Närvaro | Igår                  | Idag              | Hinder               |
+| -------- | ------- | --------------------- | ----------------- | -------------------- |
+| Staffan  | Ja      | Ändra/ta bort bokning | Ta bort bokning   |                      |
+| Axel     | Ja      | In- och utlogg        | Ta bort lokal     |                      |
+| Anton    | Ja      | Presentationssida     | Presentationssida | Väntat på in-/utlogg |
+| Johan    | Nej     |                       |                   |                      |
+| Jonathan | Nej     |                       |                   |                      |
+
+Vi hade flyttat standupen till 09:30 pga föreläsning kl 10 men det kanske inte alla hade uppfattat.
 
 ## Torsdag ÅÅÅÅ-MM-DD
 
