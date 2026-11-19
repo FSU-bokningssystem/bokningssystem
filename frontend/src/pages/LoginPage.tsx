@@ -1,14 +1,19 @@
 import { useState } from "react";
-import { Link, Navigate } from "react-router-dom";
-import { LogIn, Building, DoorClosed, CalendarCheck } from "lucide-react";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { LogIn, Building, DoorClosed, CalendarCheck, ArrowRight } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import OrganizationSelector from "../components/OrganizationSelector";
 
 const LoginPage = () => {
-    const { login, isAuthenticated } = useAuth();
+    const { login, isAuthenticated, userOrganizations } = useAuth();
     const [error, setError] = useState<string | null>(null);
     const [submitting, setSubmitting] = useState(false);
+    const [selectingOrg, setSelectingOrg] = useState(false);
+    const navigate = useNavigate();
 
-    if (isAuthenticated) return <Navigate to="/" replace />;
+    if (isAuthenticated && !selectingOrg) {
+        return <Navigate to="/" replace />;
+    } 
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -21,6 +26,9 @@ const LoginPage = () => {
                 email: formData.get("email") as string,
                 password: formData.get("password") as string,
             });
+            // Aktivera organisationsval efter inloggning (om fler än 1 finns)
+            setSelectingOrg(true);
+            setSubmitting(false);
         } catch (err) {
             setError(
                 err instanceof Error
@@ -31,6 +39,42 @@ const LoginPage = () => {
         }
     };
 
+    // Om användaren är inloggad och har flera organisationer: visa väljar-steget
+    if (isAuthenticated && selectingOrg) {
+        if (userOrganizations.length <= 1) {
+            return <Navigate to="/" replace />;
+        }
+    
+        return (
+            <div className="mx-auto flex w-full max-w-md flex-col items-center gap-8 pt-6">
+                    <div className="rounded-md bg-[#0058a3] px-6 py-3 text-3xl font-extrabold tracking-wide text-[#ffdb00]">
+                        LOGOTYPE
+                    </div>
+
+                    <div className="w-full rounded-2xl border border-gray-200 bg-white p-6 shadow-xl space-y-5">
+                        <h2 className="border-b border-gray-100 pb-4 text-lg font-bold text-gray-900">
+                            Välj organisation
+                        </h2>
+                        <p className="text-sm text-gray-600">
+                            Du är medlem i flera organisationer. Välj vilken du vill arbeta i:
+                        </p>
+
+                        <div className="py-2">
+                            <OrganizationSelector />
+                        </div>
+
+                        <button
+                            type="button"
+                            onClick={() => navigate("/", { replace: true })}
+                            className="inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-[#0058a3] px-5 py-2 text-sm font-bold text-white shadow-xs transition hover:bg-[#004f93]"
+                        >
+                            Fortsätt
+                            <ArrowRight className="h-4 w-4" />
+                        </button>
+                    </div>
+                </div>
+        );
+    }
     return (
         <div className="mx-auto flex w-full max-w-4xl flex-col items-center gap-10 pt-6">
             <div className="rounded-md bg-[#0058a3] px-6 py-3 text-3xl font-extrabold tracking-wide text-[#ffdb00]">
