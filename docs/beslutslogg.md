@@ -37,6 +37,24 @@ Kopiera den här för varje nytt beslut:
 
 **Konsekvenser:** Vad betyder beslutet för projektet framåt?
 
+## #9 Lösenord i databasen
+
+**Datum:** 2026-11-19
+**Status:** Gäller
+
+**Bakgrund:** Standardiserade lösenord i databasen
+
+**Alternativ:**
+
+- Sätta ett och samma lösenord på alla användare i testsyfte.
+- Låta lösenorden vara olika.
+
+**Beslut:** Vi valde att sätta alla lösenord till 123456.
+
+**Varför:** För att underlätta testning.
+
+**Konsekvenser:** När man skapar en ny användare bör man sätta lösenordet till 123456.
+
 ## #8 Unika rumsnummer i databasen
 
 **Datum:** 2026-11-02

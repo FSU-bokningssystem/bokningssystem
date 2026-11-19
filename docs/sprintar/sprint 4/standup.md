@@ -25,20 +25,21 @@
 | -------- | ------- | --------------------- | ----------------- | -------------------- |
 | Staffan  | Ja      | Ändra/ta bort bokning | Ta bort bokning   |                      |
 | Axel     | Ja      | In- och utlogg        | Ta bort lokal     |                      |
-| Anton    | Ja      | Presentationssida     | Presentationssida | Väntat på in-/utlogg |
+| Anton    | Ja      | Presentationssida     | Organisationssida | Väntat på in-/utlogg |
 | Johan    | Nej     |                       |                   |                      |
 | Jonathan | Nej     |                       |                   |                      |
 
 Vi hade flyttat standupen till 09:30 pga föreläsning kl 10 men det kanske inte alla hade uppfattat.
 
-## Torsdag ÅÅÅÅ-MM-DD
+## Torsdag 2026-11-19
 
-| Namn | Närvaro | Igår | Idag | Hinder |
-| ---- | ------- | ---- | ---- | ------ |
-|      |         |      |      |        |
-|      |         |      |      |        |
-|      |         |      |      |        |
-|      |         |      |      |        |
+| Namn     | Närvaro | Igår                           | Idag                           | Hinder                                       |
+| -------- | ------- | ------------------------------ | ------------------------------ | -------------------------------------------- |
+| Staffan  | Ja      | Ändra/ta bort bokning          | Tidszonlista                   |                                              |
+| Axel     | Ja      | Ta bort lokal                  | Ta bort lokal                  |                                              |
+| Anton    | Ja      | Organisationssida              | Organisationssida              |                                              |
+| Johan    | Ja      | Ta bort användarprofil         | Ta bort användarprofil         | Konflikter/inkompatibilitet med nya inlogget |
+| Jonathan | Ja      | Lägg till användare i bokning. | Lägg till användare i bokning. |                                              |
 
 ## Fredag ÅÅÅÅ-MM-DD
 
