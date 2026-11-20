@@ -41,11 +41,12 @@ Vi hade flyttat standupen till 09:30 pga föreläsning kl 10 men det kanske inte
 | Johan    | Ja      | Ta bort användarprofil         | Ta bort användarprofil         | Konflikter/inkompatibilitet med nya inlogget |
 | Jonathan | Ja      | Lägg till användare i bokning. | Lägg till användare i bokning. |                                              |
 
-## Fredag ÅÅÅÅ-MM-DD
+## Fredag 2026-11-20
 
-| Namn | Närvaro | Igår | Idag | Hinder |
-| ---- | ------- | ---- | ---- | ------ |
-|      |         |      |      |        |
-|      |         |      |      |        |
-|      |         |      |      |        |
-|      |         |      |      |        |
+| Namn     | Närvaro | Igår                                   | Idag                                   | Hinder                                                    |
+| -------- | ------- | -------------------------------------- | -------------------------------------- | --------------------------------------------------------- |
+| Staffan  | Ja      | Tidszonlista                           | Spärr för skapa möten i fel hus        |                                                           |
+| Axel     | Ja      | Ta bort lokal                          | Ta bort lokal                          |                                                           |
+| Anton    | Ja      | Organisationssida                      | Organisationssida                      |                                                           |
+| Johan    | Ja      | Ta bort användarprofil                 | Beskrivning-buggen                     | Diskussion om huruvida issuen är rättdesignad från början |
+| Jonathan | Ja      | Lägg till/ta bort användare på bokning | Lägg till/ta bort användare på bokning |                                                           |
