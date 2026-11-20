@@ -52,7 +52,6 @@ const UserModal = ({ user, onClose, onUserUpdated }: UserModalProps) => {
         `membership/organization/${orgId}/user/${user.id}${
           anonymize ? "?anonymize=true" : ""
         }`,
-        actorId!,
       ),
     onSuccess: (_data, { anonymize }) => {
       setRemoveError(null);
