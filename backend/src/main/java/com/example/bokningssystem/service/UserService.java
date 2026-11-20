@@ -4,10 +4,12 @@ package com.example.bokningssystem.service;
 import com.example.bokningssystem.dtos.userDtos.UserRegistrationDTO;
 import com.example.bokningssystem.dtos.userDtos.UserResponseDTO;
 import com.example.bokningssystem.dtos.userDtos.UserWithBookingsResponseDTO;
+import com.example.bokningssystem.exceptions.UserNotFoundException;
 import com.example.bokningssystem.mapper.UserMapper;
 import com.example.bokningssystem.entities.User;
 import com.example.bokningssystem.mapper.UserWithBookingsMapper;
 import com.example.bokningssystem.repository.UserRepository;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,5 +67,10 @@ public class UserService {
 
         User updatedUser = userRepository.save(user);
         return userMapper.toResponseDTO(updatedUser);
+    }
+
+    public User getUserFromAuth (UserDetails auth) {
+        return userRepository.findByEmail(auth.getUsername())
+                .orElseThrow(() -> new UserNotFoundException("Hittar inte användare med e-post " + auth.getUsername()+"."));
     }
 }

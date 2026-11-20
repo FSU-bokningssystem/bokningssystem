@@ -43,10 +43,17 @@ public class BookingService {
         this.userRepository = userRepository;
     }
 
-    public BookingResponseDTO create(BookingRequestDTO requestDTO){
+    public BookingResponseDTO create(BookingRequestDTO requestDTO, User loggedInUser){
         Booking newBooking = bookingMapper.fromBookingRequestDTO(requestDTO);
+
+        //Kontrollera om den inloggade användaren är med i organisationen som äger huset.
+        if (!loggedInUser.isMemberOf(newBooking.getRoom().getHouse().getOrganization().getId())) throw new UserCantBookInHouseException(loggedInUser.getFirstName() + " " + loggedInUser.getLastName() + " har inte rätt att boka tid i " + newBooking.getRoom().getHouse().getName());
+
+        //Kontrollera om rummet är tillgängligt.
         if(!newBooking.getRoom().getIsAvailable()) throw new RoomNotAvailableException(
                 "Rum " + requestDTO.roomNumber() + " går inte att boka.");
+
+        //Ta fram lista på framtida bokningar i rummet och kontrollera om den nya bokningen skulle överlappa med dessa.
         List<Booking> futureBookings = newBooking.getRoom().getBookings()
                 .stream()
                 .filter(booking->booking.getEndTime().isAfter(Instant.now()))
