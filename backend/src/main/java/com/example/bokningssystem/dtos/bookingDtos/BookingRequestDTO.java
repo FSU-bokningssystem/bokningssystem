@@ -16,7 +16,7 @@ public record BookingRequestDTO(
         @NotNull @NotBlank (message="Bokningen måste ha en titel.")
         String title,
 
-        @NotNull @NotBlank (message="Bokningen måste ha en beskrivning.")
+
         String description,
 
         @NotNull (message="Bokningen måste ha en start-tid.")
