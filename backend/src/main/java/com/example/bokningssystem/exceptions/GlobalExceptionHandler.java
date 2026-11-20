@@ -62,6 +62,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(400).body(error);
     }
 
+    @ExceptionHandler(UserCantBookInHouseException.class)
+    public ResponseEntity<ErrorResponse> UserCantBookInHouseException(UserCantBookInHouseException ex) {
+        ErrorResponse error = new ErrorResponse(400, ex.getMessage());
+        return ResponseEntity.status(400).body(error);
+    }
+
     @ExceptionHandler(CantReassignBookingOutsideOrganization.class)
     public ResponseEntity<ErrorResponse> cantReassignBookingOutsideOrganizationException (CantReassignBookingOutsideOrganization ex) {
         ErrorResponse error = new ErrorResponse(400, ex.getMessage());

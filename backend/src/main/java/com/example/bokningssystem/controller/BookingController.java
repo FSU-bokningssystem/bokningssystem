@@ -5,11 +5,15 @@ import com.example.bokningssystem.dtos.bookingDtos.BookingResponseDTO;
 import com.example.bokningssystem.dtos.bookingDtos.TransferOwnerDTO;
 import com.example.bokningssystem.dtos.bookingDtos.UserOrgBookingsDTO;
 import com.example.bokningssystem.dtos.bookingDtos.BookingChangeDTO;
+import com.example.bokningssystem.entities.User;
 import com.example.bokningssystem.service.BookingService;
+import com.example.bokningssystem.service.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,14 +32,17 @@ import java.util.List;
 @Validated
 public class BookingController {
     private final BookingService bookingService;
+    private final UserService userService;
 
-    public BookingController(BookingService bookingService) {
+    public BookingController(BookingService bookingService, UserService userService) {
         this.bookingService = bookingService;
+        this.userService = userService;
     }
 
     @PostMapping
-    public ResponseEntity<BookingResponseDTO> create (@Valid @RequestBody BookingRequestDTO requestDTO) {
-        return ResponseEntity.ok(bookingService.create(requestDTO));
+    public ResponseEntity<BookingResponseDTO> create (@Valid @RequestBody BookingRequestDTO requestDTO, @AuthenticationPrincipal UserDetails auth) {
+        User loggedInUser = userService.getUserFromAuth(auth);
+        return ResponseEntity.ok(bookingService.create(requestDTO, loggedInUser));
     }
 
     @PutMapping

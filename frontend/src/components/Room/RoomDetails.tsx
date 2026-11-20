@@ -53,10 +53,17 @@ const RoomDetails = () => {
 
 	const theHouse: houseWithRoomsData = useOutletContext();
 	const rooms = theHouse.rooms;
-	const { roomNbr } = useParams<{
+	const { houseid, roomNbr } = useParams<{
 		houseid: string;
 		roomNbr: string;
 	}>();
+
+	const canBook = () => {
+		const houseNbr = Number(houseid);
+		return auth.activeOrganization?.houses.some(
+			(house) => house.id === houseNbr,
+		);
+	};
 
 	// Redigering
 	const navigate = useNavigate();
@@ -106,11 +113,11 @@ const RoomDetails = () => {
 					<div className="flex items-center gap-2 flex-wrap">
 						<span
 							className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold ${
-								room.isAvailable
+								room.isAvailable && canBook()
 									? "bg-green-100 text-green-800 border border-green-200"
 									: "bg-red-100 text-red-800 border border-red-200"
 							}`}>
-							{room.isAvailable ? (
+							{room.isAvailable && canBook() ? (
 								<>
 									<button
 										className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-800 text-white font-bold py-2.5 px-5 rounded-full transition shadow-xs text-sm"
