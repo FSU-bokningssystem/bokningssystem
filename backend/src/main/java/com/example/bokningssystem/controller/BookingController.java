@@ -71,4 +71,14 @@ public class BookingController {
             @Valid @RequestBody TransferOwnerDTO dto) {
         return ResponseEntity.ok(bookingService.transferOwner(bookingId, dto.newOwnerId()));
     }
+
+    @PostMapping("/{bookingId}/participants/{userId}")
+    public ResponseEntity<BookingResponseDTO> addParticipant(@PathVariable Long bookingId, @PathVariable Long userId) {
+        return ResponseEntity.ok(bookingService.addParticipant(bookingId, userId));
+    }
+
+    @DeleteMapping("/{bookingId}/participants/{userId}")
+    public ResponseEntity<BookingResponseDTO> removeParticipant(@PathVariable Long bookingId, @PathVariable Long userId) {
+        return ResponseEntity.ok(bookingService.removeParticipant(bookingId, userId));
+    }
 }

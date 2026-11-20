@@ -13,6 +13,8 @@ import com.example.bokningssystem.repository.BookingRepository;
 import com.example.bokningssystem.repository.MembershipRepository;
 import com.example.bokningssystem.repository.UserRepository;
 import com.example.bokningssystem.repository.RoomRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -190,4 +192,57 @@ public class BookingService {
             throw new BookingNotFoundException("Hittade inte bokning " + id + ".");
         }
     }
+
+    @Transactional
+    public BookingResponseDTO addParticipant(Long bookingId, Long userId) {
+        Booking booking = getBookingOwnedByCurrentUser(bookingId);
+
+        if (booking.getOwner().getId().equals(userId)) {
+            throw new IllegalArgumentException("Bokningsägaren kan inte läggas till som deltagare i sin egen bokning");
+        }
+
+        Long orgId = booking.getRoom().getHouse().getOrganization().getId();
+
+        // Validera att användaren är medlem i samma organisation som bokningen
+        membershipRepository.findByUserIdAndOrganizationId(userId, orgId)
+                .orElseThrow(() -> new MembershipNotFoundException(
+                        "Användare " + userId + " är inte medlem i organisationen.")
+        );
+
+        User participant = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("Hittar inte användare " + userId + ".")
+                );
+
+        booking.getParticipants().add(participant);
+        return bookingMapper.toBookingResponseDTO(booking);
+    }
+
+    @Transactional
+    public BookingResponseDTO removeParticipant(Long bookingId, Long userId) {
+        Booking booking = getBookingOwnedByCurrentUser(bookingId);
+
+        boolean removed = booking.getParticipants().removeIf(u -> u.getId().equals(userId));
+        if (!removed) {
+            throw new UserNotFoundException("Användare " + userId + " är inte deltagare i denna bokning.");
+        }
+
+        return bookingMapper.toBookingResponseDTO(booking);
+    }
+
+    private Booking getBookingOwnedByCurrentUser(Long bookingId) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new BookingNotFoundException("Hittade inte bokning " + bookingId + "."));
+
+        String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (!booking.getOwner().getEmail().equalsIgnoreCase(currentUserEmail)) {
+            throw new ForbiddenException("Endast bokningsägaren får hantera deltagare för denna bokning.");
+        }
+
+        if (booking.getEndTime().isBefore(Instant.now())) {
+            throw new IllegalArgumentException("Det går inte att ändra deltagare på en bokning som redan har passerat");
+        }
+
+        return booking;
+    }
+
 }
