@@ -4,9 +4,11 @@ package com.example.bokningssystem.service;
 import com.example.bokningssystem.dtos.userDtos.UserRegistrationDTO;
 import com.example.bokningssystem.dtos.userDtos.UserResponseDTO;
 import com.example.bokningssystem.dtos.userDtos.UserWithBookingsResponseDTO;
+import com.example.bokningssystem.exceptions.UserNotFoundException;
 import com.example.bokningssystem.mapper.UserMapper;
 import com.example.bokningssystem.entities.User;
 import com.example.bokningssystem.mapper.UserWithBookingsMapper;
+import com.example.bokningssystem.repository.CredentialRepository;
 import com.example.bokningssystem.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,12 +22,14 @@ public class UserService {
     private final UserMapper userMapper;
     private final UserWithBookingsMapper userWithBookingsMapper;
     private final AuthService authService;
+    private final CredentialRepository credentialRepository;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper, UserWithBookingsMapper userWithBookingsMapper, AuthService authService) {
+    public UserService(UserRepository userRepository, UserMapper userMapper, UserWithBookingsMapper userWithBookingsMapper, AuthService authService, CredentialRepository credentialRepository) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.userWithBookingsMapper = userWithBookingsMapper;
         this.authService = authService;
+        this.credentialRepository = credentialRepository;
     }
 
     public List<UserResponseDTO> getAll() {
