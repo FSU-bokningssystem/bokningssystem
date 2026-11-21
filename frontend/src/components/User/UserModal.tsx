@@ -44,17 +44,24 @@ const UserModal = ({ user, onClose, onUserUpdated }: UserModalProps) => {
     return a && canRemove(a.memberRole, t.memberRole);
   });
 
+  const canAnonymize = user.id !== actorId && targetMemberships.length === 1;
+
   const removeMutation = useMutation({
-    mutationFn: (orgId: number) =>
+    mutationFn: ({ orgId, anonymize }: { orgId: number; anonymize: boolean }) =>
       deleteFromApi(
-        `membership/organization/${orgId}/user/${user.id}`,
-        actorId!,
+        `membership/organization/${orgId}/user/${user.id}${
+          anonymize ? "?anonymize=true" : ""
+        }`,
       ),
-    onSuccess: () => {
+    onSuccess: (_data, { anonymize }) => {
       setRemoveError(null);
       setSelectedOrg(null);
       queryClient.invalidateQueries({ queryKey: ["membership"] });
       queryClient.invalidateQueries({ queryKey: ["orgMembers"] });
+      if (anonymize) {
+        queryClient.invalidateQueries({ queryKey: ["users"] });
+        onClose();
+      }
     },
     onError: (err: Error) => setRemoveError(err.message),
   });
@@ -146,12 +153,16 @@ const UserModal = ({ user, onClose, onUserUpdated }: UserModalProps) => {
                   orgId={selectedOrg.organizationId}
                   orgName={selectedOrg.organizationName}
                   isRemoving={removeMutation.isPending}
+                  canAnonymize={canAnonymize}
                   onCancel={() => {
                     setSelectedOrg(null);
                     setRemoveError(null);
                   }}
-                  onRemove={() =>
-                    removeMutation.mutate(selectedOrg.organizationId)
+                  onRemove={(anonymize) =>
+                    removeMutation.mutate({
+                      orgId: selectedOrg.organizationId,
+                      anonymize,
+                    })
                   }
                 />
               ) : (

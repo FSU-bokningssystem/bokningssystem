@@ -130,6 +130,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> forbidden(ForbiddenException ex) {
         return ResponseEntity.status(403).body(new ErrorResponse( 403, ex.getMessage()));
     }
+
+    @ExceptionHandler(HasOtherMembershipsException.class)
+    public ResponseEntity<ErrorResponse> hasOtherMemberships(HasOtherMembershipsException ex) {
+        return ResponseEntity.status(409).body(new ErrorResponse(409, ex.getMessage()));
+    }
+
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ErrorResponse> badCredentials(BadCredentialsException ex) {
         return ResponseEntity.status(401)

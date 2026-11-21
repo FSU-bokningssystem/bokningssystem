@@ -20,6 +20,7 @@ import java.util.List;
 public class MemberShipController {
     private final MembershipService memberShipService;
 
+
     public MemberShipController(MembershipService memberShipService) {
         this.memberShipService = memberShipService;
     }
@@ -41,10 +42,9 @@ public class MemberShipController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/organization/{orgId}/user/{userId}")
     public void removeUserFromOrganization (
-            @RequestHeader("X-User-Id") @Positive  long actorId,
             @PathVariable("userId") @Positive long targetId,
-            @PathVariable @Positive long orgId)
-           {
-        memberShipService.removeUserFromOrganization(actorId,targetId,orgId);
+            @PathVariable @Positive long orgId,
+            @RequestParam(defaultValue = "false") boolean anonymize) {
+        memberShipService.removeUserFromOrganization(targetId,orgId,anonymize);
     }
 }

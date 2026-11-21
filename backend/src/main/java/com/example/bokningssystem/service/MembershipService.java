@@ -4,12 +4,12 @@ import com.example.bokningssystem.dtos.membershipDtos.MembershipResponseDTO;
 import com.example.bokningssystem.dtos.organizationDtos.OrgMemberDTO;
 import com.example.bokningssystem.entities.Booking;
 import com.example.bokningssystem.entities.Membership;
+import com.example.bokningssystem.entities.User;
 import com.example.bokningssystem.enums.MemberRole;
-import com.example.bokningssystem.exceptions.ForbiddenException;
-import com.example.bokningssystem.exceptions.LastOwnerException;
-import com.example.bokningssystem.exceptions.MembershipNotFoundException;
-import com.example.bokningssystem.exceptions.OwnsBookingsException;
+import com.example.bokningssystem.exceptions.*;
 import com.example.bokningssystem.repository.MembershipRepository;
+import com.example.bokningssystem.repository.UserRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,11 +20,15 @@ import java.util.List;
 public class MembershipService {
     private final MembershipRepository membershipRepository;
     private final BookingService bookingService;
+    private final UserService userService;
+    private final UserRepository userRepository;
 
 
-    public MembershipService(MembershipRepository membershipRepository, BookingService bookingService) {
+    public MembershipService(MembershipRepository membershipRepository, UserRepository userRepository, BookingService bookingService, UserService userService) {
         this.membershipRepository = membershipRepository;
+        this.userRepository = userRepository;
         this.bookingService = bookingService;
+        this.userService = userService;
     }
 
     @Transactional(readOnly = true)
@@ -50,7 +54,12 @@ public class MembershipService {
     }
 
     @Transactional
-    public void removeUserFromOrganization(long actorId, long targetId, long orgId){
+    public void removeUserFromOrganization(long targetId, long orgId, boolean anonymize){
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User actorUser = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("Inloggad användare hittades inte"));
+        long actorId = actorUser.getId();
+
         Membership actor = membershipRepository.findByUserIdAndOrganizationId(actorId, orgId)
                 .orElseThrow(() -> new ForbiddenException(
                         "Användare " + actorId + " är inte medlem i organisationen " + orgId
@@ -64,10 +73,19 @@ public class MembershipService {
     if( actorId != targetId && !canRemove(actor.getMemberRole(), target.getMemberRole())){
         throw new ForbiddenException("Du har inte behörighet att ta bort denna användare");
     }
+    // om användarens profil ska tas bort
+    if (anonymize){
+        if(actorId == targetId){
+            throw new ForbiddenException("Du får inte anonymisera dig själv!");
 
+        }
+        if (membershipRepository.findAllByUserId(targetId).size() > 1 ){
+            throw new HasOtherMembershipsException("Användaren är med i andra organisationer!");
+        }
+    }
 
         if (target.getMemberRole() == MemberRole.OWNER
-        && membershipRepository.countByOrganizationIdAndMemberRole(orgId, MemberRole.OWNER) <= 1) {
+                && membershipRepository.countByOrganizationIdAndMemberRole(orgId, MemberRole.OWNER) <= 1) {
             throw new LastOwnerException("Kan inte ta bort den enda ägaren av organisationen");
         }
         List<Booking> owned = bookingService.ownedFutureBookings(targetId, orgId, Instant.now());
@@ -77,6 +95,10 @@ public class MembershipService {
         }
         bookingService.removeUserFromFutureBookings(targetId, orgId);
         membershipRepository.delete(target);
+
+        if(anonymize){
+            userService.anonymizeUser(targetId);
+        }
     }
 
 
