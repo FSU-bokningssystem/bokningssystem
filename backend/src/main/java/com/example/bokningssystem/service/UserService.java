@@ -10,6 +10,7 @@ import com.example.bokningssystem.entities.User;
 import com.example.bokningssystem.mapper.UserWithBookingsMapper;
 import com.example.bokningssystem.repository.CredentialRepository;
 import com.example.bokningssystem.repository.UserRepository;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -85,4 +86,9 @@ public class UserService {
     }
 
 
+
+    public User getUserFromAuth (UserDetails auth) {
+        return userRepository.findByEmail(auth.getUsername())
+                .orElseThrow(() -> new UserNotFoundException("Hittar inte användare med e-post " + auth.getUsername()+"."));
+    }
 }
