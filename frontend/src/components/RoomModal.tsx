@@ -1,9 +1,23 @@
-import { X, Plus, Save } from "lucide-react";
+import { X, Plus, Save, Trash2 } from "lucide-react";
 import type { RoomModalProps, roomFormValues } from "../types/types";
 import type React from "react";
+import { useState } from "react";
 
-const RoomModal = ({ onClose, submitData, room, error }: RoomModalProps) => {
+type Props = RoomModalProps & {
+    onDelete?: () => void;
+    deleting?: boolean;
+};
+
+const RoomModal = ({
+    onClose,
+    submitData,
+    room,
+    error,
+    onDelete,
+    deleting,
+}: RoomModalProps) => {
     const isEditing = !!room;
+    const [confirmingDelete, setConfirmingDelete] = useState(false);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -45,124 +59,169 @@ const RoomModal = ({ onClose, submitData, room, error }: RoomModalProps) => {
                     </button>
                 </div>
 
-                <form onSubmit={handleSubmit} className="mt-4 space-y-4">
-                    <div>
-                        <label
-                            htmlFor="rumsnummer"
-                            className="block text-xs font-bold text-gray-700 uppercase mb-1"
-                        >
-                            Rumsnummer
-                        </label>
-                        <input
-                            type="text"
-                            name="roomNumber"
-                            id="rumsnummer"
-                            defaultValue={room?.roomNumber ?? ""}
-                            className="w-full rounded-lg border border-gray-300 bg-gray-50 px-3.5 py-2 text-sm text-gray-900 focus:border-[#0058a3] focus:ring-[#0058a3]"
-                            placeholder="Ex. 101"
-                            required
-                        />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <label
-                                htmlFor="floor"
-                                className="block text-xs font-bold text-gray-700 uppercase mb-1"
+                {confirmingDelete ? (
+                    <div className="mt-4 space-y-4">
+                        <p className="text-sm font-bold text-gray-900">
+                            Är du säker på att du vill ta bort {room?.name}?
+                        </p>
+                        <p className="text-sm text-gray-700">
+                            Alla bokningar för lokalen kommer att tas bort. Det
+                            går inte att ångra.
+                        </p>
+                        {error && (
+                            <p className="text-sm text-red-600" role="alert">
+                                {error}
+                            </p>
+                        )}
+                        <div className="flex items-center justify-end space-x-3 border-t border-gray-100 pt-4">
+                            <button
+                                type="button"
+                                onClick={() => setConfirmingDelete(false)}
+                                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-full transition"
                             >
-                                Våning
-                            </label>
-                            <input
-                                type="number"
-                                name="floor"
-                                id="floor"
-                                defaultValue={room?.floor ?? ""}
-                                className="w-full rounded-lg border border-gray-300 bg-gray-50 px-3.5 py-2 text-sm text-gray-900 focus:border-[#0058a3] focus:ring-[#0058a3]"
-                                placeholder="(valfritt)"
-                            />
+                                Avbryt
+                            </button>
+                            <button
+                                type="button"
+                                onClick={onDelete}
+                                disabled={deleting}
+                                className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-bold text-white bg-red-600 hover:bg-red-700 rounded-full transition shadow-xs disabled:opacity-60"
+                            >
+                                <Trash2 className="h-4 w-4" />
+                                {deleting ? "Tar bort..." : "Ja, ta bort"}
+                            </button>
                         </div>
+                    </div>
+                ) : (
+                    <form onSubmit={handleSubmit} className="mt-4 space-y-4">
                         <div>
                             <label
-                                htmlFor="rumsnamn"
+                                htmlFor="rumsnummer"
                                 className="block text-xs font-bold text-gray-700 uppercase mb-1"
                             >
-                                Rumsnamn
+                                Rumsnummer
                             </label>
                             <input
                                 type="text"
-                                name="name"
-                                id="rumsnamn"
-                                defaultValue={room?.name ?? ""}
+                                name="roomNumber"
+                                id="rumsnummer"
+                                defaultValue={room?.roomNumber ?? ""}
                                 className="w-full rounded-lg border border-gray-300 bg-gray-50 px-3.5 py-2 text-sm text-gray-900 focus:border-[#0058a3] focus:ring-[#0058a3]"
-                                placeholder="Ex. Konferensrum"
+                                placeholder="Ex. 101"
                                 required
                             />
                         </div>
-                    </div>
 
-                    <div>
-                        <label
-                            htmlFor="description"
-                            className="block text-xs font-bold text-gray-700 uppercase mb-1"
-                        >
-                            Beskrivning
-                        </label>
-                        <textarea
-                            name="description"
-                            id="description"
-                            rows={3}
-                            defaultValue={room?.description ?? ""}
-                            className="w-full rounded-lg border border-gray-300 bg-gray-50 px-3.5 py-2 text-sm text-gray-900 focus:border-[#0058a3] focus:ring-[#0058a3]"
-                            placeholder="Kort beskrivning..."
-                            required
-                        />
-                    </div>
-
-                    {isEditing && (
-                        <div className="flex items-center gap-2">
-                            <input
-                                type="checkbox"
-                                name="isAvailable"
-                                id="isAvailable"
-                                defaultChecked={room.isAvailable}
-                                className="h-4 w-4 rounded border-gray-300 text-[#0058a3] focus:ring-[#0058a3]"
-                            />
-                            <label
-                                htmlFor="isAvailable"
-                                className="text-sm font-medium text-gray-700"
-                            >
-                                Bokningsbar
-                            </label>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label
+                                    htmlFor="floor"
+                                    className="block text-xs font-bold text-gray-700 uppercase mb-1"
+                                >
+                                    Våning
+                                </label>
+                                <input
+                                    type="number"
+                                    name="floor"
+                                    id="floor"
+                                    defaultValue={room?.floor ?? ""}
+                                    className="w-full rounded-lg border border-gray-300 bg-gray-50 px-3.5 py-2 text-sm text-gray-900 focus:border-[#0058a3] focus:ring-[#0058a3]"
+                                    placeholder="(valfritt)"
+                                />
+                            </div>
+                            <div>
+                                <label
+                                    htmlFor="rumsnamn"
+                                    className="block text-xs font-bold text-gray-700 uppercase mb-1"
+                                >
+                                    Rumsnamn
+                                </label>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    id="rumsnamn"
+                                    defaultValue={room?.name ?? ""}
+                                    className="w-full rounded-lg border border-gray-300 bg-gray-50 px-3.5 py-2 text-sm text-gray-900 focus:border-[#0058a3] focus:ring-[#0058a3]"
+                                    placeholder="Ex. Konferensrum"
+                                    required
+                                />
+                            </div>
                         </div>
-                    )}
 
-                    {error && (
-                        <p className="text-sm text-red-600" role="alert">
-                            {error}
-                        </p>
-                    )}
+                        <div>
+                            <label
+                                htmlFor="description"
+                                className="block text-xs font-bold text-gray-700 uppercase mb-1"
+                            >
+                                Beskrivning
+                            </label>
+                            <textarea
+                                name="description"
+                                id="description"
+                                rows={3}
+                                defaultValue={room?.description ?? ""}
+                                className="w-full rounded-lg border border-gray-300 bg-gray-50 px-3.5 py-2 text-sm text-gray-900 focus:border-[#0058a3] focus:ring-[#0058a3]"
+                                placeholder="Kort beskrivning..."
+                                required
+                            />
+                        </div>
 
-                    <div className="flex items-center justify-end space-x-3 border-t border-gray-100 pt-4">
-                        <button
-                            onClick={onClose}
-                            type="button"
-                            className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-full transition"
-                        >
-                            Avbryt
-                        </button>
-                        <button
-                            type="submit"
-                            className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-bold text-white bg-[#0058a3] hover:bg-[#004f93] rounded-full transition shadow-xs"
-                        >
-                            {isEditing ? (
-                                <Save className="h-4 w-4" />
-                            ) : (
-                                <Plus className="h-4 w-4" />
+                        {isEditing && (
+                            <div className="flex items-center gap-2">
+                                <input
+                                    type="checkbox"
+                                    name="isAvailable"
+                                    id="isAvailable"
+                                    defaultChecked={room.isAvailable}
+                                    className="h-4 w-4 rounded border-gray-300 text-[#0058a3] focus:ring-[#0058a3]"
+                                />
+                                <label
+                                    htmlFor="isAvailable"
+                                    className="text-sm font-medium text-gray-700"
+                                >
+                                    Bokningsbar
+                                </label>
+                            </div>
+                        )}
+
+                        {error && (
+                            <p className="text-sm text-red-600" role="alert">
+                                {error}
+                            </p>
+                        )}
+
+                        <div className="flex items-center justify-end space-x-3 border-t border-gray-100 pt-4">
+                            {isEditing && onDelete && (
+                                <button
+                                    type="button"
+                                    onClick={() => setConfirmingDelete(true)}
+                                    className="mr-auto inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-50 rounded-full transition"
+                                >
+                                    <Trash2 className="h-4 w-4" />
+                                    Ta bort lokal
+                                </button>
                             )}
-                            {isEditing ? "Spara" : "Lägg till"}
-                        </button>
-                    </div>
-                </form>
+                            <button
+                                onClick={onClose}
+                                type="button"
+                                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-full transition"
+                            >
+                                Avbryt
+                            </button>
+                            <button
+                                type="submit"
+                                className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-bold text-white bg-[#0058a3] hover:bg-[#004f93] rounded-full transition shadow-xs"
+                            >
+                                {isEditing ? (
+                                    <Save className="h-4 w-4" />
+                                ) : (
+                                    <Plus className="h-4 w-4" />
+                                )}
+                                {isEditing ? "Spara" : "Lägg till"}
+                            </button>
+                        </div>
+                    </form>
+                )}
             </div>
         </div>
     );
