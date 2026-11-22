@@ -6,7 +6,7 @@ import { useAuth } from "../context/AuthContext";
 
 export const navLinks = [
     { id: "", title: "Hem" },
-    { id: "users", title: "Användare" },
+    { id: "users", title: "Medlemmar" },
     { id: "houses", title: "Hus" },
     { id: "rooms", title: "Rum & Lokaler" },
     { id: "bookings", title: "Mina Bokningar" },
