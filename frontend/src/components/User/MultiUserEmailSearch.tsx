@@ -4,12 +4,14 @@ import type { userData } from "../../types/types";
 
 interface MultiUserEmailSearchProps {
   onUsersChange: (userIds: number[]) => void;
-  excludeUserId?: number | null; // För att undvika att välja samma person som host
+  excludeUserId?: number | null;
+  excludeUserIds?: number[];
 }
 
 export const MultiUserEmailSearch: React.FC<MultiUserEmailSearchProps> = ({
   onUsersChange,
   excludeUserId,
+  excludeUserIds = [],
 }) => {
   const [query, setQuery] = useState("");
   const [allUsers, setAllUsers] = useState<userData[]>([]);
@@ -38,12 +40,13 @@ export const MultiUserEmailSearch: React.FC<MultiUserEmailSearchProps> = ({
         (user) =>
           user.email?.toLowerCase().includes(query.toLowerCase()) &&
           user.id !== excludeUserId &&
+          !excludeUserIds.includes(user.id) &&
           !selectedUsers.some((selected) => selected.id === user.id)
       );
       setFilteredUsers(matches);
       setIsOpen(true);
     }
-  }, [query, allUsers, selectedUsers, excludeUserId]);
+  }, [query, allUsers, selectedUsers, excludeUserId, excludeUserIds]);
 
   const handleSelect = (user: userData) => {
     const updated = [...selectedUsers, user];
@@ -64,8 +67,7 @@ export const MultiUserEmailSearch: React.FC<MultiUserEmailSearchProps> = ({
       <label className="block text-sm font-medium text-gray-700 mb-1">
         Lägg till medlemmar (Sök på e-post)
       </label>
-      
-      {/* Valda medlemmar som taggar */}
+
       {selectedUsers.length > 0 && (
         <div className="flex flex-wrap gap-2 mb-2">
           {selectedUsers.map((user) => (
@@ -77,7 +79,7 @@ export const MultiUserEmailSearch: React.FC<MultiUserEmailSearchProps> = ({
               <button
                 type="button"
                 onClick={() => handleRemove(user.id)}
-                className="hover:text-red-600 font-bold ml-1"
+                className="hover:text-red-600 font-bold ml-1 cursor-pointer"
               >
                 ×
               </button>
@@ -91,7 +93,7 @@ export const MultiUserEmailSearch: React.FC<MultiUserEmailSearchProps> = ({
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Sök och lägg till fler medlemmar..."
-        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0058a3] focus:outline-none"
+        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0058a3] focus:outline-none text-sm"
       />
 
       {isOpen && filteredUsers.length > 0 && (
