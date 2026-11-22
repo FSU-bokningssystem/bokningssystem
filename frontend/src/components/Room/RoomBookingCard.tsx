@@ -3,14 +3,16 @@ import {
 	Clock,
 	User,
 	Users,
+	UserPlus,
 	SquarePen,
 	Trash,
 } from "lucide-react";
 import type { BookingData, BookingUser } from "../../types/types";
 import EditBookingModal from "../Booking/EditBookingModal";
 import DeleteBookingModal from "../Booking/DeleteBookingModal";
+import ManageParticipantsPanel from "../Booking/ManageParticipantsPanel";
 import { useAuth } from "../../context/AuthContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const BookingCard = ({ booking }: { booking: BookingData }) => {
 	const auth = useAuth();
@@ -19,6 +21,19 @@ const BookingCard = ({ booking }: { booking: BookingData }) => {
 	// Modal-förberedelser
 	const [isEditOpen, setIsEditOpen] = useState(false);
 	const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+	const [isParticipantsOpen, setIsParticipantsOpen] = useState(false);
+	const [participants, setParticipants] = useState<BookingUser[]>(
+		booking.participants ?? [],
+	);
+	
+	useEffect(() => {
+		setParticipants(booking.participants ?? []);
+	}, [booking.participants]);
+
+	// Endast bokningsägaren får lägga till/ta bort deltagare
+	const isBookingOwner =
+		currentUser != null && booking.owner.id === currentUser.id;
+
 	//Kontrollerar först om det finns en inloggad användare, sedan om den inloggade användaren är ägare av bokningen eller om den inloggade användaren är ägare av huset som bokningen tillhör.
 	const canEdit =
 		currentUser != null &&
@@ -77,27 +92,41 @@ const BookingCard = ({ booking }: { booking: BookingData }) => {
 			{/* Innehåll */}
 			<div className="flex-1 min-w-0 space-y-2">
 				<div className="flex justify-between items-start gap-2 flex-wrap">
-					<h4 className="text-lg font-semibold text-gray-900">
-						{booking.title}
+					<h4 className="text-lg font-semibold text-gray-900 flex items-center flex-wrap gap-2">
+						<span>{booking.title}</span>
 						{
 							// Om användaren har behörighet att redigera bokningen, visa redigeringsknappen
 							canEdit && (
-								<>
+								<span className="inline-flex items-center gap-1.5">
 									<button
 										type="button"
 										onClick={() => setIsEditOpen(true)}
-										className="ml-2 inline-flex items-center text-blue-600 hover:text-blue-800">
+										title="Redigera bokning"
+										className="inline-flex items-center text-blue-600 hover:text-blue-800 cursor-pointer">
 										<SquarePen className="w-5 h-5" />
 									</button>
 									<button
 										type="button"
 										onClick={() => setIsDeleteOpen(true)}
-										className="ml-2 inline-flex items-center text-red-600 hover:text-red-800">
+										title="Ta bort bokning"
+										className="inline-flex items-center text-red-600 hover:text-red-800 cursor-pointer">
 										<Trash className="w-5 h-5" />
 									</button>
-								</>
+								</span>
 							)
 						}
+						{isBookingOwner && !isPast && (
+							<button
+								type="button"
+								onClick={() =>
+									setIsParticipantsOpen((prev) => !prev)
+								}
+								title="Hantera deltagare"
+								className="inline-flex items-center gap-1 rounded-full bg-[#0058a3]/10 px-2.5 py-0.5 text-xs font-semibold text-[#0058a3] hover:bg-[#0058a3]/20 transition cursor-pointer">
+								<UserPlus className="w-3.5 h-3.5" />
+								Deltagare
+							</button>
+						)}
 					</h4>
 					<span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-700 border border-gray-200">
 						<Clock className="w-3 h-3" />
@@ -131,13 +160,13 @@ const BookingCard = ({ booking }: { booking: BookingData }) => {
 						</span>
 					</span>
 
-					{booking.participants.length > 0 && (
+					{participants.length > 0 && (
 						<div className="flex items-center gap-2">
 							<Users className="w-4 h-4 text-gray-400" />
 							<div className="flex -space-x-2">
-								{booking.participants.map((u, index) => (
+								{participants.map((u) => (
 									<span
-										key={index}
+										key={u.id}
 										title={`${u.firstName} ${u.lastName}`}
 										className="w-8 h-8 rounded-full bg-[#0058a3] text-white text-xs font-semibold flex items-center justify-center ring-2 ring-white">
 										{initials(u)}
@@ -145,12 +174,34 @@ const BookingCard = ({ booking }: { booking: BookingData }) => {
 								))}
 							</div>
 							<span className="text-xs text-gray-500">
-								{booking.participants.length} deltagare
+								{participants.length} deltagare
 							</span>
 						</div>
 					)}
 				</div>
+
+				{/* Utfällbar panel för att lägga till/ta bort deltagare */}
+				{isBookingOwner &&
+					!isPast &&
+					isParticipantsOpen &&
+					auth.activeOrganization && (
+						<ManageParticipantsPanel
+							bookingId={booking.id}
+							ownerId={booking.owner.id}
+							orgId={auth.activeOrganization.id}
+							participants={participants}
+							onBookingUpdated={(updated) => {
+								const nextParticipants = updated.participants ?? [];
+								setParticipants(nextParticipants);
+								auth.updateBooking({
+									...booking,
+									participants: nextParticipants,
+								});
+							}}
+						/>
+					)}
 			</div>
+
 			{isEditOpen && (
 				<EditBookingModal
 					booking={booking}
