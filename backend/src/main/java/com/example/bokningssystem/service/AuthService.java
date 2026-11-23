@@ -111,4 +111,10 @@ public class AuthService {
         credentialRepository.save(credential);
     }
 
+    public boolean hasRole(UserDetails user, String role){
+        String roleWithPrefix = role.startsWith("ROLE_") ? role : "ROLE_" + role;
+        return user.getAuthorities().stream()
+                .anyMatch(auth -> auth.getAuthority().equals(roleWithPrefix));
+    }
+
 }
