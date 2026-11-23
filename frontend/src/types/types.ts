@@ -1,25 +1,18 @@
-// User types
+/* =============================================================
+   INNEHÅLL
+   1. Auth        (inloggning, registrering, kontext)
+   2. User        (användare)
+   3. Organization (organisationer)
+   4. Membership  (medlemskap och roller)
+   5. House       (hus)
+   6. Room        (lokaler)
+   7. Booking     (bokningar)
+   ============================================================= */
 
-export interface userData {
-    email: string;
-    firstName: string;
-    id: number;
-    lastName: string;
-    phone: string | null;
-    timeZone: string;
-}
-
-// matchar UserShortResponseDTO i backend
-export interface UserSummaryData {
-    id: number;
-    firstName: string;
-    lastName: string;
-    email: string;
-}
-
-export interface userList {
-    users: Array<userData>;
-}
+// =============================================================
+// AUTH
+// Inloggning, registrering och data som AuthContext använder
+// =============================================================
 
 export interface Login {
     email: string;
@@ -36,12 +29,104 @@ export interface RegisterUser {
     timeZone: string;
 }
 
+export interface AuthResponse {
+    token: string;
+    userId: number;
+    email: string;
+    userRole: string;
+}
+
+// InitialData type for use in AuthContext
+export interface InitialData {
+    user: userData;
+    userOrganizations: OrganizationSummaryData[];
+    activeOrganization: OrganizationDetailData | null;
+    bookings: BookingData[];
+    userRole: string;
+}
+
+// =============================================================
+// USER
+// =============================================================
+
+export interface userData {
+    email: string;
+    firstName: string;
+    id: number;
+    lastName: string;
+    phone: string | null;
+    timeZone: string;
+}
+
+// Matchar UserShortResponseDTO i backend
+export interface UserSummaryData {
+    id: number;
+    firstName: string;
+    lastName: string;
+    email: string;
+}
+
+// Matchar UserResponseDTO i backend
+export interface BookingUser {
+    id: number;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phoneNumber: string | null;
+    timeZone: string | null;
+}
+
+export interface userList {
+    users: Array<userData>;
+}
+
 export interface UserModalProps {
     user: userData;
     onClose: () => void;
 }
 
-// House types
+// =============================================================
+// ORGANIZATION
+// =============================================================
+
+export interface OrganizationSummaryData {
+    id: number;
+    name: string;
+    memberRole: "ADMIN" | "MEMBER" | "OWNER";
+}
+
+export interface OrganizationDetailData {
+    id: number;
+    name: string;
+    users: UserSummaryData[];
+    houses: HouseDetailData[];
+}
+
+// =============================================================
+// MEMBERSHIP
+// Medlemskap och roller i en organisation
+// =============================================================
+
+export type MemberRole = "OWNER" | "ADMIN" | "MEMBER";
+
+export interface Membership {
+    userId: number;
+    organizationId: number;
+    organizationName: string;
+    memberRole: MemberRole;
+}
+
+// Matchar OrgMemberDTO i backend
+export interface OrgMember {
+    userId: number;
+    firstName: string;
+    lastName: string;
+    memberRole: MemberRole;
+}
+
+// =============================================================
+// HOUSE
+// =============================================================
 
 export interface houseData {
     id: number;
@@ -66,10 +151,6 @@ export interface houseWithRoomsData {
     rooms: roomData[];
 }
 
-export interface houseList {
-    houses: houseData[];
-}
-
 export interface HouseDetailData {
     id: number;
     name: string;
@@ -82,7 +163,14 @@ export interface HouseDetailData {
     owners: UserSummaryData[];
 }
 
-// Room types
+export interface houseList {
+    houses: houseData[];
+}
+
+// =============================================================
+// ROOM
+// =============================================================
+
 export interface roomData {
     id: number;
     roomNumber: string;
@@ -93,8 +181,13 @@ export interface roomData {
     isAvailable: boolean;
 }
 
-export interface RoomRowProps {
-    room: roomData;
+export interface RoomSummaryData {
+    id: number;
+    roomNumber: string;
+    floor: number;
+    name: string;
+    description: string | null;
+    isAvailable: boolean;
 }
 
 // Matchar RoomCreateDTO i backend
@@ -106,6 +199,7 @@ export interface roomCreateData {
     houseId: number;
 }
 
+// Värden som RoomModal skickar (skapa och redigera)
 export interface roomFormValues {
     roomNumber: string;
     floor: number | null;
@@ -123,20 +217,32 @@ export interface RoomModalProps {
     deleting?: boolean;
 }
 
+export interface RoomRowProps {
+    room: roomData;
+}
+
 export interface RoomListProps {
     id: number;
 }
 
-export interface RoomSummaryData {
-    id: number;
-    roomNumber: string;
-    floor: number;
-    name: string;
-    description: string | null;
-    isAvailable: boolean;
-}
+// =============================================================
+// BOOKING
+// =============================================================
 
-// Booking types
+// Matchar BookingResponseDTO i backend
+export interface BookingData {
+    id: number;
+    title: string;
+    description: string | null;
+    startTime: string; // LocalDateTime i husets tidszon, t.ex. "2026-05-10T09:00:00"
+    endTime: string;
+    houseId: number;
+    houseName: string;
+    roomNumber: string;
+    roomName: string;
+    owner: BookingUser;
+    participants: BookingUser[];
+}
 
 export interface BookingCreateData {
     houseId: number;
@@ -159,6 +265,12 @@ export interface BookingEditData {
     ownerId: number | null;
 }
 
+// Matchar UserOrgBookingsDTO i backend
+export interface UserOrgBookings {
+    owned: BookingData[];
+    participating: BookingData[];
+}
+
 export interface BookingModalProps {
     onClose: () => void;
     submitData: (values: BookingCreateData) => void;
@@ -169,86 +281,6 @@ export interface BookingEditModalProps {
     onClose: () => void;
 }
 
-// Matchar UserResponseDTO i backend
-export interface BookingUser {
-    id: number;
-    firstName: string;
-    lastName: string;
-    email: string;
-    phoneNumber: string | null;
-    timeZone: string | null;
-}
-
-// Matchar BookingResponseDTO i backend
-export interface BookingData {
-    id: number;
-    title: string;
-    description: string | null;
-    startTime: string; // LocalDateTime i husets tidszon, t.ex. "2026-05-10T09:00:00"
-    endTime: string;
-    houseId: number;
-    houseName: string;
-    roomNumber: string;
-    roomName: string;
-    owner: BookingUser;
-    participants: BookingUser[];
-}
-
 export interface RoomBookingDetailsProps {
     roomId: number;
-}
-
-// Organization types
-
-export interface OrganizationSummaryData {
-    id: number;
-    name: string;
-    memberRole: "ADMIN" | "MEMBER" | "OWNER";
-}
-
-export interface OrganizationDetailData {
-    id: number;
-    name: string;
-    users: UserSummaryData[];
-    houses: HouseDetailData[];
-}
-
-// InitialData type for use in AuthContext
-
-export interface InitialData {
-    user: userData;
-    userOrganizations: OrganizationSummaryData[];
-    activeOrganization: OrganizationDetailData | null;
-    bookings: BookingData[];
-    userRole: string;
-}
-
-export interface AuthResponse {
-    token: string;
-    userId: number;
-    email: string;
-    userRole: string;
-}
-
-export type MemberRole = "OWNER" | "ADMIN" | "MEMBER";
-
-export interface Membership {
-    userId: number;
-    organizationId: number;
-    organizationName: string;
-    memberRole: MemberRole;
-}
-
-// Matchar OrgMemberDTO i backend
-export interface OrgMember {
-    userId: number;
-    firstName: string;
-    lastName: string;
-    memberRole: MemberRole;
-}
-
-// Matchar UserOrgBookingsDTO i backend
-export interface UserOrgBookings {
-    owned: BookingData[];
-    participating: BookingData[];
 }
