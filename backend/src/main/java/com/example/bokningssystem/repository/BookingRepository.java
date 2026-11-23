@@ -15,5 +15,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> findByParticipantsIdAndRoomHouseOrganizationIdAndStartTimeAfter(
             Long userId, Long organizationId, Instant now);
+    void deleteByRoomId(Long roomId);
 }
 
