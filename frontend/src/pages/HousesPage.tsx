@@ -8,6 +8,7 @@ import AddHouseButton from "../components/House/AddHouseButton";
 
 const HousesPage = () => {
 	const auth = useAuth();
+	console.log(auth);
 	const {
 		data: houselist,
 		isLoading,
@@ -23,9 +24,8 @@ const HousesPage = () => {
 
 	const canAddHouse = () => {
 		const isAdmin = auth.userRole === "ADMIN";
-		const activeOrgId = auth.activeOrganization?.id;
 		const roleInActiveOrg = auth.userOrganizations.find(
-			(org) => org.id == activeOrgId,
+			(org) => org.id === auth.activeOrganization?.id,
 		)?.memberRole;
 		const isOrgOwnerorAdmin =
 			roleInActiveOrg === "OWNER" || roleInActiveOrg === "ADMIN";
