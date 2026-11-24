@@ -26,11 +26,9 @@ import java.util.List;
 class HouseController {
 
     private final HouseService houseService;
-    private final UserService userService;
 
-    public HouseController(HouseService houseService, UserService userService) {
+    public HouseController(HouseService houseService) {
         this.houseService = houseService;
-        this.userService = userService;
     }
 
     @GetMapping
