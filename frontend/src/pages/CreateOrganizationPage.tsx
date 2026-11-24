@@ -87,6 +87,14 @@ export const CreateOrganizationPage: React.FC = () => {
         >
           {loading ? "Skapar..." : "Skapa Organisation"}
         </button>
+
+        <button
+          type="button"
+          onClick={() => navigate("/")}
+          className="w-full bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg hover:bg-gray-300 transition mt-2"
+        >
+          Avbryt
+        </button>
       </form>
     </div>
   );

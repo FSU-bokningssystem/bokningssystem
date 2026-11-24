@@ -8,10 +8,12 @@ interface MultiUserEmailSearchProps {
   excludeUserIds?: number[];
 }
 
+const EMPTY_IDS: number[] = [];
+
 export const MultiUserEmailSearch: React.FC<MultiUserEmailSearchProps> = ({
   onUsersChange,
   excludeUserId,
-  excludeUserIds = [],
+  excludeUserIds = EMPTY_IDS,
 }) => {
   const [query, setQuery] = useState("");
   const [allUsers, setAllUsers] = useState<userData[]>([]);
