@@ -9,60 +9,42 @@
   Närvaro: Ja / Nej / Sen / Distans.
 -->
 
-> **Exempel (Sysslo, sprint 1):**
->
-> ### Tisdag 2026-11-03
->
-> | Namn | Närvaro | Igår | Idag | Hinder |
-> |---|---|---|---|---|
-> | Amir | Ja | Sprint planning | Projektskelett #9 | – |
-> | Sara | Ja | Sprint planning | Skapa hushåll #3, backend | – |
-> | Jonas | Distans | Sprint planning | Lista sysslor #7 | – |
-> | Lina | Ja | Sprint planning | Formulär ny syssla #4 | Vet inte hur datum ska skickas. Jonas hjälper efter standup. |
+## Tisdag 2026-11-24
 
----
+| Namn     | Närvaro | Igår                                                  | Idag       | Hinder |
+| -------- | ------- | ----------------------------------------------------- | ---------- | ------ |
+| Staffan  | Ja      | Skapa hus                                             | Skapa hus  |        |
+| Axel     | Ja      | Lägg till deltagare i samband med skapande av bokning | Samma      |        |
+| Johan    | Ja      | Deployment                                            | Deployment |        |
+| Anton    | Nej     |                                                       |            |        |
+| Jonathan | Nej     |                                                       |            |        |
 
-## Måndag ÅÅÅÅ-MM-DD
+## Onsdag 2026-11-25
 
-| Namn | Närvaro | Igår | Idag | Hinder |
-|---|---|---|---|---|
-| | | | | |
-| | | | | |
-| | | | | |
-| | | | | |
+| Namn     | Närvaro | Igår                   | Idag                   | Hinder |
+| -------- | ------- | ---------------------- | ---------------------- | ------ |
+| Staffan  | Ja      | Skapa hus              | Skapa hus              |        |
+| Anton    | Ja      | Valideringar i backend | Valideringar i backend |        |
+| Jonathan | Ja      | Jobbat                 | Sök lediga rum         |        |
+| Axel     | Nej     |                        |                        |        |
+| Johan    | Nej     |                        |                        |        |
 
-## Tisdag ÅÅÅÅ-MM-DD
-
-| Namn | Närvaro | Igår | Idag | Hinder |
-|---|---|---|---|---|
-| | | | | |
-| | | | | |
-| | | | | |
-| | | | | |
-
-## Onsdag ÅÅÅÅ-MM-DD
-
-| Namn | Närvaro | Igår | Idag | Hinder |
-|---|---|---|---|---|
-| | | | | |
-| | | | | |
-| | | | | |
-| | | | | |
+Vi tror Axel och Johan kan ha missat att standupen var tidigarelagd pga föreläsning.
 
 ## Torsdag ÅÅÅÅ-MM-DD
 
 | Namn | Närvaro | Igår | Idag | Hinder |
-|---|---|---|---|---|
-| | | | | |
-| | | | | |
-| | | | | |
-| | | | | |
+| ---- | ------- | ---- | ---- | ------ |
+|      |         |      |      |        |
+|      |         |      |      |        |
+|      |         |      |      |        |
+|      |         |      |      |        |
 
 ## Fredag ÅÅÅÅ-MM-DD
 
 | Namn | Närvaro | Igår | Idag | Hinder |
-|---|---|---|---|---|
-| | | | | |
-| | | | | |
-| | | | | |
-| | | | | |
+| ---- | ------- | ---- | ---- | ------ |
+|      |         |      |      |        |
+|      |         |      |      |        |
+|      |         |      |      |        |
+|      |         |      |      |        |
