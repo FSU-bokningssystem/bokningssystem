@@ -19,14 +19,17 @@
 | Anton    | Nej     |                                                       |            |        |
 | Jonathan | Nej     |                                                       |            |        |
 
-## Onsdag ÅÅÅÅ-MM-DD
+## Onsdag 2026-11-25
 
-| Namn | Närvaro | Igår | Idag | Hinder |
-| ---- | ------- | ---- | ---- | ------ |
-|      |         |      |      |        |
-|      |         |      |      |        |
-|      |         |      |      |        |
-|      |         |      |      |        |
+| Namn     | Närvaro | Igår                   | Idag                   | Hinder |
+| -------- | ------- | ---------------------- | ---------------------- | ------ |
+| Staffan  | Ja      | Skapa hus              | Skapa hus              |        |
+| Anton    | Ja      | Valideringar i backend | Valideringar i backend |        |
+| Jonathan | Ja      | Jobbat                 | Sök lediga rum         |        |
+| Axel     | Nej     |                        |                        |        |
+| Johan    | Nej     |                        |                        |        |
+
+Vi tror Axel och Johan kan ha missat att standupen var tidigarelagd pga föreläsning.
 
 ## Torsdag ÅÅÅÅ-MM-DD
 
