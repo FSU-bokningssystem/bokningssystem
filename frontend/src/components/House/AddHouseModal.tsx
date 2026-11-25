@@ -1,12 +1,16 @@
 import type { HouseModalProps, OrganizationShortData } from "../../types";
-import { X } from "lucide-react";
+import { BuildingComplexPlus, X } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import { fetchFromApi } from "../../api/fetchData";
 import LoadingSpinner from "../../UI/LoadingSpinner";
+import TimeZoneList from "../Common/TimeZoneList";
 
 const AddHouseModal = ({ onClose, submitData }: HouseModalProps) => {
 	const auth = useAuth();
+
+	const browserZone =
+		Intl.DateTimeFormat().resolvedOptions().timeZone || "Europe/Stockholm";
 
 	//Hämtar organisationslista, returnerar Loadingspinner medan det pågår och ger felmeddelande om det misslyckas.
 	const {
@@ -150,6 +154,34 @@ const AddHouseModal = ({ onClose, submitData }: HouseModalProps) => {
 								required
 							/>
 						</div>
+					</div>
+					<div>
+						<label
+							htmlFor="timeZone"
+							className="block text-xs font-bold text-gray-700 uppercase mb-1">
+							Tidszon
+						</label>
+						<select
+							id="timeZone"
+							name="timeZone"
+							className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#0058a3] focus:border-[#0058a3] transition"
+							defaultValue={browserZone}>
+							<TimeZoneList />
+						</select>
+					</div>
+					<div className="flex items-center justify-end space-x-3 border-t border-gray-100 pt-4">
+						<button
+							onClick={onClose}
+							type="button"
+							className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-full transition">
+							Avbryt
+						</button>
+						<button
+							type="submit"
+							className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-bold text-white bg-[#0058a3] hover:bg-[#004f93] rounded-full transition shadow-xs disabled:opacity-50">
+							<BuildingComplexPlus className="h-4 w-4" />
+							Skapa
+						</button>
 					</div>
 				</form>
 			</div>

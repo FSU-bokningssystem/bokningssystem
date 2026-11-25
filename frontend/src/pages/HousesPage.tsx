@@ -8,7 +8,6 @@ import AddHouseButton from "../components/House/AddHouseButton";
 
 const HousesPage = () => {
 	const auth = useAuth();
-	console.log(auth);
 	const {
 		data: houselist,
 		isLoading,
