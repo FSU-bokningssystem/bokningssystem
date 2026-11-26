@@ -147,4 +147,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(401)
                 .body(new ErrorResponse(401, "Fel e-postadress eller lösenord."));
     }
+    @ExceptionHandler(OrganizationNotFoundException.class)
+    public ResponseEntity<ErrorResponse> bookingNotFound(OrganizationNotFoundException ex) {
+        return ResponseEntity.status(404).body(new ErrorResponse(404, ex.getMessage()));
+    }
 }

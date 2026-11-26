@@ -18,6 +18,7 @@
 | Johan    | Ja      | Deployment                                            | Deployment |        |
 | Anton    | Nej     |                                                       |            |        |
 | Jonathan | Nej     |                                                       |            |        |
+|            |        |
 
 ## Onsdag 2026-11-25
 
