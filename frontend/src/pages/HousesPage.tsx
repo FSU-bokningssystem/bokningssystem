@@ -24,6 +24,13 @@ const HousesPage = () => {
 
   if (isLoading) return <LoadingSpinner />;
   if (error) return <p className="text-red-600">Ett fel uppstod: {error.message}</p>;
+  if (activeOrganization === null) {
+    return (
+      <h1 className="text-xl font-bold text-gray-900">
+        Du saknar medlemskap i en organisation och kan därför inte se några hus.
+      </h1>
+    );
+  }
 
 	const canAddHouse = () => {
 		const isAdmin = auth.userRole === "ADMIN";
