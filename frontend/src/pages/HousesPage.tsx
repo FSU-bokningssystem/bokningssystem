@@ -37,7 +37,7 @@ const HousesPage = () => {
 
   return (
     <div className="space-y-6">
-		<div className="flex items-start justify-between">
+		
 		  {filteredHouses.length === 0 ? (
 			<h1 className="text-xl font-bold text-gray-900">
 			  Det saknas hus som tillhör {activeOrganization?.name}
@@ -51,12 +51,13 @@ const HousesPage = () => {
 				<p className="text-sm text-gray-500">
 				  Välj ett hus för att se dess lokaler och detaljer
 				</p>
-				  <div>{canAddHouse() ? <AddHouseButton /> : null}</div>
+				  
 			  </div>
 			  <HouseList houses={filteredHouses} />
 			</>
 		  )}
-		</div>
+      <div>{canAddHouse() ? <AddHouseButton /> : null}</div>
+		
 	</div>
 	);
 };
