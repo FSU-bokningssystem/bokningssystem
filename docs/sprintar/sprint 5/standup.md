@@ -18,29 +18,35 @@
 | Johan    | Ja      | Deployment                                            | Deployment |        |
 | Anton    | Nej     |                                                       |            |        |
 | Jonathan | Nej     |                                                       |            |        |
+|            |        |
 
-## Onsdag ÅÅÅÅ-MM-DD
+## Onsdag 2026-11-25
 
-| Namn | Närvaro | Igår | Idag | Hinder |
-| ---- | ------- | ---- | ---- | ------ |
-|      |         |      |      |        |
-|      |         |      |      |        |
-|      |         |      |      |        |
-|      |         |      |      |        |
+| Namn     | Närvaro | Igår                   | Idag                   | Hinder |
+| -------- | ------- | ---------------------- | ---------------------- | ------ |
+| Staffan  | Ja      | Skapa hus              | Skapa hus              |        |
+| Anton    | Ja      | Valideringar i backend | Valideringar i backend |        |
+| Jonathan | Ja      | Jobbat                 | Sök lediga rum         |        |
+| Axel     | Nej     |                        |                        |        |
+| Johan    | Nej     |                        |                        |        |
 
-## Torsdag ÅÅÅÅ-MM-DD
+Vi tror Axel och Johan kan ha missat att standupen var tidigarelagd pga föreläsning.
 
-| Namn | Närvaro | Igår | Idag | Hinder |
-| ---- | ------- | ---- | ---- | ------ |
-|      |         |      |      |        |
-|      |         |      |      |        |
-|      |         |      |      |        |
-|      |         |      |      |        |
+## Torsdag 2026-11-26
+
+| Namn     | Närvaro | Igår                                                  | Idag           | Hinder |
+| -------- | ------- | ----------------------------------------------------- | -------------- | ------ |
+| Staffan  | Ja      | Skapa hus                                             | Skapa hus      |        |
+| Anton    | Ja      | Valideringar i backend                                | Test           |        |
+| Axel     | Ja      | Lägg till deltagare i samband med skapande av bokning | Test           |        |
+| Johan    | Ja      | Deployment                                            | Deployment     |        |
+| Jonathan | Ja      | Sök lediga rum                                        | Sök lediga rum |        |
 
 ## Fredag ÅÅÅÅ-MM-DD
 
 | Namn | Närvaro | Igår | Idag | Hinder |
 | ---- | ------- | ---- | ---- | ------ |
+|      |         |      |      |        |
 |      |         |      |      |        |
 |      |         |      |      |        |
 |      |         |      |      |        |
