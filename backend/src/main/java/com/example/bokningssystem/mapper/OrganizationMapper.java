@@ -2,6 +2,7 @@ package com.example.bokningssystem.mapper;
 
 import com.example.bokningssystem.dtos.houseDtos.HouseDTO;
 import com.example.bokningssystem.dtos.organizationDtos.OrganizationDetailDTO;
+import com.example.bokningssystem.dtos.organizationDtos.OrganizationShortDTO;
 import com.example.bokningssystem.dtos.userDtos.UserShortResponseDTO;
 import com.example.bokningssystem.entities.Organization;
 import org.springframework.stereotype.Component;
@@ -30,5 +31,9 @@ public class OrganizationMapper {
                 .toList();
 
         return new OrganizationDetailDTO(organization.getId(), organization.getName(), houseDTOs, members);
+    }
+
+    public OrganizationShortDTO toShortDTO(Organization organization) {
+        return new OrganizationShortDTO(organization.getId(), organization.getName());
     }
 }

@@ -2,6 +2,7 @@ package com.example.bokningssystem.service;
 
 import com.example.bokningssystem.dtos.organizationDtos.OrganizationCreateDTO;
 import com.example.bokningssystem.dtos.organizationDtos.OrganizationDetailDTO;
+import com.example.bokningssystem.dtos.organizationDtos.OrganizationShortDTO;
 import com.example.bokningssystem.entities.Membership;
 import com.example.bokningssystem.entities.Organization;
 import com.example.bokningssystem.entities.User;
@@ -12,6 +13,9 @@ import com.example.bokningssystem.repository.OrganizationRepository;
 import com.example.bokningssystem.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Comparator;
+import java.util.List;
 
 @Service
 public class OrganizationService {
@@ -59,5 +63,13 @@ public class OrganizationService {
         }
 
         return organizationMapper.toDetailDTO(savedOrganization);
+    }
+
+    public List<OrganizationShortDTO> organizationList(){
+        return organizationRepository.findAll()
+                .stream()
+                .map(organizationMapper::toShortDTO)
+                .sorted(Comparator.comparing(OrganizationShortDTO::id))
+                .toList();
     }
 }
