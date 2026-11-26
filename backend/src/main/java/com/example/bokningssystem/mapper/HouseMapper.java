@@ -75,6 +75,8 @@ public class HouseMapper {
                 house.getZipcode(),
                 house.getCity(),
                 house.getTimeZone(),
+                house.getOrganization().getId(),
+                house.getOrganization().getName(),
                 rooms,
                 owners
         );

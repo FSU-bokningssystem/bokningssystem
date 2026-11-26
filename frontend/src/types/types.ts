@@ -164,6 +164,8 @@ export interface HouseDetailData {
 	zipCode: string;
 	city: string;
 	timeZone: string;
+	organizationId: number;
+	organizationName: string;
 	rooms: RoomSummaryData[];
 	owners: UserSummaryData[];
 }
@@ -174,15 +176,13 @@ export interface houseList {
 
 export interface HouseModalProps {
 	onClose: () => void;
-	//submitData: (values: HouseFormValues) => void;
-	submitData: () => void;
-	error?: string | null;
+	finish: () => void;
 }
 
 export interface HouseFormValues {
 	name: string;
 	street: string;
-	streetnumber: string;
+	streetNumber: string;
 	zipCode: string;
 	city: string;
 	timeZone: string;

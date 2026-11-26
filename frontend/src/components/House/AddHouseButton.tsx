@@ -7,9 +7,8 @@ const AddHouseButton = () => {
 	const openForm = () => setOpenModal(true);
 	const closeForm = () => setOpenModal(false);
 
-	const handleSubmit = () => {
+	const finish = () => {
 		setOpenModal(false);
-		alert("Test");
 	};
 
 	return (
@@ -21,9 +20,7 @@ const AddHouseButton = () => {
 				<BuildingComplexPlus className="w-3.5 h-3.5" />
 				Lägg till hus
 			</button>
-			{openModal && (
-				<AddHouseModal onClose={() => closeForm()} submitData={handleSubmit} />
-			)}
+			{openModal && <AddHouseModal onClose={closeForm} finish={finish} />}
 		</>
 	);
 };

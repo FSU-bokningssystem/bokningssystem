@@ -3,6 +3,7 @@ import type {
 	HouseFormValues,
 	OrganizationShortData,
 	OrgMember,
+	HouseDetailData,
 } from "../../types";
 import { BuildingComplexPlus, X } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
@@ -12,8 +13,9 @@ import LoadingSpinner from "../../UI/LoadingSpinner";
 import TimeZoneList from "../Common/TimeZoneList";
 import { useState } from "react";
 import ManageHouseOwnersPanel from "./ManageHouseOwnersPanel";
+import { postToApi } from "../../api/postData";
 
-const AddHouseModal = ({ onClose, submitData }: HouseModalProps) => {
+const AddHouseModal = ({ onClose, finish }: HouseModalProps) => {
 	const auth = useAuth();
 	const queryClient = useQueryClient();
 
@@ -38,6 +40,12 @@ const AddHouseModal = ({ onClose, submitData }: HouseModalProps) => {
 		);
 	};
 
+	const [statusMessage, setStatusMessage] = useState<{
+		text: string;
+		type: "success" | "error";
+	} | null>(null);
+	const [isUpdating, setUpdating] = useState(false);
+
 	//Defaultvärde för tidszon sätts till antingen användarens systems tidszon eller, om det saknas, Europe/Stockholm.
 	const browserZone =
 		Intl.DateTimeFormat().resolvedOptions().timeZone || "Europe/Stockholm";
@@ -56,14 +64,16 @@ const AddHouseModal = ({ onClose, submitData }: HouseModalProps) => {
 	if (error)
 		return <p className="text-red-600">Ett fel uppstod: {error.message}</p>;
 
-	const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
+	const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
 		const formData = new FormData(e.currentTarget);
-		if (Number.isNaN(orgId)) {
+		if (orgId === undefined || Number.isNaN(orgId)) {
 			alert("Du måste välja en organisation!");
 			return;
 		}
+		setUpdating(true);
+
 		const values: HouseFormValues = {
 			name: formData.get("name") as string,
 			street: formData.get("streetName") as string,
@@ -74,8 +84,19 @@ const AddHouseModal = ({ onClose, submitData }: HouseModalProps) => {
 			organizationId: orgId,
 			ownerIds: owners.map((owner) => owner.userId),
 		};
-
-		submitData();
+		try {
+			const newHouse: HouseDetailData = await postToApi("house", values);
+			queryClient.invalidateQueries({ queryKey: ["houses"] });
+			auth.addHouse(newHouse);
+			finish();
+		} catch (err: any) {
+			setStatusMessage({
+				text: err.message || "Ett oväntat fel uppstod.",
+				type: "error",
+			});
+		} finally {
+			setUpdating(false);
+		}
 	};
 	return (
 		<div
@@ -106,7 +127,7 @@ const AddHouseModal = ({ onClose, submitData }: HouseModalProps) => {
 								name="organization"
 								id="organization"
 								className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#0058a3] focus:border-[#0058a3] transition"
-								onChange={(e) => setOrgId(Number(e.currentTarget.value))}>
+								onChange={(e) => updateOrgId(Number(e.currentTarget.value))}>
 								{organizationlist?.map((org) => (
 									<option key={org.id} value={org.id}>
 										{org.name}
@@ -210,6 +231,22 @@ const AddHouseModal = ({ onClose, submitData }: HouseModalProps) => {
 							<TimeZoneList />
 						</select>
 					</div>
+					<ManageHouseOwnersPanel
+						orgId={orgId}
+						owners={owners}
+						addOwner={addOwner}
+						removeOwner={removeOwner}
+					/>
+					{statusMessage && (
+						<div
+							className={`p-3 rounded-lg text-sm font-medium border ${
+								statusMessage.type === "success"
+									? "bg-green-50 border-green-200 text-green-800"
+									: "bg-red-50 border-red-200 text-red-800"
+							}`}>
+							{statusMessage.text}
+						</div>
+					)}
 					<div className="flex items-center justify-end space-x-3 border-t border-gray-100 pt-4">
 						<button
 							onClick={onClose}
@@ -219,18 +256,12 @@ const AddHouseModal = ({ onClose, submitData }: HouseModalProps) => {
 						</button>
 						<button
 							type="submit"
-							disabled={Number.isNaN(orgId)}
+							disabled={Number.isNaN(orgId) || isUpdating}
 							className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-bold text-white bg-[#0058a3] hover:bg-[#004f93] rounded-full transition shadow-xs disabled:opacity-50">
 							<BuildingComplexPlus className="h-4 w-4" />
-							Skapa
+							{isUpdating ? "Skapar..." : "Skapa Hus"}
 						</button>
 					</div>
-					<ManageHouseOwnersPanel
-						orgId={orgId}
-						owners={owners}
-						addOwner={addOwner}
-						removeOwner={removeOwner}
-					/>
 				</form>
 			</div>
 		</div>

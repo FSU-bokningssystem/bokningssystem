@@ -1,5 +1,6 @@
 package com.example.bokningssystem.dtos.houseDtos;
 
+import com.example.bokningssystem.dtos.organizationDtos.OrganizationShortDTO;
 import com.example.bokningssystem.dtos.roomDtos.RoomDTO;
 import com.example.bokningssystem.dtos.userDtos.UserShortResponseDTO;
 
@@ -13,6 +14,8 @@ public record HouseDTO(
         String zipCode,
         String city,
         String timeZone,
+        Long organisationId,
+        String organizationName,
         List<RoomDTO> rooms,
         List<UserShortResponseDTO> owners
 ) {}

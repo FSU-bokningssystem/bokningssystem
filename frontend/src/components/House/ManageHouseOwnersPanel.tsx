@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { UserPlus, X } from "lucide-react";
 import { fetchFromApi } from "../../api/fetchData";
 import type { OrgMember } from "../../types";
+
+const EMPTY_MEMBERS: OrgMember[] = [];
 
 interface ManageHouseOwnersPanelProps {
 	orgId: number | undefined;
@@ -17,9 +19,7 @@ const ManageHouseOwnersPanel = ({
 	addOwner,
 	removeOwner,
 }: ManageHouseOwnersPanelProps) => {
-	const queryClient = useQueryClient();
 	const [selectedUserId, setSelectedUserId] = useState<number>(0);
-	const [error, setError] = useState<string | null>(null);
 
 	//Skapar en state med medlemmar i organisationen som inte är husägare samt funktioner för att flytta en orgmedlem från icke-ägare till ägare och vice versa.
 	const [nonOwnerList, setNonOwnerList] = useState<OrgMember[]>([]);
@@ -44,7 +44,12 @@ const ManageHouseOwnersPanel = ({
 	};
 
 	// Hämta alla medlemmar i organisationen
-	const { data: members = [], isLoading } = useQuery<OrgMember[]>({
+
+	const {
+		data: members = EMPTY_MEMBERS,
+		isLoading,
+		isError,
+	} = useQuery<OrgMember[]>({
 		queryKey: ["orgMembers", orgId],
 		queryFn: () => fetchFromApi(`membership/organization/${orgId}`),
 		enabled: !!orgId,
@@ -88,7 +93,7 @@ const ManageHouseOwnersPanel = ({
 			{/* Dropdown + knapp för att lägga till */}
 			<div className="flex flex-col sm:flex-row gap-2">
 				<select
-					value={selectedUserId}
+					defaultValue=""
 					onChange={(e) => setSelectedUserId(Number(e.target.value))}
 					disabled={isLoading}
 					className="flex-1 rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-900 focus:border-[#0058a3] focus:ring-[#0058a3]">
@@ -115,9 +120,9 @@ const ManageHouseOwnersPanel = ({
 				</button>
 			</div>
 
-			{error && (
+			{isError && (
 				<p className="text-xs text-red-600" role="alert">
-					{error}
+					Fel vid inläsning av organisationsmedlemmar.
 				</p>
 			)}
 		</div>

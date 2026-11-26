@@ -14,6 +14,7 @@ import type {
 	AuthResponse,
 	RegisterUser,
 	Login,
+	HouseDetailData,
 } from "../types/types";
 import { fetchFromApi } from "../api/fetchData";
 import { postToApi } from "../api/postData";
@@ -31,6 +32,7 @@ interface AuthContextType {
 	switchOrganization: (organizationId: number) => Promise<void>;
 	updateBooking: (booking: BookingData) => void;
 	removeBooking: (booking: BookingData) => void;
+	addHouse: (house: HouseDetailData) => void;
 	logout: () => void;
 }
 
@@ -165,6 +167,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 		setBookings(bookings.filter((b) => b.id !== booking.id));
 	};
 
+	const addHouse = (house: HouseDetailData) => {
+		if (house.organizationId === activeOrganization?.id) {
+			activeOrganization.houses.push(house);
+		}
+	};
+
 	const logout = () => {
 		setCurrentUser(null);
 		setUserRole(null);
@@ -193,6 +201,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 				switchOrganization,
 				updateBooking,
 				removeBooking,
+				addHouse,
 				logout,
 			}}>
 			{children}
