@@ -16,7 +16,11 @@ export const Navbar = () => {
     const [toggle, setToggle] = useState(false);
     const [adminDropdown, setAdminDropdown] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
-    const { currentUser, logout } = useAuth();
+    const { currentUser, userRole, logout } = useAuth();
+
+    const isSystemAdmin =
+    userRole?.toUpperCase() === "ADMIN" ||
+    userRole?.toUpperCase() === "ROLE_ADMIN";
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -77,6 +81,7 @@ export const Navbar = () => {
                         })}
 
                         {/* Systemadmin Dropdown */}
+                        {isSystemAdmin && (
                         <div className="relative" ref={dropdownRef}>
                             <button
                                 type="button"
@@ -100,6 +105,7 @@ export const Navbar = () => {
                                 </div>
                             )}
                         </div>
+                        )}
                     </nav>
                 </div>
 
