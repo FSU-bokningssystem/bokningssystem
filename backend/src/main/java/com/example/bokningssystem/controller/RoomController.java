@@ -1,6 +1,8 @@
 package com.example.bokningssystem.controller;
 
+import com.example.bokningssystem.dtos.bookingDtos.BookingAvailabilityDTO;
 import com.example.bokningssystem.dtos.roomDtos.RoomCreateDTO;
+import com.example.bokningssystem.dtos.roomDtos.RoomDTO;
 import com.example.bokningssystem.dtos.roomDtos.RoomResponseDTO;
 import com.example.bokningssystem.dtos.roomDtos.RoomUpdateDTO;
 import com.example.bokningssystem.service.RoomService;
@@ -8,6 +10,9 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @CrossOrigin(allowCredentials = "true",
         originPatterns = {"http://localhost:*"})
@@ -36,5 +41,10 @@ public class RoomController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         roomService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/available")
+    public ResponseEntity<List<RoomDTO>> findAvailableRooms(@Valid @RequestBody BookingAvailabilityDTO dto) {
+        return ResponseEntity.ok(roomService.findAvailableRooms(dto));
     }
 }
