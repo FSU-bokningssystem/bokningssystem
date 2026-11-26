@@ -7,10 +7,10 @@ import { useAuth } from "../context/AuthContext";
 import AddHouseButton from "../components/House/AddHouseButton";
 
 const HousesPage = () => {
-
-  const { activeOrganization } = useAuth();
-  const orgHouseIds = new Set(activeOrganization?.houses.map((h) => h.id) ?? []);
   const auth = useAuth();
+  const { activeOrganization } = auth;
+  const orgHouseIds = new Set(activeOrganization?.houses.map((h) => h.id) ?? []);
+  
   const {
 	data: houselist,
 	isLoading,
@@ -36,29 +36,30 @@ const HousesPage = () => {
 	};
 
   return (
-    <div className="space-y-6">
-		
-		  {filteredHouses.length === 0 ? (
-			<h1 className="text-xl font-bold text-gray-900">
-			  Det saknas hus som tillhör {activeOrganization?.name}
-			</h1>
-		  ) : (
-			<>
-			  <div>
-				<h1 className="text-2xl font-bold text-gray-900">
-				  Alla Hus tillhörande {activeOrganization?.name}
-				</h1>
-				<p className="text-sm text-gray-500">
-				  Välj ett hus för att se dess lokaler och detaljer
-				</p>
-				  
-			  </div>
-			  <HouseList houses={filteredHouses} />
-			</>
-		  )}
-      <div>{canAddHouse() ? <AddHouseButton /> : null}</div>
-		
-	</div>
+		<div className="space-y-6">
+			{/* Topprad: Rubrik till vänster, knapp till höger */}
+			<div className="flex items-start justify-between gap-4">
+				{filteredHouses.length === 0 ? (
+					<h1 className="text-2xl font-bold text-gray-900">
+						Det saknas hus som tillhör {activeOrganization?.name}
+					</h1>
+				) : (
+					<div>
+						<h1 className="text-2xl font-bold text-gray-900">
+							Alla Hus tillhörande {activeOrganization?.name}
+						</h1>
+						<p className="text-sm text-gray-500">
+							Välj ett hus för att se dess lokaler och detaljer
+						</p>
+					</div>
+				)}
+
+				{canAddHouse() && <AddHouseButton />}
+			</div>
+
+			{/* Korten visas under toppraden över hela bredden */}
+			{filteredHouses.length > 0 && <HouseList houses={filteredHouses} />}
+		</div>
 	);
 };
 
