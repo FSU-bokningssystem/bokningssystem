@@ -7,19 +7,30 @@ import { useAuth } from "../context/AuthContext";
 import AddHouseButton from "../components/House/AddHouseButton";
 
 const HousesPage = () => {
-	const auth = useAuth();
-	const {
-		data: houselist,
-		isLoading,
-		error,
-	} = useQuery({
-		queryKey: ["houses"],
-		queryFn: () => fetchFromApi<houseData[]>("house"),
-	});
+  const auth = useAuth();
+  const { activeOrganization } = auth;
+  const orgHouseIds = new Set(activeOrganization?.houses.map((h) => h.id) ?? []);
+  
+  const {
+	data: houselist,
+	isLoading,
+	error,
+  } = useQuery({
+	  queryKey: ["houses"],
+	  queryFn: () => fetchFromApi<houseData[]>("house"),
+  });
 
-	if (isLoading) return <LoadingSpinner />;
-	if (error)
-		return <p className="text-red-600">Ett fel uppstod: {error.message}</p>;
+  const filteredHouses = houselist?.filter((house) => orgHouseIds.has(house.id)) || [];
+
+  if (isLoading) return <LoadingSpinner />;
+  if (error) return <p className="text-red-600">Ett fel uppstod: {error.message}</p>;
+  if (activeOrganization === null) {
+    return (
+      <h1 className="text-xl font-bold text-gray-900">
+        Du saknar medlemskap i en organisation och kan därför inte se några hus.
+      </h1>
+    );
+  }
 
 	const canAddHouse = () => {
 		const isAdmin = auth.userRole === "ADMIN";
@@ -31,18 +42,30 @@ const HousesPage = () => {
 		return isAdmin || isOrgOwnerorAdmin;
 	};
 
-	return (
+  return (
 		<div className="space-y-6">
-			<div className="flex items-start justify-between">
-				<div>
-					<h1 className="text-2xl font-bold text-gray-900">Alla Hus</h1>
-					<p className="text-sm text-gray-500">
-						Välj ett hus för att se dess lokaler och detaljer
-					</p>
-				</div>
-				<div>{canAddHouse() ? <AddHouseButton /> : null}</div>
+			{/* Topprad: Rubrik till vänster, knapp till höger */}
+			<div className="flex items-start justify-between gap-4">
+				{filteredHouses.length === 0 ? (
+					<h1 className="text-2xl font-bold text-gray-900">
+						Det saknas hus som tillhör {activeOrganization?.name}
+					</h1>
+				) : (
+					<div>
+						<h1 className="text-2xl font-bold text-gray-900">
+							Alla Hus tillhörande {activeOrganization?.name}
+						</h1>
+						<p className="text-sm text-gray-500">
+							Välj ett hus för att se dess lokaler och detaljer
+						</p>
+					</div>
+				)}
+
+				{canAddHouse() && <AddHouseButton />}
 			</div>
-			<HouseList houses={houselist || []} />
+
+			{/* Korten visas under toppraden över hela bredden */}
+			{filteredHouses.length > 0 && <HouseList houses={filteredHouses} />}
 		</div>
 	);
 };
