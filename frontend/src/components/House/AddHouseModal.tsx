@@ -1,14 +1,44 @@
-import type { HouseModalProps, OrganizationShortData } from "../../types";
+import type {
+	HouseModalProps,
+	HouseFormValues,
+	OrganizationShortData,
+	OrgMember,
+} from "../../types";
 import { BuildingComplexPlus, X } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchFromApi } from "../../api/fetchData";
 import LoadingSpinner from "../../UI/LoadingSpinner";
 import TimeZoneList from "../Common/TimeZoneList";
+import { useState } from "react";
+import ManageHouseOwnersPanel from "./ManageHouseOwnersPanel";
 
 const AddHouseModal = ({ onClose, submitData }: HouseModalProps) => {
 	const auth = useAuth();
+	const queryClient = useQueryClient();
 
+	const [orgId, setOrgId] = useState<number | undefined>(
+		auth.userRole === "ADMIN" ? undefined : auth.activeOrganization?.id,
+	);
+	const updateOrgId = (id: number) => {
+		setOrgId(id);
+		queryClient.invalidateQueries({ queryKey: ["organizations"] });
+	};
+	//Skapa en state som innehåller husets blivande ägare.
+	const [owners, setOwners] = useState<OrgMember[]>([]);
+
+	//Lägg till/ta bort en ägare i arrayen med ägare.
+	const addOwner = (newOwner: OrgMember) => {
+		setOwners((currentOwners) => [...currentOwners, newOwner]);
+	};
+
+	const removeOwner = (removedOwner: OrgMember) => {
+		setOwners((currentOwners) =>
+			currentOwners.filter((owner) => owner.userId !== removedOwner.userId),
+		);
+	};
+
+	//Defaultvärde för tidszon sätts till antingen användarens systems tidszon eller, om det saknas, Europe/Stockholm.
 	const browserZone =
 		Intl.DateTimeFormat().resolvedOptions().timeZone || "Europe/Stockholm";
 
@@ -26,17 +56,24 @@ const AddHouseModal = ({ onClose, submitData }: HouseModalProps) => {
 	if (error)
 		return <p className="text-red-600">Ett fel uppstod: {error.message}</p>;
 
-	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+	const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-		/* const formData = new FormData(e.currentTarget);
-          const floor = formData.get("floor") as string;
-          const values: roomFormValues = {
-              roomNumber: formData.get("roomNumber") as string,
-              floor: floor ? Number(floor) : null,
-              name: formData.get("name") as string,
-              description: formData.get("description") as string,
-          }; */
+		const formData = new FormData(e.currentTarget);
+		if (Number.isNaN(orgId)) {
+			alert("Du måste välja en organisation!");
+			return;
+		}
+		const values: HouseFormValues = {
+			name: formData.get("name") as string,
+			street: formData.get("streetName") as string,
+			streetNumber: formData.get("streetNumber") as string,
+			zipCode: formData.get("zipCode") as string,
+			city: formData.get("city") as string,
+			timeZone: formData.get("timeZone") as string,
+			organizationId: orgId,
+			ownerIds: owners.map((owner) => owner.userId),
+		};
 
 		submitData();
 	};
@@ -65,7 +102,11 @@ const AddHouseModal = ({ onClose, submitData }: HouseModalProps) => {
 								className="block text-xs font-bold text-gray-700 uppercase mb-1">
 								Organisation
 							</label>
-							<select>
+							<select
+								name="organization"
+								id="organization"
+								className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#0058a3] focus:border-[#0058a3] transition"
+								onChange={(e) => setOrgId(Number(e.currentTarget.value))}>
 								{organizationlist?.map((org) => (
 									<option key={org.id} value={org.id}>
 										{org.name}
@@ -178,11 +219,18 @@ const AddHouseModal = ({ onClose, submitData }: HouseModalProps) => {
 						</button>
 						<button
 							type="submit"
+							disabled={Number.isNaN(orgId)}
 							className="inline-flex items-center gap-1.5 px-5 py-2 text-sm font-bold text-white bg-[#0058a3] hover:bg-[#004f93] rounded-full transition shadow-xs disabled:opacity-50">
 							<BuildingComplexPlus className="h-4 w-4" />
 							Skapa
 						</button>
 					</div>
+					<ManageHouseOwnersPanel
+						orgId={orgId}
+						owners={owners}
+						addOwner={addOwner}
+						removeOwner={removeOwner}
+					/>
 				</form>
 			</div>
 		</div>

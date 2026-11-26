@@ -183,7 +183,7 @@ export interface HouseFormValues {
 	name: string;
 	street: string;
 	streetnumber: string;
-	zipcode: string;
+	zipCode: string;
 	city: string;
 	timeZone: string;
 	organizationId: number;
