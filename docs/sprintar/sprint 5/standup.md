@@ -18,7 +18,7 @@
 | Johan    | Ja      | Deployment                                            | Deployment |        |
 | Anton    | Nej     |                                                       |            |        |
 | Jonathan | Nej     |                                                       |            |        |
-|            |        |
+|          |         |
 
 ## Onsdag 2026-11-25
 
@@ -42,12 +42,14 @@ Vi tror Axel och Johan kan ha missat att standupen var tidigarelagd pga förelä
 | Johan    | Ja      | Deployment                                            | Deployment     |        |
 | Jonathan | Ja      | Sök lediga rum                                        | Sök lediga rum |        |
 
-## Fredag ÅÅÅÅ-MM-DD
+## Fredag 2026-11-27
 
-| Namn | Närvaro | Igår | Idag | Hinder |
-| ---- | ------- | ---- | ---- | ------ |
-|      |         |      |      |        |
-|      |         |      |      |        |
-|      |         |      |      |        |
-|      |         |      |      |        |
-|      |         |      |      |        |
+| Namn     | Närvaro | Igår                                                  | Idag                                                    | Hinder |
+| -------- | ------- | ----------------------------------------------------- | ------------------------------------------------------- | ------ |
+| Staffan  | Ja      | Skapa hus                                             | Justera DB                                              |        |
+| Anton    | Ja      | Valideringar i backend                                | Ta bort rum/lokaler från navbar, mouseover på rumslista |        |
+| Axel     | Ja      | Lägg till deltagare i samband med skapande av bokning | Buggfix: Endast rätt personer ska lägga till lokal      |        |
+| Johan    | Ja      | Deployment                                            | Deployment                                              |        |
+| Jonathan | Ja      | Sök lediga rum, bara visa hus för aktiv organisation  | Sök lediga rum                                          |        |
+
+För-review på måndag 09:30.
