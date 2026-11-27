@@ -2,6 +2,7 @@ package com.example.bokningssystem.service;
 
 import com.example.bokningssystem.dtos.organizationDtos.OrganizationCreateDTO;
 import com.example.bokningssystem.dtos.organizationDtos.OrganizationDetailDTO;
+import com.example.bokningssystem.dtos.organizationDtos.OrganizationShortDTO;
 import com.example.bokningssystem.entities.Membership;
 import com.example.bokningssystem.entities.Organization;
 import com.example.bokningssystem.entities.User;
@@ -10,8 +11,12 @@ import com.example.bokningssystem.mapper.OrganizationMapper;
 import com.example.bokningssystem.repository.MembershipRepository;
 import com.example.bokningssystem.repository.OrganizationRepository;
 import com.example.bokningssystem.repository.UserRepository;
+import com.example.bokningssystem.service.UserContextService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Comparator;
+import java.util.List;
 
 @Service
 public class OrganizationService {
@@ -20,19 +25,23 @@ public class OrganizationService {
     private final UserRepository userRepository;
     private final MembershipRepository membershipRepository;
     private final OrganizationMapper organizationMapper;
+    private final UserContextService userContextService;
 
     public OrganizationService(OrganizationRepository organizationRepository,
                                UserRepository userRepository,
                                MembershipRepository membershipRepository,
-                               OrganizationMapper organizationMapper) {
+                               OrganizationMapper organizationMapper,
+                               UserContextService userContextService) {
         this.organizationRepository = organizationRepository;
         this.userRepository = userRepository;
         this.membershipRepository = membershipRepository;
         this.organizationMapper = organizationMapper;
+        this.userContextService = userContextService;
     }
 
     @Transactional
     public OrganizationDetailDTO createOrganization(OrganizationCreateDTO dto) {
+        userContextService.requireSystemAdmin();
         // 1. Validera host-användaren
         User hostUser = userRepository.findById(dto.organizationHostId())
                 .orElseThrow(() -> new IllegalArgumentException("Hittade ingen host med ID: " + dto.organizationHostId()));
@@ -59,5 +68,13 @@ public class OrganizationService {
         }
 
         return organizationMapper.toDetailDTO(savedOrganization);
+    }
+
+    public List<OrganizationShortDTO> organizationList(){
+        return organizationRepository.findAll()
+                .stream()
+                .map(organizationMapper::toShortDTO)
+                .sorted(Comparator.comparing(OrganizationShortDTO::id))
+                .toList();
     }
 }

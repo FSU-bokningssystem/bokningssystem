@@ -1,19 +1,11 @@
 package com.example.bokningssystem.controller;
 
-import com.example.bokningssystem.dtos.bookingDtos.BookingRequestDTO;
-import com.example.bokningssystem.dtos.bookingDtos.BookingResponseDTO;
-import com.example.bokningssystem.dtos.bookingDtos.TransferOwnerDTO;
-import com.example.bokningssystem.dtos.bookingDtos.UserOrgBookingsDTO;
-import com.example.bokningssystem.dtos.bookingDtos.BookingChangeDTO;
-import com.example.bokningssystem.entities.User;
+import com.example.bokningssystem.dtos.bookingDtos.*;
 import com.example.bokningssystem.service.BookingService;
-import com.example.bokningssystem.service.UserService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +16,7 @@ import java.util.List;
                 RequestMethod.GET,
                 RequestMethod.POST,
                 RequestMethod.PUT,
+                RequestMethod.PATCH,
                 RequestMethod.DELETE
         },
         originPatterns = "http://localhost:[*]")
@@ -32,21 +25,18 @@ import java.util.List;
 @Validated
 public class BookingController {
     private final BookingService bookingService;
-    private final UserService userService;
 
-    public BookingController(BookingService bookingService, UserService userService) {
+    public BookingController(BookingService bookingService) {
         this.bookingService = bookingService;
-        this.userService = userService;
     }
 
     @PostMapping
-    public ResponseEntity<BookingResponseDTO> create (@Valid @RequestBody BookingRequestDTO requestDTO, @AuthenticationPrincipal UserDetails auth) {
-        User loggedInUser = userService.getUserFromAuth(auth);
-        return ResponseEntity.ok(bookingService.create(requestDTO, loggedInUser));
+    public ResponseEntity<BookingResponseDTO> create(@Valid @RequestBody BookingRequestDTO requestDTO) {
+        return ResponseEntity.ok(bookingService.create(requestDTO));
     }
 
     @PutMapping
-    public ResponseEntity<BookingResponseDTO> change (@Valid @RequestBody BookingChangeDTO changeDTO) {
+    public ResponseEntity<BookingResponseDTO> change(@Valid @RequestBody BookingChangeDTO changeDTO) {
         return ResponseEntity.ok(bookingService.change(changeDTO));
     }
 
@@ -61,10 +51,11 @@ public class BookingController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable @NotNull @Positive long id){
+    public ResponseEntity<Void> delete(@PathVariable @NotNull @Positive long id) {
         bookingService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
     @GetMapping("/user/{userId}/organization/{orgId}")
     public ResponseEntity<UserOrgBookingsDTO> findUserBookingsInOrganization(
             @PathVariable @Positive long userId,

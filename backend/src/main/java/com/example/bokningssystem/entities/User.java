@@ -1,5 +1,6 @@
 package com.example.bokningssystem.entities;
 
+import com.example.bokningssystem.enums.MemberRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -123,6 +124,15 @@ public class User {
     public boolean isMemberOf(Long organizationId){
         for (Membership membership : memberships){
             if(membership.getOrganization().getId() == organizationId) return true;
+        }
+        return false;
+    }
+
+    @Transient
+    public boolean isAdminOrOwnerOf(Long organizationId){
+        for (Membership membership : memberships){
+            if(membership.getOrganization().getId() == organizationId
+                    && (membership.getMemberRole()== MemberRole.ADMIN || membership.getMemberRole()==MemberRole.OWNER )) return true;
         }
         return false;
     }

@@ -18,6 +18,7 @@
 | Johan    | Ja      | Deployment                                            | Deployment |        |
 | Anton    | Nej     |                                                       |            |        |
 | Jonathan | Nej     |                                                       |            |        |
+|            |        |
 
 ## Onsdag 2026-11-25
 
@@ -31,19 +32,21 @@
 
 Vi tror Axel och Johan kan ha missat att standupen var tidigarelagd pga föreläsning.
 
-## Torsdag ÅÅÅÅ-MM-DD
+## Torsdag 2026-11-26
 
-| Namn | Närvaro | Igår | Idag | Hinder |
-| ---- | ------- | ---- | ---- | ------ |
-|      |         |      |      |        |
-|      |         |      |      |        |
-|      |         |      |      |        |
-|      |         |      |      |        |
+| Namn     | Närvaro | Igår                                                  | Idag           | Hinder |
+| -------- | ------- | ----------------------------------------------------- | -------------- | ------ |
+| Staffan  | Ja      | Skapa hus                                             | Skapa hus      |        |
+| Anton    | Ja      | Valideringar i backend                                | Test           |        |
+| Axel     | Ja      | Lägg till deltagare i samband med skapande av bokning | Test           |        |
+| Johan    | Ja      | Deployment                                            | Deployment     |        |
+| Jonathan | Ja      | Sök lediga rum                                        | Sök lediga rum |        |
 
 ## Fredag ÅÅÅÅ-MM-DD
 
 | Namn | Närvaro | Igår | Idag | Hinder |
 | ---- | ------- | ---- | ---- | ------ |
+|      |         |      |      |        |
 |      |         |      |      |        |
 |      |         |      |      |        |
 |      |         |      |      |        |

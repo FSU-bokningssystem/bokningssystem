@@ -5,15 +5,14 @@ import com.example.bokningssystem.dtos.bookingDtos.BookingRequestDTO;
 import com.example.bokningssystem.dtos.bookingDtos.BookingResponseDTO;
 import com.example.bokningssystem.dtos.bookingDtos.UserOrgBookingsDTO;
 import com.example.bokningssystem.entities.Booking;
+import com.example.bokningssystem.entities.Room;
 import com.example.bokningssystem.entities.User;
 import com.example.bokningssystem.exceptions.*;
-import com.example.bokningssystem.entities.Room;
 import com.example.bokningssystem.mapper.BookingMapper;
 import com.example.bokningssystem.repository.BookingRepository;
 import com.example.bokningssystem.repository.MembershipRepository;
-import com.example.bokningssystem.repository.UserRepository;
 import com.example.bokningssystem.repository.RoomRepository;
-import org.springframework.security.core.context.SecurityContextHolder;
+import com.example.bokningssystem.repository.UserRepository;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +22,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class BookingService {
@@ -31,40 +31,44 @@ public class BookingService {
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
     private final MembershipRepository membershipRepository;
+    private final UserContextService userContextService;
 
     public BookingService(
             BookingMapper bookingMapper,
             BookingRepository bookingRepository,
             RoomRepository roomRepository,
             UserRepository userRepository,
-            MembershipRepository membershipRepository
-    ) {
+            MembershipRepository membershipRepository,
+            UserContextService userContextService) {
         this.bookingMapper = bookingMapper;
         this.bookingRepository = bookingRepository;
-        this.membershipRepository = membershipRepository;
         this.roomRepository = roomRepository;
         this.userRepository = userRepository;
+        this.membershipRepository = membershipRepository;
+        this.userContextService = userContextService;
     }
 
-    public BookingResponseDTO create(BookingRequestDTO requestDTO, User loggedInUser){
-        Booking newBooking = bookingMapper.fromBookingRequestDTO(requestDTO);
+    @Transactional
+    public BookingResponseDTO create(BookingRequestDTO requestDTO) {
+        User loggedInUser = userContextService.getCurrentUser();
+        Booking newBooking = bookingMapper.fromBookingRequestDTO(requestDTO, loggedInUser);
 
-        //Kontrollera om den inloggade användaren är med i organisationen som äger huset.
-        if (!loggedInUser.isMemberOf(newBooking.getRoom().getHouse().getOrganization().getId())) throw new UserCantBookInHouseException(loggedInUser.getFirstName() + " " + loggedInUser.getLastName() + " har inte rätt att boka tid i " + newBooking.getRoom().getHouse().getName());
+        Long orgId = newBooking.getRoom().getHouse().getOrganization().getId();
+        userContextService.requireMembership(orgId);
 
-        //Kontrollera om rummet är tillgängligt.
-        if(!newBooking.getRoom().getIsAvailable()) throw new RoomNotAvailableException(
-                "Rum " + requestDTO.roomNumber() + " går inte att boka.");
+        if (!newBooking.getRoom().getIsAvailable()) {
+            throw new RoomNotAvailableException("Rum " + requestDTO.roomNumber() + " går inte att boka.");
+        }
 
-        //Ta fram lista på framtida bokningar i rummet och kontrollera om den nya bokningen skulle överlappa med dessa.
         List<Booking> futureBookings = newBooking.getRoom().getBookings()
                 .stream()
-                .filter(booking->booking.getEndTime().isAfter(Instant.now()))
+                .filter(booking -> booking.getEndTime().isAfter(Instant.now()))
                 .toList();
-        for(Booking futureBooking: futureBookings) {
-            if(futureBooking.overlapsWith(newBooking.getStartTime(), newBooking.getEndTime())) {
+
+        for (Booking futureBooking : futureBookings) {
+            if (futureBooking.overlapsWith(newBooking.getStartTime(), newBooking.getEndTime())) {
                 LocalDateTime start = LocalDateTime.ofInstant(futureBooking.getStartTime(), futureBooking.getRoom().getHouse().getActualTimeZone());
-                LocalDateTime end =  LocalDateTime.ofInstant(futureBooking.getEndTime(), futureBooking.getRoom().getHouse().getActualTimeZone());
+                LocalDateTime end = LocalDateTime.ofInstant(futureBooking.getEndTime(), futureBooking.getRoom().getHouse().getActualTimeZone());
                 throw new RoomOccupiedException(
                         "Rum " + requestDTO.roomNumber() + " är bokat " + start + " till " + end + ".");
             }
@@ -74,56 +78,65 @@ public class BookingService {
         return bookingMapper.toBookingResponseDTO(bookingRepository.save(newBooking));
     }
 
+    @Transactional
     public BookingResponseDTO change(BookingChangeDTO dto) {
         Booking oldBooking = bookingRepository.findById(dto.id())
                 .orElseThrow(() -> new BookingNotFoundException("Hittade inte bokning " + dto.id() + "."));
 
+        userContextService.requireBookingModifyAccess(oldBooking);
+
         Long tempHouseId = oldBooking.getRoom().getHouse().getId();
-        if (dto.houseId()!=null) tempHouseId=dto.houseId();
-        // Om DTO:n innehåller ett rumsnummer, kontrollera om rumsnumret finns, är tillgängligt, och tillhör ett hus i samma organisation. I så fall, uppdatera rummet. Annars kasta fel.
-        if ((dto.roomNumber() != null)) {
-            final String possibleErrorMsg = "Hittade inte rum "+dto.roomNumber()+" i hus " + tempHouseId+".";
-            Room newRoom = roomRepository.findByRoomNumberIgnoreCaseAndHouseId(dto.roomNumber(),tempHouseId)
-                    .orElseThrow(()->new RoomInHouseNotFoundException(possibleErrorMsg));
-            if(newRoom.getHouse().getOrganization().getId()!=oldBooking.getRoom().getHouse().getOrganization().getId()) {
+        if (dto.houseId() != null) tempHouseId = dto.houseId();
+
+        if (dto.roomNumber() != null) {
+            final String possibleErrorMsg = "Hittade inte rum " + dto.roomNumber() + " i hus " + tempHouseId + ".";
+            Room newRoom = roomRepository.findByRoomNumberIgnoreCaseAndHouseId(dto.roomNumber(), tempHouseId)
+                    .orElseThrow(() -> new RoomInHouseNotFoundException(possibleErrorMsg));
+
+            if (!Objects.equals(newRoom.getHouse().getOrganization().getId(), oldBooking.getRoom().getHouse().getOrganization().getId())) {
                 throw new CantMoveBookingOutsideOrganizationException("Du får inte flytta bokningen utanför organisationen.");
             }
-            if(!newRoom.getIsAvailable()) throw new RoomNotAvailableException("Rum " + dto.roomNumber() + " går inte att boka.");
+            if (!newRoom.getIsAvailable()) {
+                throw new RoomNotAvailableException("Rum " + dto.roomNumber() + " går inte att boka.");
+            }
             oldBooking.setRoom(newRoom);
         }
-        // Om DTO:n har ett ägarId, kontrollera om ägaren finns och är medlem av rätt organisation, och uppdatera i så fall ägaren.
+
         if (dto.ownerId() != null) {
             User newOwner = userRepository.findById(dto.ownerId())
-                    .orElseThrow(()->new UserNotFoundException("Användare med ID " + dto.ownerId() + "hittades ej."));
-            if(!newOwner.isMemberOf(oldBooking.getRoom().getHouse().getOrganization().getId()))
+                    .orElseThrow(() -> new UserNotFoundException("Användare med ID " + dto.ownerId() + " hittades ej."));
+            if (!newOwner.isMemberOf(oldBooking.getRoom().getHouse().getOrganization().getId())) {
                 throw new CantReassignBookingOutsideOrganization("Användare " + dto.ownerId() + " är inte en del av samma organisation.");
+            }
+            oldBooking.getParticipants().removeIf(u -> Objects.equals(u.getId(), newOwner.getId()));
             oldBooking.setOwner(newOwner);
         }
-        // Om DTO:n har en start-tid, tolka på följande sätt:
-        // Sluttid saknas: Ändra start-tid till ny starttid, behåll samma längd på mötet (så kl 10-11 ändras till 12-13).
-        // Sluttid finns: Ändra både starttid och längd.
-        if(dto.startTime() != null) {
+
+        if (dto.startTime() != null) {
             oldBooking.setStartTime(dto.startTime().atZone(oldBooking.getRoom().getHouse().getActualTimeZone()).toInstant());
-            if(dto.endTime()!=null) {
+            if (dto.endTime() != null) {
                 oldBooking.setDuration((int) ChronoUnit.MINUTES.between(dto.startTime(), dto.endTime()));
             }
         }
-        //Om starttid saknas men det finns en sluttid, ändra mötets längd.
-        if(dto.startTime() == null && dto.endTime() != null) {
+
+        if (dto.startTime() == null && dto.endTime() != null) {
             oldBooking.setDuration((int) ChronoUnit.MINUTES.between(
                     oldBooking.getStartTime(),
                     dto.endTime().atZone(oldBooking.getRoom().getHouse().getActualTimeZone()).toInstant()
             ));
         }
-        //Kontrollera att detta inte har resulterat i en negativ längd på mötet (alltså sluttid före starttid)
-        if(oldBooking.getDuration()<0) throw new TimeOrderException("Sluttiden måste vara efter starttiden.");
-        // Kontrollera att den ändrade bokningen inte överlappar med andra bokningar.
+
+        if (oldBooking.getDuration() < 0) {
+            throw new TimeOrderException("Sluttiden måste vara efter starttiden.");
+        }
+
         List<Booking> futureBookings = oldBooking.getRoom().getBookings()
                 .stream()
-                .filter(booking->booking.getEndTime().isAfter(Instant.now()))
+                .filter(booking -> booking.getEndTime().isAfter(Instant.now()))
                 .toList();
-        for(Booking futureBooking: futureBookings) {
-            if(futureBooking.getId()!= oldBooking.getId()){
+
+        for (Booking futureBooking : futureBookings) {
+            if (!Objects.equals(futureBooking.getId(), oldBooking.getId())) {
                 if (futureBooking.overlapsWith(oldBooking.getStartTime(), oldBooking.getEndTime())) {
                     LocalDateTime start = LocalDateTime.ofInstant(futureBooking.getStartTime(), futureBooking.getRoom().getHouse().getActualTimeZone());
                     LocalDateTime end = LocalDateTime.ofInstant(futureBooking.getEndTime(), futureBooking.getRoom().getHouse().getActualTimeZone());
@@ -132,12 +145,42 @@ public class BookingService {
                 }
             }
         }
-        // Om DTO:n innehåller en beskrivning, uppdatera beskrivningen.
+
         if (dto.description() != null) oldBooking.setDescription(dto.description());
-        //Om DTO:n innehåller en titel, uppdatera titeln.
         if (dto.title() != null) oldBooking.setTitle(dto.title());
-        Booking newBooking = bookingRepository.save(oldBooking);
-        return bookingMapper.toBookingResponseDTO(newBooking);
+
+        return bookingMapper.toBookingResponseDTO(bookingRepository.save(oldBooking));
+    }
+
+    @Transactional
+    public BookingResponseDTO transferOwner(long bookingId, long newOwnerId) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new BookingNotFoundException("Hittar inte bokning " + bookingId));
+
+        userContextService.requireBookingModifyAccess(booking);
+
+        long orgId = booking.getRoom().getHouse().getOrganization().getId();
+
+        membershipRepository.findByUserIdAndOrganizationId(newOwnerId, orgId)
+                .orElseThrow(() -> new MembershipNotFoundException(
+                        "Användare " + newOwnerId + " är inte medlem i organisationen"));
+
+        User newOwner = userRepository.findById(newOwnerId)
+                .orElseThrow(() -> new UserNotFoundException("Hittar inte användare " + newOwnerId));
+
+        booking.getParticipants().removeIf(u -> Objects.equals(u.getId(), newOwnerId));
+        booking.setOwner(newOwner);
+        return bookingMapper.toBookingResponseDTO(booking);
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new BookingNotFoundException("Hittade inte bokning " + id + "."));
+
+        userContextService.requireBookingModifyAccess(booking);
+
+        bookingRepository.delete(booking);
     }
 
     @Transactional(readOnly = true)
@@ -150,6 +193,10 @@ public class BookingService {
 
     @Transactional(readOnly = true)
     public List<BookingResponseDTO> findByRoomId(Long roomId) {
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new RoomInHouseNotFoundException("Hittade inte rum " + roomId + "."));
+        userContextService.requireMembership(room.getHouse().getOrganization().getId());
+
         return bookingRepository.findByRoomId(roomId)
                 .stream()
                 .map(bookingMapper::toBookingResponseDTO)
@@ -158,6 +205,7 @@ public class BookingService {
 
     @Transactional(readOnly = true)
     public UserOrgBookingsDTO findUserBookingsInOrganization(long userId, long orgId) {
+        userContextService.requireMembership(orgId);
         Instant now = Instant.now();
         return new UserOrgBookingsDTO(
                 ownedFutureBookings(userId, orgId, now).stream().map(bookingMapper::toBookingResponseDTO).toList(),
@@ -172,56 +220,26 @@ public class BookingService {
     @Transactional
     public void removeUserFromFutureBookings(long userId, long orgId) {
         bookingRepository.findByParticipantsIdAndRoomHouseOrganizationIdAndStartTimeAfter(userId, orgId, Instant.now())
-                .forEach(b -> b.getParticipants().removeIf(u -> u.getId().equals(userId)));
-    }
-
-    @Transactional
-    public BookingResponseDTO transferOwner(long bookingId, long newOwnerId) {
-        Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new BookingNotFoundException("Hittar inte bokning " + bookingId));
-        long orgId = booking.getRoom().getHouse().getOrganization().getId();
-
-        // Validering: den nya ägaren måste vara medlem i samma organisation
-        membershipRepository.findByUserIdAndOrganizationId(newOwnerId, orgId)
-                .orElseThrow(() -> new MembershipNotFoundException(
-                        "Användare " + newOwnerId + " är inte medlem i organisationen"));
-
-        User newOwner = userRepository.findById(newOwnerId)
-                .orElseThrow(() -> new UserNotFoundException("Hittar inte användare " + newOwnerId));
-
-        booking.getParticipants().removeIf(u -> u.getId().equals(newOwnerId)); // ingen ska vara både ägare och deltagare
-        booking.setOwner(newOwner);
-        return bookingMapper.toBookingResponseDTO(booking);
-    }
-
-    public void delete (Long id){
-        //Här ska vi ha validering på att den inloggade användaren ska ha rättighet att ta bort bokningen (husägare eller bokningsägare).
-        if(bookingRepository.existsById(id)) {
-            bookingRepository.deleteById(id);
-        } else {
-            throw new BookingNotFoundException("Hittade inte bokning " + id + ".");
-        }
+                .forEach(b -> b.getParticipants().removeIf(u -> Objects.equals(u.getId(), userId)));
     }
 
     @Transactional
     public BookingResponseDTO addParticipant(Long bookingId, Long userId) {
         Booking booking = getBookingOwnedByCurrentUser(bookingId);
 
-        if (booking.getOwner().getId().equals(userId)) {
+        if (Objects.equals(booking.getOwner().getId(), userId)) {
             throw new IllegalArgumentException("Bokningsägaren kan inte läggas till som deltagare i sin egen bokning");
         }
 
         Long orgId = booking.getRoom().getHouse().getOrganization().getId();
 
-        // Validera att användaren är medlem i samma organisation som bokningen
         membershipRepository.findByUserIdAndOrganizationId(userId, orgId)
                 .orElseThrow(() -> new MembershipNotFoundException(
                         "Användare " + userId + " är inte medlem i organisationen.")
-        );
+                );
 
         User participant = userRepository.findById(userId)
-                .orElseThrow(() -> new UsernameNotFoundException("Hittar inte användare " + userId + ".")
-                );
+                .orElseThrow(() -> new UsernameNotFoundException("Hittar inte användare " + userId + "."));
 
         booking.getParticipants().add(participant);
         return bookingMapper.toBookingResponseDTO(booking);
@@ -231,7 +249,7 @@ public class BookingService {
     public BookingResponseDTO removeParticipant(Long bookingId, Long userId) {
         Booking booking = getBookingOwnedByCurrentUser(bookingId);
 
-        boolean removed = booking.getParticipants().removeIf(u -> u.getId().equals(userId));
+        boolean removed = booking.getParticipants().removeIf(u -> Objects.equals(u.getId(), userId));
         if (!removed) {
             throw new UserNotFoundException("Användare " + userId + " är inte deltagare i denna bokning.");
         }
@@ -243,8 +261,8 @@ public class BookingService {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new BookingNotFoundException("Hittade inte bokning " + bookingId + "."));
 
-        String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        if (!booking.getOwner().getEmail().equalsIgnoreCase(currentUserEmail)) {
+        User currentUser = userContextService.getCurrentUser();
+        if (!Objects.equals(booking.getOwner().getId(), currentUser.getId())) {
             throw new ForbiddenException("Endast bokningsägaren får hantera deltagare för denna bokning.");
         }
 
