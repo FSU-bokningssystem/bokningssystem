@@ -3,6 +3,7 @@ package com.example.bokningssystem.dtos.bookingDtos;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import java.util.List;
 
 import java.time.LocalDateTime;
 
@@ -25,6 +26,10 @@ public record BookingRequestDTO(
         LocalDateTime endTime,
 
         @NotNull @Positive (message="Bokningen måste ha en ägare.")
-        Long ownerId
+        Long ownerId,
+
+        List<@NotNull @Positive Long> participantIds
 ) {
 }
+
+

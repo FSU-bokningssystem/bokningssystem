@@ -17,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.LinkedHashSet;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -68,6 +69,8 @@ public class BookingService {
                         "Rum " + requestDTO.roomNumber() + " är bokat " + start + " till " + end + ".");
             }
         }
+        addParticipantsToNewBooking(newBooking, requestDTO.participantIds());
+
         return bookingMapper.toBookingResponseDTO(bookingRepository.save(newBooking));
     }
 
@@ -250,6 +253,30 @@ public class BookingService {
         }
 
         return booking;
+    }
+
+    private void addParticipantsToNewBooking(Booking booking, List<Long> participantIds) {
+        if (participantIds == null || participantIds.isEmpty()) return;
+
+        Long orgId = booking.getRoom().getHouse().getOrganization().getId();
+        Long ownerId = booking.getOwner().getId();
+
+        for (Long userId : new LinkedHashSet<>(participantIds)) { // tar bort dubbletter
+            if (userId.equals(ownerId)) {
+                throw new IllegalArgumentException(
+                        "Bokningsägaren kan inte läggas till som deltagare i sin egen bokning");
+            }
+
+            membershipRepository.findByUserIdAndOrganizationId(userId, orgId)
+                    .orElseThrow(() -> new MembershipNotFoundException(
+                            "Användare " + userId + " är inte medlem i organisationen."));
+
+            User participant = userRepository.findById(userId)
+                    .orElseThrow(() -> new UserNotFoundException(
+                            "Hittar inte användare " + userId + "."));
+
+            booking.getParticipants().add(participant);
+        }
     }
 
 }
