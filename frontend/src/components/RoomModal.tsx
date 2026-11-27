@@ -3,11 +3,6 @@ import type { RoomModalProps, roomFormValues } from "../types/types";
 import type React from "react";
 import { useState } from "react";
 
-type Props = RoomModalProps & {
-    onDelete?: () => void;
-    deleting?: boolean;
-};
-
 const RoomModal = ({
     onClose,
     submitData,
