@@ -11,6 +11,7 @@ import com.example.bokningssystem.mapper.OrganizationMapper;
 import com.example.bokningssystem.repository.MembershipRepository;
 import com.example.bokningssystem.repository.OrganizationRepository;
 import com.example.bokningssystem.repository.UserRepository;
+import com.example.bokningssystem.service.UserContextService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,19 +25,23 @@ public class OrganizationService {
     private final UserRepository userRepository;
     private final MembershipRepository membershipRepository;
     private final OrganizationMapper organizationMapper;
+    private final UserContextService userContextService;
 
     public OrganizationService(OrganizationRepository organizationRepository,
                                UserRepository userRepository,
                                MembershipRepository membershipRepository,
-                               OrganizationMapper organizationMapper) {
+                               OrganizationMapper organizationMapper,
+                               UserContextService userContextService) {
         this.organizationRepository = organizationRepository;
         this.userRepository = userRepository;
         this.membershipRepository = membershipRepository;
         this.organizationMapper = organizationMapper;
+        this.userContextService = userContextService;
     }
 
     @Transactional
     public OrganizationDetailDTO createOrganization(OrganizationCreateDTO dto) {
+        userContextService.requireSystemAdmin();
         // 1. Validera host-användaren
         User hostUser = userRepository.findById(dto.organizationHostId())
                 .orElseThrow(() -> new IllegalArgumentException("Hittade ingen host med ID: " + dto.organizationHostId()));

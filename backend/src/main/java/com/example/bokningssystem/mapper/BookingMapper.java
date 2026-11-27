@@ -22,17 +22,15 @@ import java.util.List;
 @Component
 public class BookingMapper {
     private final RoomRepository roomRepository;
-    private final UserRepository userRepository;
     private final UserMapper userMapper;
 
 
     public BookingMapper(RoomRepository roomRepository, UserRepository userRepository, UserMapper userMapper) {
         this.roomRepository = roomRepository;
-        this.userRepository = userRepository;
         this.userMapper = userMapper;
     }
 
-    public Booking fromBookingRequestDTO (BookingRequestDTO DTO) {
+    public Booking fromBookingRequestDTO (BookingRequestDTO DTO, User owner) {
         Room room = roomRepository.findByRoomNumberIgnoreCaseAndHouseId(DTO.roomNumber(),DTO.houseId())
                 .orElseThrow(()->new RoomInHouseNotFoundException("Hittade inte rum "+DTO.roomNumber()+" i hus " + DTO.houseId()+"."));
         // Beräkna bokningens varaktighet utifrån skillnaden mellan start- och sluttid och ge felmeddelande om de är i fel ordning.
@@ -42,8 +40,6 @@ public class BookingMapper {
         //Konvertera DTO:ns starttid till en Instant med hjälp av husets tidszon.
         Instant startTime = DTO.startTime().atZone(room.getHouse().getActualTimeZone()).toInstant();
 
-        User owner = userRepository.findById(DTO.ownerId())
-                .orElseThrow(()->new UserNotFoundException("Hittar inte användare med ID " +  DTO.ownerId()+"."));
         return new Booking(
                 DTO.title(),
                 DTO.description(),
